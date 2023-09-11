@@ -13,13 +13,30 @@ function Login() {
 const userContext=useContext(UserContext)
     const handleSubmit = (e) => {
         e.preventDefault();
-        loginUser({email,password}).then(data=>{
-            console.log(data)
+        // loginUser({email,password}).then((data)=>{
+        //     // console.log(data)
+        //     userContext.doLogin(data);
+        //     navigate("/home")
+        //     toast.success("Logged In Successfully")
+        // }).catch((error)=>{
+        //         // console.log(error)
+        //         if(error && error.response && error.response.data)
+        //         toast.error(error.response.data.message)
+        //     else
+        //     toast.error("error while login")
+        // })
+
+        loginUser({email,password}).then((data)=>{
             userContext.doLogin(data);
-            navigate("/home")
-            toast.success("Logged In Successfully")
-        },error=>{
-            console.log(error)
+                navigate("/home")
+                toast.success("Logged In Successfully")
+        }).catch((response)=>{
+            console.log("eror occured")
+            if(response && response.response && response.response.data)
+            toast.error(response.response.data.message)
+        else{
+            toast.error("error occured")
+        }
         })
         // Add your login logic here
     };

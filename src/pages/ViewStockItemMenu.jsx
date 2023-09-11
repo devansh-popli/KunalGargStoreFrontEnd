@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { privateAxios } from '../services/AxiosService';
 import { Button, Container, Form, InputGroup, Pagination, Table } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { isUserLoggedIn } from '../auth/HelperAuth';
+import { UserContext } from '../context/UserContext';
 
 const ViewStockItemMenu = () => {
     const [stockItems, setStockItems] = useState([]);
@@ -36,7 +38,8 @@ const ViewStockItemMenu = () => {
                 console.error('Error fetching stock items:', error);
             });
     }
-    return (
+    const userContext=useContext(UserContext)
+    return userContext.isLogin ? (
         <Container fluid>
 
             <h3 className='m-2'>Stock Items</h3>
@@ -135,7 +138,7 @@ const ViewStockItemMenu = () => {
                 <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={stockItems.lastPage} />
             </Pagination>
         </Container>
-    );
+    ):<Navigate to="/"/>
 };
 
 

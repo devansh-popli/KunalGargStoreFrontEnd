@@ -3,8 +3,10 @@ export const doLoginLocalStorage = (data) => {
 }
 export const getLoginData = () => {
     const data = localStorage.getItem("loginData");
+    if(data && data!='undefined'){
      const loginData=JSON.parse(data);
      return loginData
+    }
 }
 export const getJwtToken = () => {
      const loginData=getLoginData()
