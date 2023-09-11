@@ -248,7 +248,6 @@ const StockItemMenu = () => {
           <Col md={6}>
             {/* Left side of the form */}
             <TextField
-              fullWidth
               margin="normal"
               label="A/c Code"
               id="standard-basic"
@@ -258,9 +257,9 @@ const StockItemMenu = () => {
               value={formData.accountCode}
               disabled
               onChange={handleChange}
+              fullWidth
             />
             <TextField
-              fullWidth
               margin="normal"
               label="Name"
               id="standard-basic"
@@ -269,34 +268,37 @@ const StockItemMenu = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-            />
-
-            <TextField
               fullWidth
-              margin="normal"
-              label="Op. Stock in Qty"
-              id="standard-basic"
-              variant="standard"
-              type="number"
-              name="openingStockQty"
-              value={formData.openingStockQty}
-              onChange={handleChange}
             />
-
+            <Row>
+              <Col>
+                <TextField
+                  margin="normal"
+                  label="Op. Stock in Qty"
+                  id="standard-basic"
+                  variant="standard"
+                  type="number"
+                  name="openingStockQty"
+                  value={formData.openingStockQty}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Col>
+              <Col>
+                <TextField
+                  margin="normal"
+                  label="Op. Stock in Rs"
+                  id="standard-basic"
+                  variant="standard"
+                  type="number"
+                  name="openingStockRs"
+                  value={formData.openingStockRs}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Col>
+            </Row>
             <TextField
-              fullWidth
-              margin="normal"
-              label="Op. Stock in Rs"
-              id="standard-basic"
-              variant="standard"
-              type="number"
-              name="openingStockRs"
-              value={formData.openingStockRs}
-              onChange={handleChange}
-            />
-
-            <TextField
-              fullWidth
               margin="normal"
               label="Group Name"
               id="standard-basic"
@@ -305,23 +307,24 @@ const StockItemMenu = () => {
               name="groupName"
               value={formData.groupName}
               onChange={handleChange}
-            />
-
-            <TextField
               fullWidth
-              margin="normal"
-              label="Purchase Rate"
-              id="standard-basic"
-              variant="standard"
-              type="number"
-              name="purchaseRate"
-              value={formData.purchaseRate}
-              onChange={handleChange}
             />
             <Row>
               <Col>
                 <TextField
+                  margin="normal"
+                  label="Purchase Rate"
+                  id="standard-basic"
+                  variant="standard"
+                  type="number"
+                  name="purchaseRate"
+                  value={formData.purchaseRate}
+                  onChange={handleChange}
                   fullWidth
+                />
+              </Col>
+              <Col>
+                <TextField
                   margin="normal"
                   label="MRP"
                   id="standard-basic"
@@ -330,11 +333,11 @@ const StockItemMenu = () => {
                   name="mrp"
                   value={formData.mrp}
                   onChange={handleChange}
+                  fullWidth
                 />
               </Col>
               <Col>
                 <TextField
-                  fullWidth
                   margin="normal"
                   label="Sale Rate"
                   id="standard-basic"
@@ -343,13 +346,13 @@ const StockItemMenu = () => {
                   name="saleRate"
                   value={formData.saleRate}
                   onChange={handleChange}
+                  fullWidth
                 />
               </Col>
             </Row>
             <Row>
               <Col>
                 <TextField
-                  fullWidth
                   margin="normal"
                   label="Total GST @"
                   id="standard-basic"
@@ -357,15 +360,20 @@ const StockItemMenu = () => {
                   type="number"
                   name="totalGST"
                   value={formData.totalGST}
-                  onChange={(e)=>{
+                  fullWidth
+                  onChange={(e) => {
                     // handleChange(e)
-                    setFormData({...formData,totalGST:e.target.value,"cgst":e.target.value/2,"sgst":e.target.value/2})
+                    setFormData({
+                      ...formData,
+                      totalGST: e.target.value,
+                      cgst: e.target.value / 2,
+                      sgst: e.target.value / 2,
+                    });
                   }}
                 />
               </Col>
               <Col>
                 <TextField
-                  fullWidth
                   margin="normal"
                   label="CGST @"
                   id="standard-basic"
@@ -374,11 +382,11 @@ const StockItemMenu = () => {
                   name="cgst"
                   value={formData.cgst}
                   onChange={handleChange}
+                  fullWidth
                 />
               </Col>
               <Col>
                 <TextField
-                  fullWidth
                   margin="normal"
                   label="S.GST @"
                   id="standard-basic"
@@ -387,36 +395,41 @@ const StockItemMenu = () => {
                   name="sgst"
                   value={formData.sgst}
                   onChange={handleChange}
+                  fullWidth
                 />
               </Col>
             </Row>
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Purchase A/C"
-              id="standard-basic"
-              variant="standard"
-              type="text"
-              name="purchaseAccount"
-              value={formData.purchaseAccount}
-              onChange={handleChange}
-            />
-
-            <TextField
-              fullWidth
-              margin="normal"
-              label="Sale A/C"
-              id="standard-basic"
-              variant="standard"
-              type="text"
-              name="saleAccount"
-              value={formData.saleAccount}
-              onChange={handleChange}
-            />
             <Row>
               <Col>
                 <TextField
+                  margin="normal"
+                  label="Purchase A/C"
+                  id="standard-basic"
+                  variant="standard"
+                  type="text"
+                  name="purchaseAccount"
+                  value={formData.purchaseAccount}
+                  onChange={handleChange}
                   fullWidth
+                />
+              </Col>
+              <Col>
+                <TextField
+                  margin="normal"
+                  label="Sale A/C"
+                  id="standard-basic"
+                  variant="standard"
+                  type="text"
+                  name="saleAccount"
+                  value={formData.saleAccount}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <TextField
                   margin="normal"
                   label="Size"
                   id="standard-basic"
@@ -425,11 +438,11 @@ const StockItemMenu = () => {
                   name="size"
                   value={formData.size}
                   onChange={handleChange}
+                  fullWidth
                 />
               </Col>
               <Col>
                 <TextField
-                  fullWidth
                   margin="normal"
                   label="HSN Code"
                   id="standard-basic"
@@ -438,111 +451,136 @@ const StockItemMenu = () => {
                   name="hsnCode"
                   value={formData.hsnCode}
                   onChange={handleChange}
+                  fullWidth
                 />
               </Col>
             </Row>
 
             {/* 
-              <TextField fullWidth  margin="normal" label="Scheme @" id="standard-basic" variant="standard"
+              <TextField   margin="normal" label="Scheme @" id="standard-basic" variant="standard"
                 type="text"
                 name="scheme"
                 value={formData.scheme}
-                onChange={handleChange}
+                onChange={handleChange} fullWidth
               />*/}
           </Col>
 
           <Col md={6}>
             {/* Right side of the form */}
-            <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="rateCalculate">Rate Calculate</InputLabel>
-              <Select
-                label="Rate Calculate"
-                name="rateCalculate"
-                value={formData.rateCalculate}
-                onChange={handleChange}
-              >
-                {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="clsStockIn">CLS Stock In</InputLabel>
-              <Select
-                label="CLS Stock In"
-                name="clsStockIn"
-                value={formData.clsStockIn}
-                onChange={handleChange}
-              >
-                {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="qtyInUnits">Qty. in UNITS</InputLabel>
-              <Select
-                label="Qty. in UNITS"
-                name="qtyInUnits"
-                value={formData.qtyInUnits}
-                onChange={handleChange}
-              >
-                {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="portalUOM">Portal UOM (Units of Measurement)</InputLabel>
-              <Select
-                label="Portal UOM (Units of Measurement)"
-                name="portalUOM"
-                value={formData.portalUOM}
-                onChange={handleChange}
-              >
-                {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="stockCalculate">Stock Calculate</InputLabel>
-              <Select
-                label="Stock Calculate"
-                name="stockCalculate"
-                value={formData.stockCalculate}
-                onChange={handleChange}
-              >
-                {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
-              <InputLabel htmlFor="typeOfGoods">Type of Goods</InputLabel>
-              <Select
-                label="Type of Goods"
-                name="typeOfGoods"
-                value={formData.typeOfGoods}
-                onChange={handleChange}
-              >
-                {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Row>
+              <Col>
+                <FormControl fullWidth variant="standard" margin="normal">
+                  <InputLabel htmlFor="rateCalculate">
+                    Rate Calculate
+                  </InputLabel>
+                  <Select
+                    label="Rate Calculate"
+                    name="rateCalculate"
+                    value={formData.rateCalculate}
+                    onChange={handleChange}
+                  >
+                    {rateCalculateOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Col>
+              <Col>
+                <FormControl fullWidth variant="standard" margin="normal">
+                  <InputLabel htmlFor="clsStockIn">CLS Stock In</InputLabel>
+                  <Select
+                    label="CLS Stock In"
+                    name="clsStockIn"
+                    value={formData.clsStockIn}
+                    onChange={handleChange}
+                  >
+                    {rateCalculateOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FormControl fullWidth variant="standard" margin="normal">
+                  <InputLabel htmlFor="qtyInUnits">Qty. in UNITS</InputLabel>
+                  <Select
+                    label="Qty. in UNITS"
+                    name="qtyInUnits"
+                    value={formData.qtyInUnits}
+                    onChange={handleChange}
+                  >
+                    {rateCalculateOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Col>
+              <Col>
+                <FormControl fullWidth variant="standard" margin="normal">
+                  <InputLabel htmlFor="portalUOM">
+                    Portal UOM (Units of Measurement)
+                  </InputLabel>
+                  <Select
+                    label="Portal UOM (Units of Measurement)"
+                    name="portalUOM"
+                    value={formData.portalUOM}
+                    onChange={handleChange}
+                  >
+                    {rateCalculateOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <FormControl fullWidth variant="standard" margin="normal">
+                  <InputLabel htmlFor="stockCalculate">
+                    Stock Calculate
+                  </InputLabel>
+                  <Select
+                    label="Stock Calculate"
+                    name="stockCalculate"
+                    value={formData.stockCalculate}
+                    onChange={handleChange}
+                  >
+                    {rateCalculateOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Col>
+              <Col>
+                <FormControl fullWidth variant="standard" margin="normal">
+                  <InputLabel htmlFor="typeOfGoods">Type of Goods</InputLabel>
+                  <Select
+                    label="Type of Goods"
+                    name="typeOfGoods"
+                    value={formData.typeOfGoods}
+                    onChange={handleChange}
+                  >
+                    {rateCalculateOptions.map((option, index) => (
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Col>
+            </Row>
             <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="stockValuation">Stk Valuation</InputLabel>
               <Select
@@ -560,7 +598,6 @@ const StockItemMenu = () => {
             </FormControl>
 
             <TextField
-              fullWidth
               margin="normal"
               label="Qty Per PC/Case"
               id="standard-basic"
@@ -569,10 +606,10 @@ const StockItemMenu = () => {
               name="qtyPerPcCase"
               value={formData.qtyPerPcCase}
               onChange={handleChange}
+              fullWidth
             />
 
             <TextField
-              fullWidth
               margin="normal"
               label="Min Stock Level"
               id="standard-basic"
@@ -581,6 +618,7 @@ const StockItemMenu = () => {
               name="minStockLevel"
               value={formData.minStockLevel}
               onChange={handleChange}
+              fullWidth
             />
             <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="gstType">GST Type</InputLabel>
@@ -597,8 +635,6 @@ const StockItemMenu = () => {
                 ))}
               </Select>
             </FormControl>
-
-            
 
             <Row className="mt-4">
               <Col>
