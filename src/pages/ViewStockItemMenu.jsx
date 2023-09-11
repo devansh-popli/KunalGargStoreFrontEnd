@@ -100,13 +100,13 @@ const ViewStockItemMenu = () => {
                             <td>{stockItem.stockItemId}</td>
                             <td>{stockItem.accountCode}</td>
                             <td>{stockItem.name}</td>
-                            <td>{stockItem.opStockInQty}</td>
-                            <td>{stockItem.opStockInRs}</td>
+                            <td>{stockItem.openingStockQty}</td>
+                            <td>{stockItem.openingStockRs}</td>
                             <td>{stockItem.groupName}</td>
                             <td>{stockItem.purchaseRate}</td>
                             <td>{stockItem.mrp}</td>
                             <td>{stockItem.saleRate}</td>
-                            <td>{stockItem.totalGst}</td>
+                            <td>{stockItem.totalGST}</td>
                             <td>{stockItem.cgst}</td>
                             <td>{stockItem.sgst}</td>
                             <td>{stockItem.purchaseAccount}</td>

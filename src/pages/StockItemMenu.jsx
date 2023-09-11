@@ -23,6 +23,9 @@ const StockItemMenu = () => {
     })
     scrollToTop()
   }
+  else{
+    fetchLastAccountCode()
+  }
  },[id])
   const handleEvent = (action) => {
     getStockItemMenuByAction(action, formData.accountCode).then(data => {
@@ -130,10 +133,10 @@ const StockItemMenu = () => {
         console.error('Error fetching last account code:', error);
       });
   }
-  useEffect(() => {
-    // Fetch the last account code from the backend
-    fetchLastAccountCode()
-  }, []);
+  // useEffect(() => {
+  //   // Fetch the last account code from the backend
+  
+  // }, []);
   const [formData, setFormData] = useState({
     accountCode: '',
     name: '',
