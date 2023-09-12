@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Grid,
   TextField,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Col, Container, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import {
   deleteStockItemMenuById,
   getStockItemMenuByAccountId,
@@ -25,6 +25,7 @@ import {
   saveLedgerAccount,
 } from "../services/LedgerAccountService";
 import { states } from "../auth/HelperAuth";
+import { UserContext } from "../context/UserContext";
 
 function NewLedgerAccountForm() {
   const [nextAccountCode, setNextAccountCode] = useState("");
@@ -204,8 +205,10 @@ function NewLedgerAccountForm() {
         console.log(error);
       });
   };
+  
 const stateList=states
-  return (
+const userContext=useContext(UserContext)
+  return userContext.isLogin ?(
     <Container>
       {/* {JSON.stringify(formData)} */}
       <h2 className="my-3 fw-bold">New Ledger Account Form</h2>
@@ -478,7 +481,7 @@ const stateList=states
         </Row>
       </form>
     </Container>
-  );
+  ):<Navigate to={"/"}/>;
 }
 
 export default NewLedgerAccountForm;
