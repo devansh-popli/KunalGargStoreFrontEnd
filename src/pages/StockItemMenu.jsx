@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button, Dropdown } from "react-bootstrap";
+import { Container, Row, Col, Form, Dropdown } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { isUserLoggedIn } from "../auth/HelperAuth";
@@ -13,6 +13,7 @@ import {
   saveStockItemMenu,
 } from "../services/StockItemMenuService";
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -242,7 +243,7 @@ const StockItemMenu = () => {
 
   return isUserLoggedIn() ? (
     <Container>
-      <h2 className="my-3 text-center fw-bold">Stock Item Menu</h2>
+      <h2 className="my-3 fw-bold">Stock Item Menu</h2>
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col md={6}>
@@ -638,47 +639,46 @@ const StockItemMenu = () => {
 
             <Row className="mt-4">
               <Col>
-                <Button variant="secondary my-2" onClick={() => addNewData()}>
+                <Button variant="contained" onClick={() => addNewData()}>
                   Add New Data
                 </Button>
                 <Button
-                  variant="secondary"
+                  variant="contained"color="secondary"
                   onClick={() => handleEvent("previous")}
                   className="m-2"
                 >
                   Previous
                 </Button>
                 <Button
-                  variant="secondary"
+                  variant="contained"color="secondary"
                   onClick={() => handleEvent("next")}
                   className="m-2"
                 >
                   Next
                 </Button>
                 <Button
-                  variant="secondary"
+                  variant="contained"color="secondary"
                   onClick={() => handleEvent("first")}
                   className="m-2"
                 >
                   First
                 </Button>
                 <Button
-                  variant="secondary"
+                  variant="contained"color="secondary"
                   onClick={() => handleEvent("last")}
                   className="m-2"
                 >
                   Last
                 </Button>
                 <Button
-                  variant="danger"
+                  variant="contained" color="error"
                   onClick={deleteData}
                   className="float-right my-2"
                 >
                   Delete
                 </Button>
-                <Button
-                  variant="success"
-                  type="submit"
+                <Button type="submit"
+                  variant="contained" color="success"
                   className="float-right m-2"
                 >
                   Save
