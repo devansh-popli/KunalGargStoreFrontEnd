@@ -211,7 +211,7 @@ const userContext=useContext(UserContext)
   return userContext.isLogin ?(
     <Container>
       {/* {JSON.stringify(formData)} */}
-      <h2 className="my-3 fw-bold">New Ledger Account Form</h2>
+      <h2 className="fw-bold">New Ledger Account Form</h2>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -422,7 +422,8 @@ const userContext=useContext(UserContext)
             />
           </Grid>
         </Grid>
-        <Row className="mt-4">
+        <Container fluid>
+        <Row className="mt-2">
           <Col>
             <Button variant="contained" onClick={() => addNewData()}>
               Add New Data
@@ -479,6 +480,7 @@ const userContext=useContext(UserContext)
             {/* <Button variant="primary" className="float-right m-2">Search</Button> */}
           </Col>
         </Row>
+        </Container>
       </form>
     </Container>
   ):<Navigate to={"/"}/>;

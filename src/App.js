@@ -14,6 +14,7 @@ import axios from "axios";
 import { Spinner } from "react-bootstrap";
 import SpinnerComponent from "./components/SpinnerComponents";
 import { privateAxios } from "./services/AxiosService";
+import PersistentDrawerLeft from "./components/PersistentDrawerLeft";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,8 @@ function App() {
     },
     (error) => {
       setLoading(false);
-      return Promise.reject(error)}
+      return Promise.reject(error);
+    }
   );
   privateAxios.interceptors.response.use(
     (config) => {
@@ -33,35 +35,38 @@ function App() {
     },
     (error) => {
       setLoading(false);
-     return Promise.reject(error)}
+      return Promise.reject(error);
+    }
   );
   return (
     <>
       <UserContextProvider>
         <BrowserRouter>
-          <NavbarComponent />
-          <ToastContainer
-            draggable
-            transition={Zoom}
-            position="bottom-center"
-          />
-          {loading && <SpinnerComponent />}
-          <Routes>
-            <Route path="" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route
-              path="/new-ledger-account-form"
-              element={<NewLedgerAccountForm />}
+          {/* <NavbarComponent /> */}
+          <PersistentDrawerLeft>
+            <ToastContainer
+              draggable
+              transition={Zoom}
+              position="bottom-center"
             />
-            <Route path="/stock-item-menu" element={<StockItemMenu />} />
-            <Route path="/stock-item-menu/:id" element={<StockItemMenu />} />
-            <Route
-              path="/view-stock-item-menu"
-              element={<ViewStockItemMenu />}
-            />
-          </Routes>
+            {loading && <SpinnerComponent />}
+            <Routes>
+              <Route path="" element={<Login />} />
+              <Route path="/home" element={<Home />} />
+              <Route
+                path="/new-ledger-account-form"
+                element={<NewLedgerAccountForm />}
+              />
+              <Route path="/stock-item-menu" element={<StockItemMenu />} />
+              <Route path="/stock-item-menu/:id" element={<StockItemMenu />} />
+              <Route
+                path="/view-stock-item-menu"
+                element={<ViewStockItemMenu />}
+              />
+            </Routes>
+          </PersistentDrawerLeft>
+            {/* <Footer /> */}
         </BrowserRouter>
-        <Footer />
       </UserContextProvider>
     </>
   );

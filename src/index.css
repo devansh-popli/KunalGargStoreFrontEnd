@@ -24,3 +24,9 @@ code {
   align-items: center;
   z-index: 9999; /* Ensure it appears above other content */
 }
+
+.alignMent{
+  display: flex !important;
+  justify-content: end !important;
+  align-items: end !important;
+}

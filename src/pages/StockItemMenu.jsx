@@ -243,7 +243,7 @@ const StockItemMenu = () => {
 
   return isUserLoggedIn() ? (
     <Container>
-      <h2 className="my-3 fw-bold">Stock Item Menu</h2>
+      <h2 className=" fw-bold">Stock Item Menu</h2>
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col md={6}>
@@ -637,7 +637,7 @@ const StockItemMenu = () => {
               </Select>
             </FormControl>
 
-            <Row className="mt-4">
+            <Row className="mt-2">
               <Col>
                 <Button variant="contained" onClick={() => addNewData()}>
                   Add New Data
