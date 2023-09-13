@@ -19,7 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { UserContext } from '../context/UserContext';
-import { Grid, Hidden } from '@mui/material';
+import { Grid, Hidden, useMediaQuery } from '@mui/material';
 import Footer from './Footer';
 import { Link, NavLink } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -83,14 +83,25 @@ export default function PersistentDrawerLeft({children}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const isMobile = useMediaQuery('(max-width:600px)');
+  // const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 600);
+const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 const userContext=React.useContext(UserContext)
+React.useEffect(()=>{
+if(userContext.isLogin && !isMobile)
+setOpen(true)
+  else{
+    setOpen(false)
+  }
+},[userContext])
   return (
     <div>
+
+     
     <Box sx={{ display: 'flex' }}>
       <Hidden smDown>
        <CssBaseline />

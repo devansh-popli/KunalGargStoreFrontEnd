@@ -62,68 +62,7 @@ function App() {
     <>
       <UserContextProvider>
         <BrowserRouter>
-          {/* <NavbarComponent /> */}
-          {/* <PersistentDrawerLeft> */}
           <div>
-      {/* <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6">Responsive Drawer</Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
-      {/* {userContext.isLogin && 
-      
-              <List>
-            <ListItem disablePadding  as={NavLink} to={"/new-ledger-account-form"} >
-              <ListItemButton>
-                <ListItemIcon >
-                  { <AccountBoxIcon  />}
-                </ListItemIcon>
-                <ListItemText  primary={'New Ledger Account Form'}  primaryTypographyProps={{
-                    color: 'black',
-                    fontWeight: 'medium',
-                    variant: 'body2',
-                  }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding as={NavLink} to={"/stock-item-menu"}>
-              <ListItemButton>
-                <ListItemIcon>
-                  { <InventoryIcon />}
-                </ListItemIcon>
-                <ListItemText  primary={'Stock Item Menu'}  primaryTypographyProps={{
-                    color: 'black',
-                    fontWeight: 'medium',
-                    variant: 'body2',
-                  }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding  as={Link} to={"/view-stock-item-menu"}>
-              <ListItemButton>
-                <ListItemIcon>
-                  { <TableViewIcon />}
-                </ListItemIcon>
-                <ListItemText  primary={'View Stock Item Menu'}  primaryTypographyProps={{
-                    color: 'black',
-                    fontWeight: 'medium',
-                    variant: 'body2',
-                  }} />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          {/* } 
-      {/* </Drawer> 
-
-      <main> */}
       <PersistentDrawerLeft>
       <ToastContainer
               draggable
