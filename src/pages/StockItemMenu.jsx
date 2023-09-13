@@ -19,6 +19,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 
 const StockItemMenu = () => {
@@ -240,10 +241,9 @@ const StockItemMenu = () => {
   const rateCalculateOptions = ["None", "Option 2", "Option 3"]; // Add your dropdown options here
 
   const taxTypeOptions = ["206C(1H)/194Q", "Option 1", "Option 2"]; // Add your dropdown options here
-
   return isUserLoggedIn() ? (
-    <Container>
-      <h2 className=" fw-bold">Stock Item Menu</h2>
+    <Container >
+      <h2 className={`fw-bold`}>Stock Item Menu</h2>
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col md={6}>

@@ -42,7 +42,7 @@ const userContext=useContext(UserContext)
         // Add your login logic here
     };
 
-    return (
+    return !userContext.isLogin && (
         <Container className="mt-5">
             <Card className='shadow border-0'>
                 <Container>

@@ -30,3 +30,9 @@ code {
   justify-content: end !important;
   align-items: end !important;
 }
+
+@media screen {
+  .margin{
+    margin-top: 20px;
+  }
+}

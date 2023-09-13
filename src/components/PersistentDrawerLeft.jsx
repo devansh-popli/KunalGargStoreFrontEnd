@@ -19,7 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { UserContext } from '../context/UserContext';
-import { Grid } from '@mui/material';
+import { Grid, Hidden } from '@mui/material';
 import Footer from './Footer';
 import { Link, NavLink } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -83,9 +83,16 @@ export default function PersistentDrawerLeft({children}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
 const userContext=React.useContext(UserContext)
   return (
+    <div>
     <Box sx={{ display: 'flex' }}>
+      <Hidden smDown>
        <CssBaseline />
       <AppBar position="fixed" open={open}>
        <Toolbar >
@@ -106,14 +113,12 @@ const userContext=React.useContext(UserContext)
       </Grid>
       <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'}>
         {userContext.isLogin && (
-          <ListItem>
-            <ListItemButton style={{ whiteSpace: 'nowrap' }}>{userContext.userData.name}</ListItemButton>
-          </ListItem>
+          <Typography style={{ whiteSpace: 'nowrap' ,cursor:"pointer",marginRight:"20px"}}>{userContext.userData.name}
+          </Typography>
         )}
         {userContext.isLogin && (
-          <ListItem onClick={() => userContext.doLogout()}>
-            <ListItemButton>Logout</ListItemButton>
-          </ListItem>
+          <Typography style={{ whiteSpace: 'nowrap' ,cursor:"pointer",marginRight:"10px"}}  onClick={() => userContext.doLogout()}>Logout
+          </Typography>
         )}
       </Grid>
     </Grid>
@@ -191,7 +196,95 @@ const userContext=React.useContext(UserContext)
         <DrawerHeader />
     {children}
       </Main>
+      </Hidden>
     
     </Box>
+  <Hidden mdUp>
+  <div>
+  <AppBar position="fixed" open={open} >
+       <Toolbar >
+        <Grid container justifyContent="space-between" alignItems="center">
+      <Grid item display={'flex'} alignItems={'center'} justifyContent={'center'}>
+      { userContext.isLogin &&  <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={toggleDrawer}
+          edge="start"
+          sx={{ mr: 2, ...(open && { display: 'none' }) }}
+        >
+          <MenuIcon />
+        </IconButton>}
+        <Typography variant="h6" noWrap component="div">
+          ShopEase
+        </Typography>
+      </Grid>
+      <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'}>
+        {userContext.isLogin && (
+          <Typography style={{ whiteSpace: 'nowrap' ,cursor:"pointer",marginRight:"20px"}}>{userContext.userData.name}
+          </Typography>
+        )}
+        {userContext.isLogin && (
+          <Typography style={{ whiteSpace: 'nowrap' ,cursor:"pointer",marginRight:"10px"}}  onClick={() => userContext.doLogout()}>Logout
+          </Typography>
+        )}
+      </Grid>
+    </Grid>
+        </Toolbar>
+      </AppBar>
+
+  <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
+  <DrawerHeader>
+          <IconButton onClick={toggleDrawer}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </DrawerHeader>
+  {userContext.isLogin &&
+          <List>
+        <ListItem disablePadding  as={NavLink} to={"/new-ledger-account-form"} >
+          <ListItemButton>
+            <ListItemIcon >
+              { <AccountBoxIcon  />}
+            </ListItemIcon>
+            <ListItemText  primary={'New Ledger Account Form'}  primaryTypographyProps={{
+                color: 'black',
+                fontWeight: 'medium',
+                variant: 'body2',
+              }} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding as={NavLink} to={"/stock-item-menu"}>
+          <ListItemButton>
+            <ListItemIcon>
+              { <InventoryIcon />}
+            </ListItemIcon>
+            <ListItemText  primary={'Stock Item Menu'}  primaryTypographyProps={{
+                color: 'black',
+                fontWeight: 'medium',
+                variant: 'body2',
+              }} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding  as={Link} to={"/view-stock-item-menu"}>
+          <ListItemButton>
+            <ListItemIcon>
+              { <TableViewIcon />}
+            </ListItemIcon>
+            <ListItemText  primary={'View Stock Item Menu'}  primaryTypographyProps={{
+                color: 'black',
+                fontWeight: 'medium',
+                variant: 'body2',
+              }} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+      }
+  </Drawer>
+
+  <main style={{marginTop:"70px"}}>
+    {children}
+  </main>
+</div>
+</Hidden>
+  </div>
   );
 }
