@@ -105,7 +105,7 @@ setOpen(true)
     <Box sx={{ display: 'flex' }}>
       <Hidden smDown>
        <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} className='bg-primary'>
        <Toolbar >
         <Grid container justifyContent="space-between" alignItems="center">
       <Grid item display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -118,7 +118,7 @@ setOpen(true)
         >
           <MenuIcon />
         </IconButton>}
-        <Typography variant="h6" noWrap component="div">
+        <Typography variant="h6" className='fw-bold' noWrap component="div">
           ShopEase
         </Typography>
       </Grid>
@@ -212,7 +212,7 @@ setOpen(true)
     </Box>
   <Hidden mdUp>
   <div>
-  <AppBar position="fixed" open={open} >
+  <AppBar position="fixed" open={open} className='bg-primary'>
        <Toolbar >
         <Grid container justifyContent="space-between" alignItems="center">
       <Grid item display={'flex'} alignItems={'center'} justifyContent={'center'}>

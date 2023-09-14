@@ -13,18 +13,47 @@ import {
   saveStockItemMenu,
 } from "../services/StockItemMenuService";
 import {
+  Box,
   Button,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
   Select,
+  Step,
+  StepLabel,
+  Stepper,
   TextField,
+  ThemeProvider,
+  Typography,
+  createTheme,
+  // makeStyles,
+  // makeStyles,
   useMediaQuery,
 } from "@mui/material";
+import { styled } from '@mui/material';
+// const useStyles = makeStyles((theme) => ({
+//   activeStepLabel: {
+//     color: '#78C2AD', // Set the desired color for active step label
+//   },
+// }));
 
 const StockItemMenu = () => {
+  // const useStyles = makeStyles(() => ({
+  //   root: {
+  //     "& .MuiStepIcon-active": { color: "red" },
+  //     "& .MuiStepIcon-completed": { color: "green" },
+  //     "& .Mui-disabled .MuiStepIcon-root": { color: "cyan" }
+  //   }
+  // }));
+  const ActiveStepLabel = styled(StepLabel)(({ theme }) => ({
+    "& .MuiStepIcon-active": { color: "red" },
+      "& .MuiStepIcon-completed": { color: "green" },
+      "& .Mui-disabled .MuiStepIcon-root": { color: "cyan" }
+  }));
+  // const c = useStyles();
   const [nextAccountCode, setNextAccountCode] = useState("");
-
+  // const classes = useStyles();
   const { id } = useParams();
   useEffect(() => {
     if (id) {
@@ -241,29 +270,48 @@ const StockItemMenu = () => {
   const rateCalculateOptions = ["None", "Option 2", "Option 3"]; // Add your dropdown options here
 
   const taxTypeOptions = ["206C(1H)/194Q", "Option 1", "Option 2"]; // Add your dropdown options here
-  return isUserLoggedIn() ? (
-    <Container >
-      <h2 className={`fw-bold`}>Stock Item Menu</h2>
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col md={6}>
-            {/* Left side of the form */}
+
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const steps = ["Step 1", "Step 2", "Step 3"]; // Add your step labels here
+  const theme = createTheme({
+    overrides: {
+      MuiStepIcon: {
+        root: {
+          '&$active': {
+            color: '#78C2AD', // Set the desired color for active steps
+          },
+        },
+      },
+    },
+  });
+  
+  const getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <Container>
             <TextField
               margin="normal"
               label="A/c Code"
-              id="standard-basic"
               variant="standard"
               type="text"
               name="accountCode"
               value={formData.accountCode}
               disabled
-              onChange={handleChange}
               fullWidth
             />
             <TextField
               margin="normal"
               label="Name"
-              id="standard-basic"
               variant="standard"
               type="text"
               name="name"
@@ -271,12 +319,11 @@ const StockItemMenu = () => {
               onChange={handleChange}
               fullWidth
             />
-            <Row>
-              <Col>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <TextField
                   margin="normal"
                   label="Op. Stock in Qty"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="openingStockQty"
@@ -284,12 +331,11 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={6}>
                 <TextField
                   margin="normal"
                   label="Op. Stock in Rs"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="openingStockRs"
@@ -297,12 +343,11 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
             <TextField
               margin="normal"
               label="Group Name"
-              id="standard-basic"
               variant="standard"
               type="text"
               name="groupName"
@@ -310,12 +355,11 @@ const StockItemMenu = () => {
               onChange={handleChange}
               fullWidth
             />
-            <Row>
-              <Col>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
                 <TextField
                   margin="normal"
                   label="Purchase Rate"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="purchaseRate"
@@ -323,12 +367,11 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={4}>
                 <TextField
                   margin="normal"
                   label="MRP"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="mrp"
@@ -336,12 +379,11 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={4}>
                 <TextField
                   margin="normal"
                   label="Sale Rate"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="saleRate"
@@ -349,21 +391,19 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={4}>
                 <TextField
                   margin="normal"
                   label="Total GST @"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="totalGST"
                   value={formData.totalGST}
                   fullWidth
                   onChange={(e) => {
-                    // handleChange(e)
                     setFormData({
                       ...formData,
                       totalGST: e.target.value,
@@ -372,12 +412,11 @@ const StockItemMenu = () => {
                     });
                   }}
                 />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={4}>
                 <TextField
                   margin="normal"
                   label="CGST @"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="cgst"
@@ -385,12 +424,11 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={4}>
                 <TextField
                   margin="normal"
                   label="S.GST @"
-                  id="standard-basic"
                   variant="standard"
                   type="number"
                   name="sgst"
@@ -398,14 +436,18 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
+              </Grid>
+            </Grid>
+          </Container>
+        );
+      case 1:
+        return (
+          <Container>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <TextField
                   margin="normal"
                   label="Purchase A/C"
-                  id="standard-basic"
                   variant="standard"
                   type="text"
                   name="purchaseAccount"
@@ -413,12 +455,11 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={6}>
                 <TextField
                   margin="normal"
                   label="Sale A/C"
-                  id="standard-basic"
                   variant="standard"
                   type="text"
                   name="saleAccount"
@@ -426,14 +467,13 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
                 <TextField
                   margin="normal"
                   label="Size"
-                  id="standard-basic"
                   variant="standard"
                   type="text"
                   name="size"
@@ -441,12 +481,11 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-              <Col>
+              </Grid>
+              <Grid item xs={6}>
                 <TextField
                   margin="normal"
                   label="HSN Code"
-                  id="standard-basic"
                   variant="standard"
                   type="text"
                   name="hsnCode"
@@ -454,134 +493,106 @@ const StockItemMenu = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-              </Col>
-            </Row>
-
-            {/* 
-              <TextField   margin="normal" label="Scheme @" id="standard-basic" variant="standard"
-                type="text"
-                name="scheme"
-                value={formData.scheme}
-                onChange={handleChange} fullWidth
-              />*/}
-          </Col>
-
-          <Col md={6}>
-            {/* Right side of the form */}
-            <Row>
-              <Col>
-                <FormControl fullWidth variant="standard" margin="normal">
-                  <InputLabel htmlFor="rateCalculate">
-                    Rate Calculate
-                  </InputLabel>
-                  <Select
-                    label="Rate Calculate"
-                    name="rateCalculate"
-                    value={formData.rateCalculate}
-                    onChange={handleChange}
-                  >
-                    {rateCalculateOptions.map((option, index) => (
+              </Grid>
+            </Grid>
+            <FormControl fullWidth variant="standard" margin="normal">
+              <InputLabel htmlFor="rateCalculate">Rate Calculate</InputLabel>
+              <Select
+                label="Rate Calculate"
+                name="rateCalculate"
+                value={formData.rateCalculate}
+                onChange={handleChange}
+              >
+                {rateCalculateOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
-                </FormControl>
-              </Col>
-              <Col>
-                <FormControl fullWidth variant="standard" margin="normal">
-                  <InputLabel htmlFor="clsStockIn">CLS Stock In</InputLabel>
-                  <Select
-                    label="CLS Stock In"
-                    name="clsStockIn"
-                    value={formData.clsStockIn}
-                    onChange={handleChange}
-                  >
-                    {rateCalculateOptions.map((option, index) => (
+              </Select>
+            </FormControl>
+            <FormControl fullWidth variant="standard" margin="normal">
+              <InputLabel htmlFor="clsStockIn">CLS Stock In</InputLabel>
+              <Select
+                label="CLS Stock In"
+                name="clsStockIn"
+                value={formData.clsStockIn}
+                onChange={handleChange}
+              >
+                {rateCalculateOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
-                </FormControl>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <FormControl fullWidth variant="standard" margin="normal">
-                  <InputLabel htmlFor="qtyInUnits">Qty. in UNITS</InputLabel>
-                  <Select
-                    label="Qty. in UNITS"
-                    name="qtyInUnits"
-                    value={formData.qtyInUnits}
-                    onChange={handleChange}
-                  >
-                    {rateCalculateOptions.map((option, index) => (
+              </Select>
+            </FormControl>
+            <FormControl fullWidth variant="standard" margin="normal">
+              <InputLabel htmlFor="qtyInUnits">Qty. in UNITS</InputLabel>
+              <Select
+                label="Qty. in UNITS"
+                name="qtyInUnits"
+                value={formData.qtyInUnits}
+                onChange={handleChange}
+              >
+                {rateCalculateOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
-                </FormControl>
-              </Col>
-              <Col>
-                <FormControl fullWidth variant="standard" margin="normal">
-                  <InputLabel htmlFor="portalUOM">
-                    Portal UOM (Units of Measurement)
-                  </InputLabel>
-                  <Select
-                    label="Portal UOM (Units of Measurement)"
-                    name="portalUOM"
-                    value={formData.portalUOM}
-                    onChange={handleChange}
-                  >
-                    {rateCalculateOptions.map((option, index) => (
+              </Select>
+            </FormControl>
+            <FormControl fullWidth variant="standard" margin="normal">
+              <InputLabel htmlFor="portalUOM">
+                Portal UOM (Units of Measurement)
+              </InputLabel>
+              <Select
+                label="Portal UOM (Units of Measurement)"
+                name="portalUOM"
+                value={formData.portalUOM}
+                onChange={handleChange}
+              >
+                {rateCalculateOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
-                </FormControl>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <FormControl fullWidth variant="standard" margin="normal">
-                  <InputLabel htmlFor="stockCalculate">
-                    Stock Calculate
-                  </InputLabel>
-                  <Select
-                    label="Stock Calculate"
-                    name="stockCalculate"
-                    value={formData.stockCalculate}
-                    onChange={handleChange}
-                  >
-                    {rateCalculateOptions.map((option, index) => (
+              </Select>
+            </FormControl>
+          
+          </Container>
+        );
+      case 2:
+        return (
+          <Container>
+              <FormControl fullWidth variant="standard" margin="normal">
+              <InputLabel htmlFor="stockCalculate">Stock Calculate</InputLabel>
+              <Select
+                label="Stock Calculate"
+                name="stockCalculate"
+                value={formData.stockCalculate}
+                onChange={handleChange}
+              >
+                {rateCalculateOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
-                </FormControl>
-              </Col>
-              <Col>
-                <FormControl fullWidth variant="standard" margin="normal">
-                  <InputLabel htmlFor="typeOfGoods">Type of Goods</InputLabel>
-                  <Select
-                    label="Type of Goods"
-                    name="typeOfGoods"
-                    value={formData.typeOfGoods}
-                    onChange={handleChange}
-                  >
-                    {rateCalculateOptions.map((option, index) => (
+              </Select>
+            </FormControl>
+            <FormControl fullWidth variant="standard" margin="normal">
+              <InputLabel htmlFor="typeOfGoods">Type of Goods</InputLabel>
+              <Select
+                label="Type of Goods"
+                name="typeOfGoods"
+                value={formData.typeOfGoods}
+                onChange={handleChange}
+              >
+                {rateCalculateOptions.map((option, index) => (
                       <MenuItem key={index} value={option}>
                         {option}
                       </MenuItem>
                     ))}
-                  </Select>
-                </FormControl>
-              </Col>
-            </Row>
+              </Select>
+            </FormControl>
             <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="stockValuation">Stk Valuation</InputLabel>
               <Select
@@ -591,17 +602,15 @@ const StockItemMenu = () => {
                 onChange={handleChange}
               >
                 {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
               </Select>
             </FormControl>
-
             <TextField
               margin="normal"
               label="Qty Per PC/Case"
-              id="standard-basic"
               variant="standard"
               type="text"
               name="qtyPerPcCase"
@@ -609,11 +618,9 @@ const StockItemMenu = () => {
               onChange={handleChange}
               fullWidth
             />
-
             <TextField
               margin="normal"
               label="Min Stock Level"
-              id="standard-basic"
               variant="standard"
               type="text"
               name="minStockLevel"
@@ -630,67 +637,130 @@ const StockItemMenu = () => {
                 onChange={handleChange}
               >
                 {rateCalculateOptions.map((option, index) => (
-                  <MenuItem key={index} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
+                      <MenuItem key={index} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
               </Select>
             </FormControl>
-
-            <Row className="mt-2">
-              <Col>
-                <Button variant="contained" onClick={() => addNewData()}>
-                  Add New Data
-                </Button>
+          </Container>
+        );
+      default:
+        return "Unknown step";
+    }
+  };
+  return isUserLoggedIn() ? (
+    <Container>
+      <h2 className={`fw-bold`}>Stock Item Menu</h2>
+      <div>
+      <Stepper activeStep={activeStep} alternativeLabel >
+        {steps.map((label,index) => (
+          <Step key={label} sx={{
+            '& .MuiStepLabel-root .Mui-completed': {
+              color: '#78C2AD', // circle color (COMPLETED)
+            },
+            '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
+              {
+                color: 'grey.500', // Just text label (COMPLETED)
+              },
+            '& .MuiStepLabel-root .Mui-active': {
+              color: '#78C2AD', // circle color (ACTIVE)
+            },
+            '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
+              {
+                color: 'common.white', // Just text label (ACTIVE)
+              },
+            '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+              fill: 'white', // circle's number (ACTIVE)
+            },
+          }}>
+            <StepLabel    >{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <div>
+        <Typography>{getStepContent(activeStep)}</Typography>
+        <Box mt={2}>
+          <Grid container spacing={2}>
+            {/* <Grid item>
+              { (
                 <Button
-                  variant="contained"color="secondary"
-                  onClick={() => handleEvent("previous")}
-                  className="m-2"
+                  variant="contained"
+                  color="secondary"
+                  onClick={()=>handleEvent("first")}
                 >
+                  Get First Data
+                </Button>
+              )}
+            </Grid>
+            <Grid item>
+              { (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={()=>handleEvent("last")}
+                >
+                 Get Last Data
+                </Button>
+              )}
+            </Grid>
+            <Grid item>
+              { (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={()=>handleEvent("previous")}
+                >
+                 Get Previous Data
+                </Button>
+              )}
+            </Grid>
+            <Grid item>
+              { (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={()=>handleEvent("next")}
+                >
+                 Get Next Data
+                </Button>
+              )}
+            </Grid> */}
+            <Grid item>
+              {activeStep !== 0 && (
+                <Button variant="contained" className="bg-danger" onClick={handleBack}>
                   Previous
                 </Button>
+              )}
+            </Grid>
+            <Grid item>
+              {activeStep !== steps.length - 1 && (
                 <Button
-                  variant="contained"color="secondary"
-                  onClick={() => handleEvent("next")}
-                  className="m-2"
+                  variant="contained"
+                  // color="primary"
+                  className="bg-primary"
+                  onClick={handleNext}
                 >
                   Next
                 </Button>
-                <Button
-                  variant="contained"color="secondary"
-                  onClick={() => handleEvent("first")}
-                  className="m-2"
-                >
-                  First
-                </Button>
-                <Button
-                  variant="contained"color="secondary"
-                  onClick={() => handleEvent("last")}
-                  className="m-2"
-                >
-                  Last
-                </Button>
-                <Button
-                  variant="contained" color="error"
-                  onClick={deleteData}
-                  className="float-right my-2"
-                >
-                  Delete
-                </Button>
-                <Button type="submit"
-                  variant="contained" color="success"
-                  className="float-right m-2"
-                >
-                  Save
-                </Button>
-                {/* <Button variant="primary" className="float-right m-2">Search</Button> */}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-
-        {/* Buttons */}
-      </Form>
+              )}
+            </Grid>
+            
+            <Grid item>
+            {activeStep === steps.length - 1 && 
+              <Button
+                variant="contained"
+                // color="success"
+                className="bg-success"
+                onClick={(e)=>handleSubmit(e)}
+              >
+                Save  
+              </Button>}
+            </Grid>
+          </Grid>
+        </Box>
+      </div>
+    </div>
     </Container>
   ) : (
     <Navigate to="/" />

@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Container, Form, Card } from 'react-bootstrap';
+import { Container, Form, Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserContext } from '../context/UserContext';
 import { loginUser } from '../services/UserService';
-import { Button } from '@mui/material';
+// import { Button } from '@mui/material';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -71,12 +71,18 @@ const userContext=useContext(UserContext)
                             />
                         </Form.Group>
                         <Container className='text-center'>
-                            <Button className='my-3' variant="contained" color='success' type="submit">
+                            <Button className='my-3' variant="success" type="submit">
+                                Login
+                            </Button>
+                            <Button className='my-3 mx-3' variant="secondary"  type="submit">
+                                Forget Password
+                            </Button>
+                            {/* <Button className='my-3' variant="contained" color='success' type="submit">
                                 Login
                             </Button>
                             <Button className='my-3 mx-3' variant="contained" color='primary' type="submit">
                                 Forget Password
-                            </Button>
+                            </Button> */}
                         </Container>
                     </Form>
                 </Container>
