@@ -668,7 +668,7 @@ const StockItemMenu = () => {
             },
             '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
               {
-                color: 'common.white', // Just text label (ACTIVE)
+                color: 'grey.500', // Just text label (ACTIVE)
               },
             '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
               fill: 'white', // circle's number (ACTIVE)
