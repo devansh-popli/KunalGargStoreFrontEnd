@@ -32,6 +32,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import TableViewIcon from '@mui/icons-material/TableView';
 import MenuIcon from '@mui/icons-material/Menu';
+import { ZoomIn } from "@mui/icons-material";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -68,7 +69,7 @@ function App() {
       <ToastContainer
               draggable
               transition={Zoom}
-              position="bottom-center"
+              position="top-right"
             />
             {loading && <SpinnerComponent />}
             <Routes>

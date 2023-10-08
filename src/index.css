@@ -37,6 +37,10 @@ code {
 .bg-success{
   background-color: #56CC9D;
 }
+.custom-button {
+  background-color: #E49E61 !important; /* A complementary color */
+  color: white !important; /* Text color */
+}
 .bg-danger{
   background-color: #F3969A;
 }

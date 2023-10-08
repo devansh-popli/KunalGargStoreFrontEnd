@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { Container, Row, Col, Form, Dropdown } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { isUserLoggedIn } from "../auth/HelperAuth";
+import { isUserLoggedIn, uomList } from "../auth/HelperAuth";
 import { UserContext } from "../context/UserContext";
 import { privateAxios } from "../services/AxiosService";
 import {
   deleteStockItemMenuById,
   getStockItemMenuByAccountId,
   getStockItemMenuByAction,
+  getUOMList,
   saveStockItemMenu,
 } from "../services/StockItemMenuService";
 import {
@@ -53,6 +54,7 @@ const StockItemMenu = () => {
   }));
   // const c = useStyles();
   const [nextAccountCode, setNextAccountCode] = useState("");
+  const [uomList, setUomList] = useState([]);
   // const classes = useStyles();
   const { id } = useParams();
   useEffect(() => {
@@ -65,9 +67,25 @@ const StockItemMenu = () => {
         .catch((error) => {
           toast.error("error occurred");
         });
+        getUOMList()
+        .then((data) => {
+          // toast.success(" data fetched")
+          setUomList(data);
+        })
+        .catch((error) => {
+          toast.error("error occurred");
+        });
       scrollToTop();
     } else {
       fetchLastAccountCode();
+      getUOMList()
+      .then((data) => {
+        // toast.success(" data fetched")
+        setUomList(data);
+      })
+      .catch((error) => {
+        toast.error("error occurred");
+      });
     }
   }, [id]);
   const handleEvent = (action) => {
@@ -423,6 +441,7 @@ const StockItemMenu = () => {
                   value={formData.cgst}
                   onChange={handleChange}
                   fullWidth
+                  disabled
                 />
               </Grid>
               <Grid item xs={4}>
@@ -435,7 +454,9 @@ const StockItemMenu = () => {
                   value={formData.sgst}
                   onChange={handleChange}
                   fullWidth
+                disabled
                 />
+
               </Grid>
             </Grid>
           </Container>
@@ -487,11 +508,11 @@ const StockItemMenu = () => {
                   margin="normal"
                   label="HSN Code"
                   variant="standard"
-                  type="text"
                   name="hsnCode"
                   value={formData.hsnCode}
                   onChange={handleChange}
                   fullWidth
+                  type="number"
                 />
               </Grid>
             </Grid>
@@ -525,7 +546,7 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
+            {/* <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="qtyInUnits">Qty. in UNITS</InputLabel>
               <Select
                 label="Qty. in UNITS"
@@ -539,7 +560,7 @@ const StockItemMenu = () => {
                       </MenuItem>
                     ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
             <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="portalUOM">
                 Portal UOM (Units of Measurement)
@@ -550,9 +571,9 @@ const StockItemMenu = () => {
                 value={formData.portalUOM}
                 onChange={handleChange}
               >
-                {rateCalculateOptions.map((option, index) => (
-                      <MenuItem key={index} value={option}>
-                        {option}
+                {uomList.map((option, index) => (
+                      <MenuItem key={index} value={option.uqcCode}>
+                        {option.uqcCode}
                       </MenuItem>
                     ))}
               </Select>

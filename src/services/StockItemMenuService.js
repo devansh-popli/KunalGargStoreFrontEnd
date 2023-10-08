@@ -9,6 +9,9 @@ export const getStockItemMenuByAction=(action,currentId)=>{
 export const getStockItemMenuByAccountId=(accountId)=>{
    return privateAxios.get(`/api/v1/get/stock-item-menu?accountId=${accountId}`).then(res=>res.data)
 }
+export const getUOMList=()=>{
+   return privateAxios.get(`/dropdown/fetch/uom`).then(res=>res.data)
+}
 export const deleteStockItemMenuById=(id)=>{
    return privateAxios.delete(`/api/v1/stockItemMenu/${id}`).then(res=>res.data)
 }

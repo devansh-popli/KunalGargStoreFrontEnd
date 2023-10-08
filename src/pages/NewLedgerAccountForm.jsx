@@ -26,6 +26,7 @@ import {
 } from "../services/LedgerAccountService";
 import { states } from "../auth/HelperAuth";
 import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
 function NewLedgerAccountForm() {
   const [nextAccountCode, setNextAccountCode] = useState("");
@@ -161,7 +162,37 @@ function NewLedgerAccountForm() {
     ifsc: "",
     branch: "",
   });
-
+  const fetchGSTINDetails = () => {
+    privateAxios
+      .get(`/auth/search/gst?gstin=${formData.gstNo}`)
+      .then((data) => {
+        const completeAddress = `${data.data.pradr?.addr?.bno || ""}, ${
+          data.data.pradr?.addr?.bnm || ""
+        }, ${data.data.pradr?.addr?.st || ""}, ${
+          data.data.pradr?.addr?.loc || ""
+        }, ${data.data.pradr?.addr?.dst || ""}, ${
+          data.data.pradr?.addr?.stcd || ""
+        } - ${data.data.pradr?.addr?.pncd || ""}`;
+        const firstTwoDigits = formData.gstNo.substring(0, 2);
+        const state = stateList.filter(
+          (state) => state?.code === firstTwoDigits
+        )[0];
+        setFormData({
+          ...formData,
+          gstNo: formData.gstNo.toUpperCase(),
+          accountName: data.data.tradeNam,
+          accountNameBank: data.data.tradeNam,
+          pan: formData.gstNo.substring(2, 12),
+          address: completeAddress || "",
+          city: data.data.pradr?.addr.loc || "",
+          pincode: data.data.pradr?.addr.pncd || "",
+          state: state?.state.trim(),
+        });
+      })
+      .catch((error) => {
+        toast.error("Error Occurred in fetching gst details");
+      });
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -205,10 +236,10 @@ function NewLedgerAccountForm() {
         console.log(error);
       });
   };
-  
-const stateList=states
-const userContext=useContext(UserContext)
-  return userContext.isLogin ?(
+
+  const stateList = states;
+  const userContext = useContext(UserContext);
+  return userContext.isLogin ? (
     <Container>
       {/* {JSON.stringify(formData)} */}
       <h2 className="fw-bold">New Ledger Account Form</h2>
@@ -227,27 +258,50 @@ const userContext=useContext(UserContext)
           </Grid>
           {/* {stateList.filter(state=>state.code=='04')[0].state} */}
           {/* {formData.state} */}
-          <Grid item xs={6}>
-            <TextField
-              label="GST No."
-              variant="standard"
-              name="gstNo"
-              value={formData.gstNo}
-              onChange={(event) => {
-                const firstTwoDigits = event.target.value.substring(0, 2);
+          <Grid
+            item
+            xs={6}
+            spacing={2}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
+            <Grid item xs={6}>
+              <TextField
+                label="GST No."
+                variant="standard"
+                name="gstNo"
+                value={formData.gstNo}
+                onChange={(event) => {
+                  const firstTwoDigits = event.target.value.substring(0, 2);
 
-                // Find the state corresponding to the first two digits
-                const state = stateList.filter(state => state?.code === firstTwoDigits)[0];
-              
-                setFormData({
-                  ...formData,
-                  gstNo: event.target.value,
-                  pan: event.target.value.substring(2, 12),
-                  state:state?.state.trim()
-                });
-              }}
-              fullWidth
-            />
+                  // Find the state corresponding to the first two digits
+                  const state = stateList.filter(
+                    (state) => state?.code === firstTwoDigits
+                  )[0];
+                  // if (event.target.value.length == 15) {
+
+                  // }
+                  setFormData({
+                    ...formData,
+                    gstNo: event.target.value.toUpperCase(),
+                    pan: event.target.value.substring(2, 12).toUpperCase(),
+                    state: state?.state.trim(),
+                  });
+                }}
+                fullWidth
+              />
+            </Grid>
+            <Grid xs={6}>
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                onClick={() => fetchGSTINDetails()}
+              >
+                fetch gst Details
+              </Button>
+            </Grid>
           </Grid>
           <Grid item xs={6}>
             <TextField
@@ -255,7 +309,13 @@ const userContext=useContext(UserContext)
               variant="standard"
               name="accountName"
               value={formData.accountName}
-              onChange={handleChange}
+              onChange={(event)=>{              
+                // handleChange()
+                setFormData({
+                  ...formData,accountName:event.target.value
+                  ,accountNameBank:event.target.value
+                })
+              }}
               fullWidth
             />
           </Grid>
@@ -287,6 +347,7 @@ const userContext=useContext(UserContext)
               value={formData.pincode}
               onChange={handleChange}
               fullWidth
+              type="number"
             />
           </Grid>
           <Grid item xs={6}>
@@ -297,11 +358,9 @@ const userContext=useContext(UserContext)
                 value={formData.state}
                 onChange={handleChange}
               >
-                {
-                  stateList.map(state=>(
-                    <MenuItem value={state.state}>{state.state}</MenuItem>                     
-                  ))
-                }
+                {stateList.map((state) => (
+                  <MenuItem value={state.state}>{state.state}</MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
@@ -313,6 +372,7 @@ const userContext=useContext(UserContext)
               value={formData.openingBalance}
               onChange={handleChange}
               fullWidth
+              type="number"
             />
           </Grid>
           <Grid item xs={6}>
@@ -323,8 +383,14 @@ const userContext=useContext(UserContext)
                 value={formData.msmedStatus}
                 onChange={handleChange}
               >
-                <MenuItem value="yes">Yes</MenuItem>
-                <MenuItem value="no">No</MenuItem>
+                <MenuItem value="Micro Enterprises">Micro Enterprises</MenuItem>
+                <MenuItem value="Small Enterprises">Small Enterprises</MenuItem>
+                <MenuItem value="Medium Enterprises">
+                  Medium Enterprises
+                </MenuItem>
+                <MenuItem value="Not Covered in MSMED">
+                  Not Covered in MSMED
+                </MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -372,14 +438,17 @@ const userContext=useContext(UserContext)
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              label="Whether Approved"
-              variant="standard"
-              name="approved"
-              value={formData.approved}
-              onChange={handleChange}
-              fullWidth
-            />
+            <FormControl fullWidth variant="standard">
+              <InputLabel>Whether Approved</InputLabel>
+              <Select
+                name="approved"
+                value={formData.approved}
+                onChange={handleChange}
+              >
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={6}>
             <TextField
@@ -423,67 +492,78 @@ const userContext=useContext(UserContext)
           </Grid>
         </Grid>
         <Container fluid>
-        <Row className="mt-2">
-          <Col>
-            <Button variant="contained" onClick={() => addNewData()}>
-              Add New Data
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleEvent("previous")}
-              className="m-2"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleEvent("next")}
-              className="m-2"
-            >
-              Next
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleEvent("first")}
-              className="m-2"
-            >
-              First
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleEvent("last")}
-              className="m-2"
-            >
-              Last
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={deleteData}
-              className="float-right my-2"
-            >
-              Delete
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color="success"
-              className="float-right m-2"
-              onClick={handleSubmit}
-            >
-              Save
-            </Button>
-            {/* <Button variant="primary" className="float-right m-2">Search</Button> */}
-          </Col>
-        </Row>
+          <Row className="mt-2">
+            <Col>
+              <Button
+                variant="contained"
+                onClick={() => addNewData()}
+                style={{ backgroundColor: "#78C2AD", color: "white" }}
+              >
+                Add New Data
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleEvent("previous")}
+                style={{ backgroundColor: "#F2A73D", color: "white" }}
+                className="m-2"
+              >
+                Previous
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleEvent("next")}
+                style={{ backgroundColor: "#FF5E5B", color: "white" }}
+                className="m-2"
+              >
+                Next
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleEvent("first")}
+                style={{ backgroundColor: "#55B4B0", color: "white" }}
+                className="m-2"
+              >
+                First
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleEvent("last")}
+                style={{ backgroundColor: "#ACD7E5", color: "white" }}
+                className="m-2"
+              >
+                Last
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={deleteData}
+                style={{ backgroundColor: "#F17300", color: "white" }}
+                className="float-right my-2"
+              >
+                Delete
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                onClick={handleSubmit}
+                style={{ backgroundColor: "#1DB954", color: "white" }}
+                className="float-right m-2"
+              >
+                Save
+              </Button>
+            </Col>
+          </Row>
         </Container>
       </form>
     </Container>
-  ):<Navigate to={"/"}/>;
+  ) : (
+    <Navigate to={"/"} />
+  );
 }
 
 export default NewLedgerAccountForm;
