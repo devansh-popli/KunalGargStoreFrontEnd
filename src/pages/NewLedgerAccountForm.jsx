@@ -245,7 +245,7 @@ function NewLedgerAccountForm() {
       <h2 className="fw-bold">New Ledger Account Form</h2>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="A/c Code"
               variant="standard"
@@ -260,13 +260,13 @@ function NewLedgerAccountForm() {
           {/* {formData.state} */}
           <Grid
             item
-            xs={6}
+            xs={12}
             spacing={2}
             display={"flex"}
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Grid item xs={6}>
+            <Grid item xs={8} className="mx-1" sm={6}>
               <TextField
                 label="GST No."
                 variant="standard"
@@ -292,18 +292,19 @@ function NewLedgerAccountForm() {
                 fullWidth
               />
             </Grid>
-            <Grid xs={6}>
+            <Grid xs={4} sm={6}>
               <Button
                 variant="outlined"
                 color="primary"
                 size="small"
+                 className="my-2"
                 onClick={() => fetchGSTINDetails()}
               >
                 fetch gst Details
               </Button>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="A/c Name"
               variant="standard"
@@ -319,7 +320,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Address"
               variant="standard"
@@ -329,7 +330,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="City"
               variant="standard"
@@ -339,7 +340,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Pincode"
               variant="standard"
@@ -350,7 +351,7 @@ function NewLedgerAccountForm() {
               type="number"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel>State</InputLabel>
               <Select
@@ -364,7 +365,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Opening Balance"
               variant="standard"
@@ -375,7 +376,7 @@ function NewLedgerAccountForm() {
               type="number"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel>MSMED Status</InputLabel>
               <Select
@@ -394,7 +395,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Contact No."
               variant="standard"
@@ -404,7 +405,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Email Id/Area"
               variant="standard"
@@ -414,7 +415,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="PAN"
               variant="standard"
@@ -424,7 +425,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel>Turnover Below 10 Cr</InputLabel>
               <Select
@@ -437,7 +438,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel>Whether Approved</InputLabel>
               <Select
@@ -450,7 +451,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Account Num"
               variant="standard"
@@ -460,7 +461,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Account Name (same as firm name)"
               variant="standard"
@@ -470,7 +471,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="IFSC"
               variant="standard"
@@ -480,7 +481,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               label="Branch"
               variant="standard"
