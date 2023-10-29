@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   Button,
+  TextareaAutosize,
 } from "@mui/material";
 import { Col, Container, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -244,8 +245,8 @@ function NewLedgerAccountForm() {
       {/* {JSON.stringify(formData)} */}
       <h2 className="fw-bold">New Ledger Account Form</h2>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4}>
             <TextField
               label="A/c Code"
               variant="standard"
@@ -256,9 +257,46 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
+          <Grid item xs={8} className="mx-1" sm={4}>
+            <TextField
+              label="GST No."
+              variant="standard"
+              name="gstNo"
+              value={formData.gstNo}
+              onChange={(event) => {
+                const firstTwoDigits = event.target.value.substring(0, 2);
+
+                // Find the state corresponding to the first two digits
+                const state = stateList.filter(
+                  (state) => state?.code === firstTwoDigits
+                )[0];
+                // if (event.target.value.length == 15) {
+
+                // }
+                setFormData({
+                  ...formData,
+                  gstNo: event.target.value.toUpperCase(),
+                  pan: event.target.value.substring(2, 12).toUpperCase(),
+                  state: state?.state.trim(),
+                });
+              }}
+              fullWidth
+            />
+          </Grid>
+          <Grid xs={4} sm={3}>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              className="mt-5 mx-3"
+              onClick={() => fetchGSTINDetails()}
+            >
+              fetch gst Details
+            </Button>
+          </Grid>
           {/* {stateList.filter(state=>state.code=='04')[0].state} */}
           {/* {formData.state} */}
-          <Grid
+          {/* <Grid
             item
             xs={12}
             spacing={2}
@@ -303,80 +341,25 @@ function NewLedgerAccountForm() {
                 fetch gst Details
               </Button>
             </Grid>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          </Grid> */}
+          <Grid item xs={12} sm={4}>
             <TextField
               label="A/c Name"
               variant="standard"
               name="accountName"
               value={formData.accountName}
-              onChange={(event)=>{              
+              onChange={(event) => {
                 // handleChange()
                 setFormData({
-                  ...formData,accountName:event.target.value
-                  ,accountNameBank:event.target.value
-                })
+                  ...formData,
+                  accountName: event.target.value,
+                  accountNameBank: event.target.value,
+                });
               }}
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Address"
-              variant="standard"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="City"
-              variant="standard"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Pincode"
-              variant="standard"
-              name="pincode"
-              value={formData.pincode}
-              onChange={handleChange}
-              fullWidth
-              type="number"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="standard">
-              <InputLabel>State</InputLabel>
-              <Select
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-              >
-                {stateList.map((state) => (
-                  <MenuItem value={state.state}>{state.state}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Opening Balance"
-              variant="standard"
-              name="openingBalance"
-              value={formData.openingBalance}
-              onChange={handleChange}
-              fullWidth
-              type="number"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <FormControl fullWidth variant="standard">
               <InputLabel>MSMED Status</InputLabel>
               <Select
@@ -395,7 +378,68 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Opening Balance"
+              variant="standard"
+              name="openingBalance"
+              value={formData.openingBalance}
+              onChange={handleChange}
+              fullWidth
+              type="number"
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <FormControl fullWidth>
+              <TextField
+                label="Address"
+                variant="standard" // Set the desired variant here
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                // multiline
+                // rows={3}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="City"
+              variant="standard"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <FormControl fullWidth variant="standard">
+              <InputLabel>State</InputLabel>
+              <Select
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+              >
+                {stateList.map((state) => (
+                  <MenuItem value={state.state}>{state.state}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Pincode"
+              variant="standard"
+              name="pincode"
+              value={formData.pincode}
+              onChange={handleChange}
+              fullWidth
+              type="number"
+            />
+          </Grid>
+        
+        
+          <Grid item xs={12} sm={4}>
             <TextField
               label="Contact No."
               variant="standard"
@@ -405,7 +449,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <TextField
               label="Email Id/Area"
               variant="standard"
@@ -415,7 +459,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <TextField
               label="PAN"
               variant="standard"

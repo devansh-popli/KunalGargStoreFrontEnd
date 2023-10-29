@@ -578,13 +578,7 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
-          
-          </Container>
-        );
-      case 2:
-        return (
-          <Container>
-              <FormControl fullWidth variant="standard" margin="normal">
+            <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="stockCalculate">Stock Calculate</InputLabel>
               <Select
                 label="Stock Calculate"
@@ -599,6 +593,11 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
+          </Container>
+        );
+      case 2:
+        return (
+          <Container>
             <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="typeOfGoods">Type of Goods</InputLabel>
               <Select

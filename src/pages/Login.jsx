@@ -46,8 +46,10 @@ const userContext=useContext(UserContext)
         <Container className="mt-5">
             <Card className='shadow border-0'>
                 <Container>
-
-                    <h2 className='my-3 fw-bold text-start'>Login Here</h2>
+                    <Container className='text-center mt-4 mb-2'>
+                      <img src="../../download.png" alt="" />
+                    <h2 className='my-3 fw-bold'>SHOPEASE LOGIN</h2>
+                    </Container>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>

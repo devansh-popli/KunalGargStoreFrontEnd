@@ -25,7 +25,7 @@ import { Link, NavLink } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import TableViewIcon from '@mui/icons-material/TableView';
-const drawerWidth = 240;
+const drawerWidth = 350 ;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -118,9 +118,8 @@ setOpen(true)
         >
           <MenuIcon />
         </IconButton>}
-        <Typography variant="h6" className='fw-bold' noWrap component="div">
-          ShopEase
-        </Typography>
+        {/* <img src="../../download.png" className='w-25 my-3 mx-2 text-white' alt="" /> */}
+        
       </Grid>
       <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'}>
         {userContext.isLogin && (
@@ -144,11 +143,17 @@ setOpen(true)
             boxSizing: 'border-box',
           },
         }}
+       
         variant="persistent"
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader >
+          
+          <img src="../../download.png" className='w-25 m-2 my-3' alt="" />
+        <Typography variant="h6" noWrap component="div">
+          <b>SHOPEASE</b>
+        </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -162,10 +167,11 @@ setOpen(true)
                 <ListItemIcon >
                   { <AccountBoxIcon  />}
                 </ListItemIcon>
-                <ListItemText  primary={'New Ledger Account Form'}  primaryTypographyProps={{
+                <ListItemText primary={'New Ledger Account Form'}  primaryTypographyProps={{
                     color: 'black',
                     fontWeight: 'medium',
                     variant: 'body2',
+                    fontSize:"20px"
                   }} />
               </ListItemButton>
             </ListItem>
@@ -178,6 +184,7 @@ setOpen(true)
                     color: 'black',
                     fontWeight: 'medium',
                     variant: 'body2',
+                    fontSize:"20px"
                   }} />
               </ListItemButton>
             </ListItem>
@@ -190,6 +197,7 @@ setOpen(true)
                     color: 'black',
                     fontWeight: 'medium',
                     variant: 'body2',
+                    fontSize:"20px"
                   }} />
               </ListItemButton>
             </ListItem>
@@ -225,7 +233,7 @@ setOpen(true)
         >
           <MenuIcon />
         </IconButton>}
-        <Typography variant="h6" noWrap component="div">
+        <Typography variant="h6" className='fw-bold' noWrap component="div">
           ShopEase
         </Typography>
       </Grid>
@@ -243,8 +251,12 @@ setOpen(true)
         </Toolbar>
       </AppBar>
 
-  <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
+  <Drawer open={isDrawerOpen} onClose={toggleDrawer}    >
   <DrawerHeader>
+    <img src="../../download.png" className='w-25 my-3 mx-2' alt="" />
+  <Typography variant="h6" noWrap component="div">
+          <b>SHOPEASE</b>
+        </Typography>
           <IconButton onClick={toggleDrawer}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
