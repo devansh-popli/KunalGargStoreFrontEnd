@@ -1,11 +1,13 @@
+
 body {
   background-color: #f5f5f5; /* Light gray or any other light color you prefer */
+  font-family: 'Raleway', sans-serif !important;
 }
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
 
 .spinner-overlay {
   position: fixed;
@@ -29,7 +31,7 @@ code {
   color: #78C2AD !important; /* Set the desired color for the active step label */
 }
 .bg-primary{
-  background-color: #78C2AD;
+  background-color: #78C2AD !important;
 }
 .font-primary{
   color: #78C2AD !important;

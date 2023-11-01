@@ -289,9 +289,9 @@ export default function ViewStockItemMenu() {
   };
   const userContext = React.useContext(UserContext);
   return userContext.isLogin ? (
-    <Container>
+    <Container fluid>
       <h3 className="fw-bold my-3">View Stock Item Menu Details</h3>
-      <Paper sx={{ width: "100%" }}>
+      <Paper sx={{ width: "90%" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
         <TextField
         className="w-50 m-4"

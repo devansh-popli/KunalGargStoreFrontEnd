@@ -1,0 +1,756 @@
+.navWrapper {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    box-shadow: 0px 0.25rem 0.25rem rgba(0, 0, 0, 0.16);
+  }
+  .navbar {
+    width: 100%;
+    height: 4.5rem;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+  
+    .menuIcon {
+      cursor: pointer;
+    }
+  
+    .DrawerToggle {
+      width: 1.875rem;
+      height: 1.438rem;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-around;
+      align-items: center;
+      margin: 0.938rem 0;
+      box-sizing: border-box;
+      outline: none;
+      border: 0;
+      background: transparent;
+      padding-bottom: 0 !important;
+  
+      &.active {
+        margin-left: 1.25rem;
+      }
+  
+      div {
+        width: 80%;
+        height: 0.25rem;
+        background-color: #be59cd;
+        border-radius: 0.188rem;
+      }
+  
+      div:not(:last-child) {
+        margin-bottom: 0px;
+      }
+    }
+  
+    ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      direction: ltr;
+      margin: 0px;
+      width: 100%;
+  
+      li {
+        width: fit-content;
+  
+        &.marginLeftAuto {
+          margin-left: auto;
+        }
+  
+        display: flex;
+        justify-content: center;
+        align-items: center;
+  
+        .notificationIcon {
+          margin-right: 0.625rem;
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+        }
+        .notiCount {
+          width: 12px;
+          height: 12px;
+          background: #ec5151;
+          color: #fff;
+          font-size: 8px;
+          right: 6rem;
+          text-align: center;
+          font-weight: bolder;
+          border-radius: 50%;
+          position: absolute;
+          top: 1.4rem;
+          cursor: pointer;
+        }
+  
+        .profileButton {
+          img {
+            height: 24px;
+            width: 24px;
+          }
+        }
+  
+        .dropdown {
+          direction: rtl;
+          margin-right: 0px;
+          cursor: pointer;
+          position: relative;
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          padding: 0.2rem;
+          padding-left: 0.5rem;
+  
+          .img {
+            border-radius: 50%;
+          }
+  
+          .name {
+            font-size: 0.8rem;
+            padding: 0 0.625rem;
+            padding-right: 0.3rem;
+            font-weight: 400;
+            vertical-align: middle;
+            color: rgb(126, 123, 123);
+          }
+  
+          .dropdownContent {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            right: 1.25rem;
+            border-radius: 8px;
+            box-shadow: 0px 0px 0.313rem rgba(207, 207, 207);
+            z-index: 10;
+            top: 100%;
+          }
+  
+          &:hover {
+            .dropdownContent {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    .navbarWrapper {
+      padding-left: 2.5rem;
+    }
+  
+    .responsive {
+      display: none;
+    }
+  
+    .responsive {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      vertical-align: center;
+  
+      .gembookLogo {
+        height: 50px;
+        width: 140px;
+      }
+  
+      button {
+        border: none;
+        background: transparent;
+        padding-top: 0.45rem;
+      }
+  
+      .mobileSearchBtn {
+        color: gray;
+        font-size: 1.25rem;
+      }
+    }
+  }
+  
+  .swipeableNotificationDrawer {
+    border-radius: 10px 10px 0 0;
+  
+    .notiMobileContainer {
+      max-height: 60vh;
+      min-height: 50vh;
+      overflow-y: auto;
+    }
+  }
+  
+  .notiContainer {
+    max-height: 240px;
+    min-height: 200px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: #ddd;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: #3da9a1;
+      border-radius: 1rem;
+  
+      &:hover {
+        background: darken(#3da9a1, 15%);
+      }
+    }
+  }
+  .noNoti {
+    font-size: 10px;
+    padding: 1rem;
+  }
+  .notiHeadingContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fff;
+  
+    .notiHeading {
+      font-size: 16px;
+      font-weight: 900;
+      text-align: center;
+      color: #191919;
+    }
+    .notiAllRead {
+      color: #13938a;
+      font-size: 9px;
+      font-weight: 700px;
+      text-decoration: underline;
+      cursor: pointer;
+      text-align: right;
+    }
+    img {
+      cursor: pointer;
+      transition: all 0.2s linear;
+  
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+  
+  .tabContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 1rem 1.5rem 1rem;
+  
+    .tab {
+      font-size: 0.75rem;
+      background: none;
+      border: none;
+      outline: 0;
+      cursor: pointer;
+      width: 35%;
+      padding: 4px;
+      color: #a6a6a6;
+  
+      .allUnreadCount {
+        width: 15px;
+        height: 15px;
+        color: #fff;
+        display: flex;
+        border-radius: 50%;
+        background: #38a3a5;
+        justify-content: center;
+        align-items: center;
+        margin-left: 5px;
+        font-size: 0.5rem;
+      }
+    }
+    .activeTab {
+      font-weight: 600;
+      background: #38a3a524;
+      border-radius: 15px;
+      color: #38a3a5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .notiNavContainer,
+  .notiNavContainerRead {
+    padding: 0.5rem 1rem;
+    margin: 3px 0px;
+    display: flex;
+    font-size: 12px;
+    cursor: pointer;
+    transform: scale(0.975);
+    transition: all 0.2s linear;
+    background-color: #fff;
+  
+    &:hover {
+      transform: scale(1);
+      background-color: #e2e2e280;
+    }
+    .notiRead {
+      background-color: rgba(56, 163, 165, 0.774);
+      border-radius: 50%;
+      cursor: pointer;
+      position: absolute;
+      left: 5px;
+      top: 23px;
+      width: 6px;
+      height: 6px;
+    }
+    .profileImg {
+      width: 40px;
+      height: 40px;
+      img {
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        object-fit: fill;
+        border : 1px solid white
+      }
+      .reac{
+        height: 20px;
+        width: 20px;
+        position: absolute;
+        top: 2rem;
+        left: 2.5rem;
+        border-radius: 50%;
+      }
+    }
+    .notiInfo {
+      padding: 0 5px;
+      display: flex;
+      flex-direction: column;
+      width: 85%;
+    }
+    p {
+      font-weight: 500;
+      color: #191919;
+  
+      .notiIcon {
+        text-transform: capitalize;
+        font-weight: bolder;
+        border: 1px solid;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 10px;
+        height: 10px;
+      }
+    }
+    p,
+    span {
+      margin-bottom: 5px;
+    }
+    .date {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      font-weight: 500;
+      color: #000;
+    }
+  }
+  .notiNavContainerRead {
+    background: lighten(#38a3a5, 54%);
+  }
+  .notifyByName {
+    font-weight: 600;
+    color: #3da9a1;
+  }
+  .footer {
+    height: 15px;
+    background: #fff;
+    position: sticky;
+    bottom: 0;
+    border-radius: 0.375rem;
+  }
+  
+  // --------------Mobile View------------------
+  
+  .navWrapperMobile {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .navbarMobile {
+    width: 100%;
+    height: 4.25rem;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+  
+    .menuIconMobile {
+      cursor: pointer;
+      width: 1.75rem;
+      height: auto;
+    }
+  
+    .headerTextMobile {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 25px;
+      .headerTextHelperMobile {
+        margin-left: 3px;
+        color: black;
+        font-weight: 700;
+        font-size: 10px;
+      }
+      img {
+        max-width: 25px;
+        height: auto;
+      }
+    }
+  
+    ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      direction: ltr;
+      margin: 0px;
+      width: 100%;
+      li {
+        width: fit-content;
+        position: relative;
+  
+        &.marginLeftAutoMobile {
+          margin-left: auto;
+        }
+  
+        display: flex;
+        justify-content: center;
+        align-items: center;
+  
+        .searchIconMobile {
+          margin-right: 13px;
+          cursor: not-allowed;
+          opacity: 0.5;
+          width: 15px;
+          height: auto;
+        }
+        .notiCount {
+          width: 12px;
+          height: 12px;
+          background: #ec5151;
+          color: #fff;
+          font-size: 8px;
+          left: 2.2rem;
+          text-align: center;
+          font-weight: bolder;
+          border-radius: 50%;
+          position: absolute;
+          top: 0;
+          cursor: pointer;
+        }
+        .notiCountMobile {
+          width: 10px;
+          height: 10px;
+          font-size: 7px;
+          left: 2.5rem;
+          top: 2px;
+        }
+        .notificationIconMobile {
+          margin-right: 13px;
+          cursor: not-allowed;
+          opacity: 0.5;
+          width: 15px;
+          height: auto;
+        }
+  
+        .dropdownMobile {
+          direction: rtl;
+          cursor: pointer;
+          position: relative;
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+  
+          .imgMobile {
+            border-radius: 50%;
+            width: 1.2rem;
+            height: 1.2rem;
+          }
+  
+          .nameMobile {
+            font-size: 0.9rem;
+            padding: 0 0.625rem;
+            padding-right: 0.3rem;
+            font-weight: 400;
+            vertical-align: middle;
+            color: rgb(126, 123, 123);
+          }
+  
+          .dropdownContentMobile {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            right: 1.25rem;
+            box-shadow: 0px 0px 0.313rem rgba(207, 207, 207);
+            z-index: 1;
+            top: 100%;
+          }
+  
+          &:hover {
+            .dropdownContentMobile {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+    .navbarWrapperMobile {
+      padding-left: 25px;
+      padding-right: 20px;
+    }
+  
+    .responsive {
+      display: none;
+    }
+  
+    .responsive {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      vertical-align: center;
+  
+      .gembookLogo {
+        height: 50px;
+        width: 140px;
+      }
+  
+      button {
+        border: none;
+        background: transparent;
+        padding-top: 0.45rem;
+      }
+  
+      .mobileSearchBtn {
+        color: gray;
+        font-size: 1.25rem;
+      }
+    }
+  }
+  .activityWrapper {
+    background: #fff;
+    display: flex;
+    padding: 1rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    justify-content: space-between;
+    &::-webkit-scrollbar {
+      height: 5px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: #fff;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: #ddd;
+    }
+  }
+  .activityContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 6rem;
+    width: 6rem;
+    margin: 0 0.5rem;
+    flex: 0 0 auto;
+    position: relative;
+    cursor: pointer;
+  
+    .currentEventsCount {
+      position: absolute;
+      top: -11px;
+      background: #38a3a5;
+      left: 4.5rem;
+      width: 20px;
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+      height: 20px;
+      border-radius: 50%;
+    }
+  
+    .activityName {
+      font-size: 12px;
+      padding: 5px;
+    }
+  }
+  .awardHeader {
+    background-color: #fff33547;
+    mix-blend-mode: normal;
+    border-radius: 0.375rem;
+    align-items: center;
+    padding: 1.313rem;
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+  }
+  .hashtagHeader {
+    background: #f0f8f5;
+    mix-blend-mode: normal;
+    border-radius: 0.375rem;
+    align-items: center;
+    padding: 1.3rem;
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+  }
+  .birthdayHeader {
+    background: #fff1f8;
+    mix-blend-mode: normal;
+    border-radius: 0.375rem;
+    padding: 1.313rem;
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+    .action {
+      margin-left: auto;
+    }
+  }
+  .memberHeader {
+    background: rgb(0, 84, 254, 0.07);
+    mix-blend-mode: normal;
+    border-radius: 0.375rem;
+    padding: 1.313rem;
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+    .action {
+      margin-left: auto;
+    }
+  }
+  .anniversaryHeader {
+    background: #f3eaff;
+    mix-blend-mode: normal;
+    border-radius: 0.375rem;
+    padding: 1.313rem;
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+    .action {
+      margin-left: auto;
+    }
+  }
+  .eventHeader {
+    background: #e4f5ff;
+    mix-blend-mode: normal;
+    border-radius: 0.375rem;
+    align-items: center;
+    padding: 1.313rem;
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+    .action {
+      margin-left: auto;
+    }
+  }
+  
+  .profileCard {
+    cursor: auto;
+    height: 100%;
+    width: 191px;
+    .profile {
+      padding: 0.625rem;
+      .profileInfo {
+        direction: ltr;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        .profileImage {
+          border-radius: 50px;
+          background-color: #d7dce3;
+        }
+        .name {
+          font-size: 12px;
+          font-weight: 800;
+        }
+        .designation {
+          font-size: 0.625rem;
+        }
+      }
+      .viewProfileBtn {
+        opacity: 0.9;
+        width: 100%;
+        height: 1.625rem;
+        border-radius: 14.313rem !important;
+        font-size: 0.75rem;
+        line-height: 1.5rem;
+        padding: 0px;
+        margin: 0.625rem 0px 0px 0.313rem;
+        border: 1px solid #17a2b8;
+        color: #17a2b8;
+  
+        &:hover {
+          background-color: #17a2b8;
+          color: #fff;
+        }
+      }
+    }
+    .hr {
+      margin: 0px;
+    }
+    .dropdown {
+      list-style-type: none;
+      font-size: 0.688rem;
+      flex-direction: column;
+      align-items: flex-start;
+      li {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        cursor: pointer;
+        padding: 0.313rem 0.625rem;
+        &:hover {
+          background-color: aliceblue;
+        }
+      }
+      .disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+  }
+  .logout {
+    color: #77787d !important;
+    width: 100%;
+    font-size: 0.75rem !important;
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.125rem 0px;
+    background-color: inherit;
+  
+    &:hover {
+      text-decoration: none;
+      box-shadow: none;
+      border: none;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  .signin {
+    background-color: #38a3a5;
+    color: white;
+    align-self: right;
+    width: max-content;
+    margin: 0.625rem;
+    font-size: 1.25rem;
+    box-shadow: 0px 0.25rem 0.688rem rgba(67, 67, 67, 0.29);
+    border-radius: 0.25rem;
+    border-color: transparent;
+  }
+    

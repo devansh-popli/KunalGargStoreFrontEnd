@@ -316,7 +316,7 @@ const StockItemMenu = () => {
     switch (step) {
       case 0:
         return (
-          <Container>
+          <Container fluid>
             <TextField
               margin="normal"
               label="A/c Code"
@@ -463,7 +463,7 @@ const StockItemMenu = () => {
         );
       case 1:
         return (
-          <Container>
+          <Container fluid>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -597,7 +597,7 @@ const StockItemMenu = () => {
         );
       case 2:
         return (
-          <Container>
+          <Container fluid>
             <FormControl fullWidth variant="standard" margin="normal">
               <InputLabel htmlFor="typeOfGoods">Type of Goods</InputLabel>
               <Select
@@ -670,7 +670,7 @@ const StockItemMenu = () => {
     }
   };
   return isUserLoggedIn() ? (
-    <Container>
+    <Container fluid>
       <h2 className={`fw-bold`}>Stock Item Menu</h2>
       <div>
       <Stepper activeStep={activeStep} alternativeLabel >

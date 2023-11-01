@@ -241,7 +241,7 @@ function NewLedgerAccountForm() {
   const stateList = states;
   const userContext = useContext(UserContext);
   return userContext.isLogin ? (
-    <Container>
+    <Container className="p-4"> 
       {/* {JSON.stringify(formData)} */}
       <h2 className="fw-bold">New Ledger Account Form</h2>
       <form onSubmit={handleSubmit}>

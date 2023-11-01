@@ -20,12 +20,14 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { UserContext } from '../context/UserContext';
 import { Grid, Hidden, useMediaQuery } from '@mui/material';
+// import { ThemeProvider } from '@mui/material/styles';
 import Footer from './Footer';
 import { Link, NavLink } from 'react-router-dom';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import TableViewIcon from '@mui/icons-material/TableView';
-const drawerWidth = 350 ;
+import NavbarComponent from './NavbarComponent';
+const drawerWidth = 300 ;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -101,12 +103,13 @@ setOpen(true)
   return (
     <div>
 
-     
+{/* <ThemeProvider theme={theme}> */}
     <Box sx={{ display: 'flex' }}>
       <Hidden smDown>
        <CssBaseline />
-      <AppBar position="fixed" open={open} className='bg-primary'>
-       <Toolbar >
+      {/* <AppBar position="fixed" open={open} sx={{ backgroundColor: "#78C2AD" }}> */}
+       <NavbarComponent handleDrawerOpen={handleDrawerOpen}/>
+       {/* <Toolbar className='bg-primary'>  
         <Grid container justifyContent="space-between" alignItems="center">
       <Grid item display={'flex'} alignItems={'center'} justifyContent={'center'}>
       { userContext.isLogin &&  <IconButton
@@ -118,7 +121,7 @@ setOpen(true)
         >
           <MenuIcon />
         </IconButton>}
-        {/* <img src="../../download.png" className='w-25 my-3 mx-2 text-white' alt="" /> */}
+        {/* <img src="../../download.png" className='w-25 my-3 mx-2 text-white' alt="" /> 
         
       </Grid>
       <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'}>
@@ -133,7 +136,7 @@ setOpen(true)
       </Grid>
     </Grid>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -151,9 +154,9 @@ setOpen(true)
         <DrawerHeader >
           
           <img src="../../download.png" className='w-25 m-2 my-3' alt="" />
-        <Typography variant="h6" noWrap component="div">
+        <h4 >
           <b>SHOPEASE</b>
-        </Typography>
+        </h4>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -167,12 +170,14 @@ setOpen(true)
                 <ListItemIcon >
                   { <AccountBoxIcon  />}
                 </ListItemIcon>
-                <ListItemText primary={'New Ledger Account Form'}  primaryTypographyProps={{
+                <h6 className='fw-medium--dark' style={{color:"black"}}>New Ledger Account Form</h6>
+                {/* <ListItemText primary={'New Ledger Account Form'}  primaryTypographyProps={{
                     color: 'black',
                     fontWeight: 'medium',
                     variant: 'body2',
-                    fontSize:"20px"
-                  }} />
+                    // fontStyle:"italic"
+                    // fontSize:"20px"
+                  }} /> */}
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding as={NavLink} to={"/stock-item-menu"}>
@@ -180,12 +185,13 @@ setOpen(true)
                 <ListItemIcon>
                   { <InventoryIcon />}
                 </ListItemIcon>
-                <ListItemText  primary={'Stock Item Menu'}  primaryTypographyProps={{
+                {/* <ListItemText  primary={'Stock Item Menu'}  primaryTypographyProps={{
                     color: 'black',
                     fontWeight: 'medium',
                     variant: 'body2',
-                    fontSize:"20px"
-                  }} />
+                    // fontSize:"20px"
+                  }} /> */}
+                  <h6 className='fw-medium--dark' style={{color:"black"}}>Stock Item Menu</h6>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding  as={Link} to={"/view-stock-item-menu"}>
@@ -193,12 +199,13 @@ setOpen(true)
                 <ListItemIcon>
                   { <TableViewIcon />}
                 </ListItemIcon>
-                <ListItemText  primary={'View Stock Item Menu'}  primaryTypographyProps={{
+                {/* <ListItemText  primary={'View Stock Item Menu'}  primaryTypographyProps={{
                     color: 'black',
                     fontWeight: 'medium',
                     variant: 'body2',
-                    fontSize:"20px"
-                  }} />
+                    // fontSize:"20px"
+                  }} /> */}
+                   <h6 className='fw-medium--dark' style={{color:"black"}}>View Stock Item Menu</h6>
               </ListItemButton>
             </ListItem>
           </List>
@@ -218,6 +225,7 @@ setOpen(true)
       </Hidden>
     
     </Box>
+    {/* </ThemeProvider> */}
   <Hidden mdUp>
   <div>
   <AppBar position="fixed" open={open} className='bg-primary'>

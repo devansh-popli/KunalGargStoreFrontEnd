@@ -27,12 +27,13 @@ import {
   ListItemText,
   ListItemButton,
   ListItemIcon,
-} from '@mui/material';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import TableViewIcon from '@mui/icons-material/TableView';
-import MenuIcon from '@mui/icons-material/Menu';
+} from "@mui/material";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import TableViewIcon from "@mui/icons-material/TableView";
+import MenuIcon from "@mui/icons-material/Menu";
 import { ZoomIn } from "@mui/icons-material";
+import Sidebar from "./components/Sidebar";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -55,42 +56,44 @@ function App() {
       return Promise.reject(error);
     }
   );
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  
-    const toggleDrawer = () => {
-      setIsDrawerOpen(!isDrawerOpen);
-    };
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+  const [toggle, setToggle] = useState(true);
   return (
     <>
       <UserContextProvider>
         <BrowserRouter>
-          <div>
-      <PersistentDrawerLeft>
-      <ToastContainer
-              draggable
-              transition={Zoom}
-              position="top-right"
-            />
-            {loading && <SpinnerComponent />}
-            <Routes>
-              <Route path="" element={<Login />} />
-              <Route path="/home" element={<Home />} />
-              <Route
-                path="/new-ledger-account-form"
-                element={<NewLedgerAccountForm />}
-              />
-              <Route path="/stock-item-menu" element={<StockItemMenu />} />
-              <Route path="/stock-item-menu/:id" element={<StockItemMenu />} />
-              <Route
-                path="/view-stock-item-menu"
-                element={<ViewStockItemMenu />}
-              />
-            </Routes>
-            </PersistentDrawerLeft>
-    </div>
-           
+          <div className={toggle?"dashboard":"dashboard-active"}>
+            <ToastContainer draggable transition={Zoom} position="top-right" />
+            <Sidebar toggle={toggle} setToggle={setToggle} />
+            <section>
+              <NavbarComponent setToggle={setToggle} />
+              {loading && <SpinnerComponent />}
+              <Routes>
+                <Route path="" element={<Login />} />
+                <Route path="/home" element={<Home />} />
+                <Route
+                  path="/new-ledger-account-form"
+                  element={<NewLedgerAccountForm />}
+                />
+                <Route path="/stock-item-menu" element={<StockItemMenu />} />
+                <Route
+                  path="/stock-item-menu/:id"
+                  element={<StockItemMenu />}
+                />
+                <Route
+                  path="/view-stock-item-menu"
+                  element={<ViewStockItemMenu />}
+                />
+              </Routes>
+            </section>
+          </div>
+
           {/* </PersistentDrawerLeft> */}
-            {/* <Footer /> */}
+          {/* <Footer /> */}
         </BrowserRouter>
       </UserContextProvider>
     </>
