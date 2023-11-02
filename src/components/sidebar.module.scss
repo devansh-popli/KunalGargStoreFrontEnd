@@ -11,7 +11,10 @@
     color: #ffffff;
     padding-top: 1.188px;
     max-height: 100vh;
-  
+    .sidebarCloseBtn {
+     visibility: hidden;
+    }
+    @media (max-width:768px) {
     .sidebarCloseBtn {
       position: absolute;
       right: -15px;
@@ -19,7 +22,9 @@
       background: #212529;
       padding: 5px;
       border-radius: 50%;
+      visibility: visible;
     }
+  }
     &.active {
       display: block;
       position: fixed;

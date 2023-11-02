@@ -17,6 +17,11 @@
   background: #faf9f8;
   height: 100vh;
 }
+@media (max-width: 768px) {
+  .dashboard{
+    margin-left: 0px;
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
