@@ -17,7 +17,7 @@ function NavbarComponent({ setToggle }) {
     else{
       setToggle(false);
     }
-  }, [userContext]);
+  }, [userContext.isLogin]);
   return userContext.isLogin && (
     <div className={s.navWrapper}>
       <div className={s.navbar}>
