@@ -103,6 +103,22 @@ const Sidebar = ({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
+          <ListItem disablePadding as={Link} to={"/employee-form"}>
+            <ListItemButton>
+              <ListItemIcon>
+                {<TableViewIcon className="text-white" />}
+              </ListItemIcon>
+              <ListItemText
+                primary={"Employee Form"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
       )}
     </div>
