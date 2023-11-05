@@ -90,12 +90,30 @@ function EmployeeEnrollmentForm() {
  
 
   return (
-    <Container className='my-3'>
+    <Container className='mt-3'>
+        <h4 className='fw-bold'>Employee Registration</h4>
       <Paper elevation={3} style={{ padding: '20px' }}>
-        <Typography variant="h4">Employee Registration</Typography>
         <Stepper activeStep={activeStep}>
           {steps.map((label) => (
-            <Step key={label}>
+            <Step key={label}  sx={{
+              '& .MuiStepLabel-root .Mui-completed': {
+                color: '#78C2AD', // circle color (COMPLETED)
+              },
+              '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
+                {
+                  color: 'grey.500', // Just text label (COMPLETED)
+                },
+              '& .MuiStepLabel-root .Mui-active': {
+                color: '#78C2AD', // circle color (ACTIVE)
+              },
+              '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
+                {
+                  color: 'grey.500', // Just text label (ACTIVE)
+                },
+              '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+                fill: 'white', // circle's number (ACTIVE)
+              },
+            }}>
               <StepLabel>{label}</StepLabel>
             </Step>
           ))}
@@ -140,10 +158,10 @@ function EmployeeEnrollmentForm() {
             )}
             {/* Add sections for other steps */}
             <div>
-              <Button disabled={activeStep === 0} onClick={handleBack}>
+              <Button size='small' disabled={activeStep === 0} className={activeStep!==0?`font-primary`:``} onClick={handleBack}>
                 Back
               </Button>
-              <Button variant="contained" color="primary" onClick={handleSave}>
+              <Button size='small' style={{backgroundColor:'#78C2AD'}} variant="contained"  onClick={handleSave}>
                 {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
               </Button>
             </div>
@@ -192,6 +210,7 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
     <div>
         <TextField
             label="First Name"
+            variant='outlined'
             name="firstName"
             fullWidth
             value={formData.firstName}

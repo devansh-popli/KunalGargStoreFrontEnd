@@ -44,7 +44,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     };
   return (
     <div>  
-  <Typography variant="h6" className='mt-3'>Enter Nominee 1 Details</Typography>
+  <h6 variant="h6" className='mt-3'>Enter Nominee 1 Details</h6>
               <TextField className="my-2"
     label="Name"
     name="name"
@@ -78,7 +78,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     onChange={(e) => handleInputChange(e, 'nominee1')}
   />
 
-<Typography variant="h6">Enter Nominee 2 Details</Typography>
+<h6 variant="h6">Enter Nominee 2 Details</h6>
   <TextField className="mb-2"
     label="Name"
     name="name"

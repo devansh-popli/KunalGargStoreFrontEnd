@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+
+import { useDropzone } from 'react-dropzone';
 import {
   Container,
   Paper,
@@ -40,7 +42,23 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     };
+    const dropzoneStyle = {
+      border: '2px dashed #ccc',
+      borderRadius: '4px',
+      padding: '20px',
+      textAlign: 'center',
+      cursor: 'pointer',
+    };
+    
+    function handleChooseFile() {
+      document.getElementById('fileInput').click();
+    }
+    const onDrop = useCallback((acceptedFiles) => {
+      // Handle the dropped files here, e.g., upload to the server or process locally
+      console.log('Accepted Files:', acceptedFiles);
+    }, []);
   
+    const { getRootProps, getInputProps } = useDropzone({ onDrop });
   return (
     <div>  <TextField className="mb-2 mt-3"
     label="Name of Bank"
@@ -51,6 +69,7 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
     error={Boolean(errors.nameOfBank)}
     helperText={errors.nameOfBank}
   />
+  
   <TextField className="mb-2"
     label="Branch"
     name="branch"
@@ -86,7 +105,17 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
     onChange={handleInputChange}
     error={Boolean(errors.ifscNo)}
     helperText={errors.ifscNo}
-  /></div>
+  />
+   <div className='mb-3'>
+      <div {...getRootProps()} style={dropzoneStyle}>
+        <input {...getInputProps()} />
+        <p>Drag & drop files here, or click to select bank document files</p>
+      </div>
+      <Button variant="outlined" className='mt-2' color="primary" component="span" onClick={handleChooseFile}>
+        Choose File
+      </Button>
+    </div>
+  </div>
   )
 }
 

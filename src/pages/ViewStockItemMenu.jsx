@@ -11,8 +11,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { privateAxios } from "../services/AxiosService";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { Container } from "react-bootstrap";
-import { Button, TextField } from "@mui/material";
+// import { Container } from "react-bootstrap";
+import { Button, Container, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
 import { toast } from "react-toastify";
@@ -289,8 +289,8 @@ export default function ViewStockItemMenu() {
   };
   const userContext = React.useContext(UserContext);
   return userContext.isLogin ? (
-    <Container fluid>
-      <h3 className="fw-bold my-3">View Stock Item Menu Details</h3>
+    <Container className="mt-3">
+      <h4 className="fw-bold">View Stock Item Menu Details</h4>
       <Paper sx={{ width: "90%" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
         <TextField

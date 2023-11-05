@@ -8,8 +8,9 @@ import {
   MenuItem,
   Button,
   TextareaAutosize,
+  Container,
 } from "@mui/material";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Navigate, useParams } from "react-router-dom";
 import {
@@ -241,11 +242,11 @@ function NewLedgerAccountForm() {
   const stateList = states;
   const userContext = useContext(UserContext);
   return userContext.isLogin ? (
-    <Container className="p-4"> 
+    <Container className="mt-3"> 
       {/* {JSON.stringify(formData)} */}
-      <h2 className="fw-bold">New Ledger Account Form</h2>
+      <h4 className="fw-bold">New Ledger Account Form</h4>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} alignItems={"center"}>
           <Grid item xs={12} sm={4}>
             <TextField
               label="A/c Code"
@@ -288,7 +289,7 @@ function NewLedgerAccountForm() {
               variant="outlined"
               color="primary"
               size="small"
-              className="mt-5 mx-3"
+              className="mt-4 mx-3"
               onClick={() => fetchGSTINDetails()}
             >
               fetch gst Details

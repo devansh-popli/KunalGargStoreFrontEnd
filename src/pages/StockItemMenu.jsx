@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Container, Row, Col, Form, Dropdown } from "react-bootstrap";
+import { Row, Col, Form, Dropdown } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { isUserLoggedIn, uomList } from "../auth/HelperAuth";
@@ -16,6 +16,7 @@ import {
 import {
   Box,
   Button,
+  Container,
   FormControl,
   Grid,
   InputLabel,
@@ -316,7 +317,7 @@ const StockItemMenu = () => {
     switch (step) {
       case 0:
         return (
-          <Container fluid>
+          <Container>
             <TextField
               margin="normal"
               label="A/c Code"
@@ -670,8 +671,8 @@ const StockItemMenu = () => {
     }
   };
   return isUserLoggedIn() ? (
-    <Container fluid>
-      <h2 className={`fw-bold`}>Stock Item Menu</h2>
+    <Container className="mt-3">
+      <h4 className={`fw-bold`}>Stock Item Menu</h4>
       <div>
       <Stepper activeStep={activeStep} alternativeLabel >
         {steps.map((label,index) => (
@@ -758,7 +759,8 @@ const StockItemMenu = () => {
                 <Button
                   variant="contained"
                   // color="primary"
-                  className="bg-primary"
+                  style={{backgroundColor:"#78C2AD"}}
+                  // className="bg-primary"
                   onClick={handleNext}
                 >
                   Next
