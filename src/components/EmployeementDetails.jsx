@@ -62,6 +62,15 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData }) => {
         onChange={handleInputChange}
         error={Boolean(errors.dateOfJoining)}
         helperText={errors.dateOfJoining}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        InputProps={{
+          inputProps: {
+            placeholder: 'dd mm yy',
+            style: { textTransform: 'none' }, // Prevent uppercase transformation
+          },
+        }}
       />
       <FormControl fullWidth className="mb-2">
         <InputLabel>Employment Hours</InputLabel>

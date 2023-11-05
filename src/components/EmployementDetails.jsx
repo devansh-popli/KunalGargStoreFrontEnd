@@ -197,6 +197,15 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         value={formData.dateOfIssue}
         onChange={handleInputChange}
         error={Boolean(errors.dateOfIssue)}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        InputProps={{
+          inputProps: {
+            placeholder: 'dd mm yy',
+            style: { textTransform: 'none' }, // Prevent uppercase transformation
+          },
+        }}
         helperText={errors.dateOfIssue}
       />
       <TextField
@@ -209,6 +218,15 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         onChange={handleInputChange}
         error={Boolean(errors.dateOfExpiry)}
         helperText={errors.dateOfExpiry}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        InputProps={{
+          inputProps: {
+            placeholder: 'dd mm yy',
+            style: { textTransform: 'none' }, // Prevent uppercase transformation
+          },
+        }}
       />
       <TextField
         className="mb-2"
