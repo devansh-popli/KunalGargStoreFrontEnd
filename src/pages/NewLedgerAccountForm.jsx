@@ -9,6 +9,7 @@ import {
   Button,
   TextareaAutosize,
   Container,
+  Paper,
 } from "@mui/material";
 import { Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -245,9 +246,11 @@ function NewLedgerAccountForm() {
     <Container className="mt-3"> 
       {/* {JSON.stringify(formData)} */}
       <h4 className="fw-bold">New Ledger Account Form</h4>
+      <div className="d-flex justify-content-center">
+      <Paper elevation={3} style={{ padding: '20px' }} className='w-60'>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={3} alignItems={"center"}>
-          <Grid item xs={12} sm={4}>
+        <Grid className="myGridItem" container spacing={3} alignItems={"center"}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="A/c Code"
               variant="standard"
@@ -258,7 +261,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={8} className="mx-1" sm={4}>
+          <Grid className="myGridItem mx-1" item xs={8} sm={4}>
             <TextField
               label="GST No."
               variant="standard"
@@ -284,11 +287,12 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid xs={4} sm={3}>
+          <Grid className="myGridItem" xs={4} sm={3}>
             <Button
               variant="outlined"
               color="primary"
               size="small"
+              style={{fontSize:"11px"}}
               className="mt-4 mx-3"
               onClick={() => fetchGSTINDetails()}
             >
@@ -297,7 +301,7 @@ function NewLedgerAccountForm() {
           </Grid>
           {/* {stateList.filter(state=>state.code=='04')[0].state} */}
           {/* {formData.state} */}
-          {/* <Grid
+          {/* <Grid className="myGridItem"
             item
             xs={12}
             spacing={2}
@@ -305,7 +309,7 @@ function NewLedgerAccountForm() {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Grid item xs={8} className="mx-1" sm={6}>
+            <Grid className="myGridItem" item xs={8} className="mx-1" sm={6}>
               <TextField
                 label="GST No."
                 variant="standard"
@@ -331,7 +335,7 @@ function NewLedgerAccountForm() {
                 fullWidth
               />
             </Grid>
-            <Grid xs={4} sm={6}>
+            <Grid className="myGridItem" xs={4} sm={6}>
               <Button
                 variant="outlined"
                 color="primary"
@@ -343,7 +347,7 @@ function NewLedgerAccountForm() {
               </Button>
             </Grid>
           </Grid> */}
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="A/c Name"
               variant="standard"
@@ -360,7 +364,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <FormControl fullWidth variant="standard">
               <InputLabel>MSMED Status</InputLabel>
               <Select
@@ -379,7 +383,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="Opening Balance"
               variant="standard"
@@ -390,7 +394,7 @@ function NewLedgerAccountForm() {
               type="number"
             />
           </Grid>
-          <Grid item xs={12} sm={12}>
+          <Grid className="myGridItem" item xs={12} sm={12}>
             <FormControl fullWidth>
               <TextField
                 label="Address"
@@ -403,7 +407,7 @@ function NewLedgerAccountForm() {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="City"
               variant="standard"
@@ -413,7 +417,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <FormControl fullWidth variant="standard">
               <InputLabel>State</InputLabel>
               <Select
@@ -427,7 +431,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="Pincode"
               variant="standard"
@@ -440,7 +444,7 @@ function NewLedgerAccountForm() {
           </Grid>
         
         
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="Contact No."
               variant="standard"
@@ -450,7 +454,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="Email Id/Area"
               variant="standard"
@@ -460,7 +464,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid className="myGridItem" item xs={12} sm={4}>
             <TextField
               label="PAN"
               variant="standard"
@@ -470,7 +474,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="myGridItem" item xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel>Turnover Below 10 Cr</InputLabel>
               <Select
@@ -483,7 +487,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="myGridItem" item xs={12} sm={6}>
             <FormControl fullWidth variant="standard">
               <InputLabel>Whether Approved</InputLabel>
               <Select
@@ -496,7 +500,7 @@ function NewLedgerAccountForm() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="myGridItem" item xs={12} sm={6}>
             <TextField
               label="Account Num"
               variant="standard"
@@ -506,7 +510,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="myGridItem" item xs={12} sm={6}>
             <TextField
               label="Account Name (same as firm name)"
               variant="standard"
@@ -516,7 +520,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="myGridItem" item xs={12} sm={6}>
             <TextField
               label="IFSC"
               variant="standard"
@@ -526,7 +530,7 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid className="myGridItem" item xs={12} sm={6}>
             <TextField
               label="Branch"
               variant="standard"
@@ -541,6 +545,7 @@ function NewLedgerAccountForm() {
           <Row className="mt-2">
             <Col>
               <Button
+              size="small"
                 variant="contained"
                 onClick={() => addNewData()}
                 style={{ backgroundColor: "#78C2AD", color: "white" }}
@@ -548,6 +553,7 @@ function NewLedgerAccountForm() {
                 Add New Data
               </Button>
               <Button
+              size="small"
                 variant="contained"
                 color="secondary"
                 onClick={() => handleEvent("previous")}
@@ -557,6 +563,7 @@ function NewLedgerAccountForm() {
                 Previous
               </Button>
               <Button
+              size="small"
                 variant="contained"
                 color="secondary"
                 onClick={() => handleEvent("next")}
@@ -566,6 +573,7 @@ function NewLedgerAccountForm() {
                 Next
               </Button>
               <Button
+              size="small"
                 variant="contained"
                 color="secondary"
                 onClick={() => handleEvent("first")}
@@ -575,6 +583,7 @@ function NewLedgerAccountForm() {
                 First
               </Button>
               <Button
+              size="small"
                 variant="contained"
                 color="secondary"
                 onClick={() => handleEvent("last")}
@@ -584,6 +593,7 @@ function NewLedgerAccountForm() {
                 Last
               </Button>
               <Button
+              size="small"
                 variant="contained"
                 color="error"
                 onClick={deleteData}
@@ -593,6 +603,7 @@ function NewLedgerAccountForm() {
                 Delete
               </Button>
               <Button
+              size="small"
                 type="submit"
                 variant="contained"
                 color="success"
@@ -606,6 +617,8 @@ function NewLedgerAccountForm() {
           </Row>
         </Container>
       </form>
+      </Paper>
+      </div>
     </Container>
   ) : (
     <Navigate to={"/"} />

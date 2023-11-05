@@ -114,6 +114,16 @@ h6 {
 .w-80{
   width: 84.95% !important;
 }
+.w-60{
+  width: 61.95% !important;
+}
+.myGridItem{
+  /* margin: 0px !important; */
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+  margin-top: 0px !important;
+  margin-bottom: 10px !important;
+}
 .MuiButton-root {
   padding: 0px; /*
    Adjust the padding as needed */
