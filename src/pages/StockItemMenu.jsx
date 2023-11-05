@@ -21,6 +21,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   Step,
   StepLabel,
@@ -317,10 +318,10 @@ const StockItemMenu = () => {
     switch (step) {
       case 0:
         return (
-          <Container>
-            <TextField
-              margin="normal"
-              label="A/c Code"
+          <Container fluid>
+            <h5 className="fw-bold">Inventory Details </h5>
+            <TextField className="mb-2"
+                            label="A/c Code"
               variant="standard"
               type="text"
               name="accountCode"
@@ -328,8 +329,8 @@ const StockItemMenu = () => {
               disabled
               fullWidth
             />
-            <TextField
-              margin="normal"
+            <TextField className="mb-2"
+              
               label="Name"
               variant="standard"
               type="text"
@@ -340,8 +341,8 @@ const StockItemMenu = () => {
             />
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="Op. Stock in Qty"
                   variant="standard"
                   type="number"
@@ -352,8 +353,8 @@ const StockItemMenu = () => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="Op. Stock in Rs"
                   variant="standard"
                   type="number"
@@ -364,8 +365,8 @@ const StockItemMenu = () => {
                 />
               </Grid>
             </Grid>
-            <TextField
-              margin="normal"
+            <TextField className="mb-2"
+              
               label="Group Name"
               variant="standard"
               type="text"
@@ -376,8 +377,8 @@ const StockItemMenu = () => {
             />
             <Grid container spacing={2}>
               <Grid item xs={4}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="Purchase Rate"
                   variant="standard"
                   type="number"
@@ -388,8 +389,8 @@ const StockItemMenu = () => {
                 />
               </Grid>
               <Grid item xs={4}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="MRP"
                   variant="standard"
                   type="number"
@@ -400,8 +401,8 @@ const StockItemMenu = () => {
                 />
               </Grid>
               <Grid item xs={4}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="Sale Rate"
                   variant="standard"
                   type="number"
@@ -414,8 +415,8 @@ const StockItemMenu = () => {
             </Grid>
             <Grid container spacing={2}>
               <Grid item xs={4}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="Total GST @"
                   variant="standard"
                   type="number"
@@ -433,8 +434,8 @@ const StockItemMenu = () => {
                 />
               </Grid>
               <Grid item xs={4}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="CGST @"
                   variant="standard"
                   type="number"
@@ -446,8 +447,8 @@ const StockItemMenu = () => {
                 />
               </Grid>
               <Grid item xs={4}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="S.GST @"
                   variant="standard"
                   type="number"
@@ -465,10 +466,10 @@ const StockItemMenu = () => {
       case 1:
         return (
           <Container fluid>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  margin="normal"
+            <h5 className="fw-bold">Product Details</h5>
+            <Grid container spacing={2} className="">
+              <Grid item xs={6} className="mt-0">
+                <TextField className="mb-2 mt-0"
                   label="Purchase A/C"
                   variant="standard"
                   type="text"
@@ -479,8 +480,7 @@ const StockItemMenu = () => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
                   label="Sale A/C"
                   variant="standard"
                   type="text"
@@ -493,8 +493,8 @@ const StockItemMenu = () => {
             </Grid>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="Size"
                   variant="standard"
                   type="text"
@@ -505,8 +505,8 @@ const StockItemMenu = () => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField
-                  margin="normal"
+                <TextField className="mb-2"
+                  
                   label="HSN Code"
                   variant="standard"
                   name="hsnCode"
@@ -517,7 +517,7 @@ const StockItemMenu = () => {
                 />
               </Grid>
             </Grid>
-            <FormControl fullWidth variant="standard" margin="normal">
+            <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="rateCalculate">Rate Calculate</InputLabel>
               <Select
                 label="Rate Calculate"
@@ -532,7 +532,7 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
+            <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="clsStockIn">CLS Stock In</InputLabel>
               <Select
                 label="CLS Stock In"
@@ -547,7 +547,7 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
-            {/* <FormControl fullWidth variant="standard" margin="normal">
+            {/* <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="qtyInUnits">Qty. in UNITS</InputLabel>
               <Select
                 label="Qty. in UNITS"
@@ -562,7 +562,7 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl> */}
-            <FormControl fullWidth variant="standard" margin="normal">
+            <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="portalUOM">
                 Portal UOM (Units of Measurement)
               </InputLabel>
@@ -579,7 +579,7 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
+            <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="stockCalculate">Stock Calculate</InputLabel>
               <Select
                 label="Stock Calculate"
@@ -599,7 +599,8 @@ const StockItemMenu = () => {
       case 2:
         return (
           <Container fluid>
-            <FormControl fullWidth variant="standard" margin="normal">
+            <h5 className="fw-bold">Inventory Classification </h5>
+            <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="typeOfGoods">Type of Goods</InputLabel>
               <Select
                 label="Type of Goods"
@@ -614,7 +615,7 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
-            <FormControl fullWidth variant="standard" margin="normal">
+            <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="stockValuation">Stk Valuation</InputLabel>
               <Select
                 label="Stk Valuation"
@@ -629,8 +630,8 @@ const StockItemMenu = () => {
                     ))}
               </Select>
             </FormControl>
-            <TextField
-              margin="normal"
+            <TextField className="mb-2"
+              
               label="Qty Per PC/Case"
               variant="standard"
               type="text"
@@ -639,8 +640,8 @@ const StockItemMenu = () => {
               onChange={handleChange}
               fullWidth
             />
-            <TextField
-              margin="normal"
+            <TextField className="mb-2"
+              
               label="Min Stock Level"
               variant="standard"
               type="text"
@@ -649,7 +650,7 @@ const StockItemMenu = () => {
               onChange={handleChange}
               fullWidth
             />
-            <FormControl fullWidth variant="standard" margin="normal">
+            <FormControl fullWidth variant="standard" >
               <InputLabel htmlFor="gstType">GST Type</InputLabel>
               <Select
                 label="GST Type"
@@ -699,9 +700,10 @@ const StockItemMenu = () => {
           </Step>
         ))}
       </Stepper>
-      <div>
+      <div className="d-flex justify-content-center mt-3">
+      <Paper elevation={3} style={{ padding: '20px' }} className='w-50'>
         <Typography>{getStepContent(activeStep)}</Typography>
-        <Box mt={2}>
+        <Container className="mt-3">
           <Grid container spacing={2}>
             {/* <Grid item>
               { (
@@ -747,16 +749,14 @@ const StockItemMenu = () => {
                 </Button>
               )}
             </Grid> */}
-            <Grid item>
-              {activeStep !== 0 && (
-                <Button variant="contained" className="bg-danger" onClick={handleBack}>
+           {activeStep !== 0 && <Grid item>
+                <Button size="small" variant="contained" className="bg-danger" onClick={handleBack}>
                   Previous
                 </Button>
-              )}
-            </Grid>
-            <Grid item>
-              {activeStep !== steps.length - 1 && (
+            </Grid>}
+            {activeStep !== steps.length - 1 &&( <Grid item>
                 <Button
+                size="small"
                   variant="contained"
                   // color="primary"
                   style={{backgroundColor:"#78C2AD"}}
@@ -765,22 +765,24 @@ const StockItemMenu = () => {
                 >
                   Next
                 </Button>
-              )}
-            </Grid>
+              
+            </Grid>)}
             
-            <Grid item>
-            {activeStep === steps.length - 1 && 
+            {activeStep === steps.length - 1 && <Grid item>
+           
               <Button
+              size="small"
                 variant="contained"
                 // color="success"
                 className="bg-success"
                 onClick={(e)=>handleSubmit(e)}
               >
                 Save  
-              </Button>}
-            </Grid>
+              </Button>
+            </Grid>}
           </Grid>
-        </Box>
+        </Container>
+        </Paper>
       </div>
     </div>
     </Container>

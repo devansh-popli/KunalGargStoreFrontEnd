@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Stepper,
   Step,
@@ -17,6 +17,8 @@ import NomineeDetails from '../components/NomineeDetails';
 import BankDetails from '../components/BankDetails';
 import MedicalDetails from '../components/MedicalDetails';
 import EmployeementDetails from '../components/EmployeementDetails';
+import { Navigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 // Mock API function (replace with actual API calls)
 const saveEmployeeDataToAPI = (data) => {
   return new Promise((resolve) => {
@@ -28,17 +30,18 @@ const saveEmployeeDataToAPI = (data) => {
 };
 
 const steps = [
-  'Step 1',
-  'Step 2',
-  'Step 3',
-  'Step 4',
-  'Step 5',
-  'Step 6',
-  'Step 7',
-  'Step 8'
+  'Personal Details',
+  'Address',
+  'Profile Details',
+  'Employee Details',
+  'Nominee',
+  'Bank',
+  'Medical',
+  'Employment'
 ];
 
 function EmployeeEnrollmentForm() {
+  const userContext=useContext(UserContext)
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     nominee1: {
@@ -89,7 +92,7 @@ function EmployeeEnrollmentForm() {
 
  
 
-  return (
+  return userContext.isLogin ?(
     <Container className='mt-3'>
         <h4 className='fw-bold'>Employee Registration</h4>
         <Stepper className='my-3' activeStep={activeStep}>
@@ -171,7 +174,7 @@ function EmployeeEnrollmentForm() {
       </Paper>
       </div>
     </Container>
-  );
+  ):<Navigate to="/"/>;
 }
 
 function PersonalDetails({ onFormChange, formData,setFormData }) {
@@ -182,6 +185,9 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
   
       if (!formData.firstName) {
         newErrors.firstName = 'First name is required';
+      }
+      if (!formData.empCode) {
+        newErrors.empCode = 'Employee Code is required';
       }
   
       if (!formData.lastName) {
@@ -211,6 +217,17 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
   return (
     <div>
       <h5 className='fw-bold'>Personal Details</h5>
+        <TextField
+            label="Employee Code"
+            variant='outlined'
+            name="empCode"
+            fullWidth
+            value={formData.empCode}
+            onChange={handleInputChange}
+            error={Boolean(errors.empCode)}
+            helperText={errors.empCode}
+             className='mb-3'
+          />
         <TextField
             label="First Name"
             variant='outlined'
@@ -253,7 +270,7 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
             className='mb-3'
           />
     </div>
-  );
+  )
 }
 
 function Address({ onFormChange, formData ,setFormData}) {

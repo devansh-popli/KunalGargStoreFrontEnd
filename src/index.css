@@ -73,42 +73,42 @@ h6 {
 } */
 
 .MuiInputBase-input {
-  font-size: 12px !important; /* Adjust the font size as needed */
+  font-size: 14px !important; /* Adjust the font size as needed */
 }
 .MuiInputLabel-root {
-  font-size: 12px !important; /* Adjust the font size as needed */
+  font-size: 14px !important; /* Adjust the font size as needed */
   /* color: #333; Adjust the color as needed */
   /* You can add other styles here, such as font-weight, text-transform, etc. */
 }
 /* Adjust the font size for placeholder text */
 .MuiInputBase-input::placeholder {
-  font-size: 12px !important; /* Adjust the font size as needed */
+  font-size: 14px !important; /* Adjust the font size as needed */
 }
 .MuiInputBase-input::placeholder {
-  font-size: 12px !important; /* Adjust the font size as needed */
+  font-size: 14px !important; /* Adjust the font size as needed */
 }
 .MuiInputBase-root.MuiInput-root.MuiInput-underline .MuiInputBase-input {
-  font-size: 12px !important; /* Adjust the font size as needed */
+  font-size: 14px !important; /* Adjust the font size as needed */
 }
 .MuiInputLabel-root.MuiInputLabel-formControl {
-  font-size: 12px !important; /* Adjust the font size as needed */
+  font-size: 14px !important; /* Adjust the font size as needed */
   /* color: #333; Adjust the color as needed */
   /* You can add other styles here, such as font-weight, text-transform, etc. */
 }
 .MuiInputLabel-root.Mui-focused {
-  font-size: 12px !important; /* Adjust the font size as needed */
+  font-size: 14px !important; /* Adjust the font size as needed */
   /* color: #333; Adjust the color as needed */
   /* You can add other styles here, such as font-weight, text-transform, etc. */
 }
 .MuiOutlinedInput-root {
   height: 40px; /* Adjust the height as needed */
   padding: 8px; /* Adjust the padding as needed */
-  font-size: 12px; /* Adjust the font size as needed */
+  font-size: 14px; /* Adjust the font size as needed */
 }
 .custom-button2 {
   height: 40px;
   padding: 8px 16px; /* Adjust the padding as needed */
-  font-size: 12px; /* Adjust the font size as needed */
+  font-size: 14px; /* Adjust the font size as needed */
 }
 
 .w-80{
@@ -118,16 +118,16 @@ h6 {
   padding: 0px; /*
    Adjust the padding as needed */
   margin: 0px;
-   font-size: 12px; /* Adjust the font size as needed */
+   font-size: 14px; /* Adjust the font size as needed */
 }
 
 /* Reduce the text size within the button */
 .MuiButton-label {
-  font-size: 12px; /* Adjust the font size as needed */
+  font-size: 14px; /* Adjust the font size as needed */
 }
 /* Decrease the label's font size */
 .MuiInputLabel-outlined {
-  font-size: 12px; /* Adjust the font size as needed */
+  font-size: 14px; /* Adjust the font size as needed */
 }
 
 /* Decrease the margin between the label and the input field */
