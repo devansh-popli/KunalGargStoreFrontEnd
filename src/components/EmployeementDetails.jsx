@@ -50,6 +50,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData }) => {
 
   return (
     <div>
+      <h5 className="fw-bold">Employment Details</h5>
       {" "}
       <TextField
         className="mb-2 mt-3"

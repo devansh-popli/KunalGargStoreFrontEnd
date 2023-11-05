@@ -28,14 +28,14 @@ const saveEmployeeDataToAPI = (data) => {
 };
 
 const steps = [
-  'Personal Details',
-  'Address',
-  'Profile Details',
-  'Employee Details',
-  'Nominee Details',
-  'Bank Details',
-  'Medical',
-  'Employment Details'
+  'Step 1',
+  'Step 2',
+  'Step 3',
+  'Step 4',
+  'Step 5',
+  'Step 6',
+  'Step 7',
+  'Step 8'
 ];
 
 function EmployeeEnrollmentForm() {
@@ -92,8 +92,7 @@ function EmployeeEnrollmentForm() {
   return (
     <Container className='mt-3'>
         <h4 className='fw-bold'>Employee Registration</h4>
-      <Paper elevation={3} style={{ padding: '20px' }}>
-        <Stepper activeStep={activeStep}>
+        <Stepper className='my-3' activeStep={activeStep}>
           {steps.map((label) => (
             <Step key={label}  sx={{
               '& .MuiStepLabel-root .Mui-completed': {
@@ -118,6 +117,8 @@ function EmployeeEnrollmentForm() {
             </Step>
           ))}
         </Stepper>
+        <div className='d-flex justify-content-center'>
+      <Paper elevation={3} style={{ padding: '20px' }} className='w-50'>
         {activeStep === steps.length ? (
           <div>
             <Typography variant="h5">Thank you for completing the form.</Typography>
@@ -168,6 +169,7 @@ function EmployeeEnrollmentForm() {
           </div>
         )}
       </Paper>
+      </div>
     </Container>
   );
 }
@@ -208,6 +210,7 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
 
   return (
     <div>
+      <h5 className='fw-bold'>Personal Details</h5>
         <TextField
             label="First Name"
             variant='outlined'
@@ -217,7 +220,7 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
             onChange={handleInputChange}
             error={Boolean(errors.firstName)}
             helperText={errors.firstName}
-             className='my-3'
+             className='mb-3'
           />
           <TextField
             label="Last Name"
@@ -291,6 +294,7 @@ function Address({ onFormChange, formData ,setFormData}) {
   };
   return (
     <div>
+      <h5 className='fw-bold'>Address</h5>
           <TextField
             label="House No"
             name="houseNo"
@@ -299,7 +303,7 @@ function Address({ onFormChange, formData ,setFormData}) {
             onChange={handleInputChange}
             error={Boolean(errors.houseNo)}
             helperText={errors.houseNo}
-            className='my-3'
+            className='mb-3'
           />
           <TextField
             label="Street"

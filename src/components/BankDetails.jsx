@@ -60,7 +60,9 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
   
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
   return (
-    <div>  <TextField className="mb-2 mt-3"
+    <div>
+      <h5 className='fw-bold'>Bank Details</h5>
+        <TextField className="mb-2"
     label="Name of Bank"
     name="nameOfBank"
     fullWidth

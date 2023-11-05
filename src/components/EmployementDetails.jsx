@@ -86,17 +86,9 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
   const [documentFiles, setDocumentFiles] = useState([]);
   return (
     <div>
-      <input
-        type="file"
-        accept=".pdf,.jpg,.jpeg,.png"
-        id="selectedDocument"
-        name="selectedDocument"
-        onChange={handleFileChange}
-        multiple
-        style={{ display: "none" }}
-      />
+      <h5 className="fw-bold">Employee Details</h5>
       {/* <label htmlFor="selectedDocument" className="mt-3"></label> */}
-      <div className="d-flex my-2 align-items-center">
+      <div className="d-flex mb-2 align-items-center">
         <TextField
           className=" w-80  "
           label="Aadhar Card"
@@ -113,7 +105,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           variant="contained"
           startIcon={<CloudUploadIcon />}
         >
-          Upload file
+         
           <VisuallyHiddenInput type="file" />
         </Button>
       </div>
@@ -127,16 +119,12 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           onChange={handleInputChange}
           error={Boolean(errors.panCard)}
           helperText={errors.panCard}
-        />
-        <Button
+        /><Button
         className="mx-2"
           component="label"
           variant="contained"
           startIcon={<CloudUploadIcon />}
-        >
-          Upload file
-          <VisuallyHiddenInput type="file" />
-        </Button>
+        ><VisuallyHiddenInput type="file" /></Button>
       </div>
       <div className="d-flex mb-2 align-items-center">
         <TextField
@@ -155,7 +143,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
            className="mx-2"
           startIcon={<CloudUploadIcon />}
         >
-          Upload file
+         
           <VisuallyHiddenInput type="file" />
         </Button>
       </div>
@@ -176,7 +164,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           className="mx-2"
           startIcon={<CloudUploadIcon />}
         >
-          Upload file
+         
           <VisuallyHiddenInput type="file" />
         </Button>
       </div>

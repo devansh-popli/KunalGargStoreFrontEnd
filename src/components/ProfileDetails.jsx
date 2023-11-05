@@ -38,6 +38,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData }) => {
     };
   return (
     <>
+    <h5 className="fw-bold">Profile Details</h5>
       <FormControl fullWidth>
         <InputLabel>Designation</InputLabel>
         <Select
@@ -45,7 +46,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData }) => {
           value={formData.designation}
           onChange={handleInputChange}
           error={Boolean(errors.designation)}
-          className="my-3"
+          className="mb-3"
         >
           <MenuItem value="">Select Designation</MenuItem>
           <MenuItem value="Supervisor">Supervisor</MenuItem>

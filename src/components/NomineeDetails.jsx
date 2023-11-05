@@ -44,8 +44,9 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     };
   return (
     <div>  
-  <h6 variant="h6" className='mt-3'>Enter Nominee 1 Details</h6>
-              <TextField className="my-2"
+<h5 className='fw-bold'>Nominee Details</h5>
+  <h6 variant="h6" className=''>Enter Nominee 1 Details</h6>
+              <TextField className="mb-2"
     label="Name"
     name="name"
     fullWidth

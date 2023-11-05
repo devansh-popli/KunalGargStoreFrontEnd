@@ -57,7 +57,8 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
 
   return (
     <div>  
-      <FormControl fullWidth className="mb-2 mt-3">
+      <h5 className='fw-bold'>Medical</h5>
+      <FormControl fullWidth className="mb-2">
         <InputLabel>Disability Status</InputLabel>
         <Select
           name="disabilityStatus"
