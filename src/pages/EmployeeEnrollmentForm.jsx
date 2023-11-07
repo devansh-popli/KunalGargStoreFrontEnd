@@ -19,6 +19,8 @@ import MedicalDetails from '../components/MedicalDetails';
 import EmployeementDetails from '../components/EmployeementDetails';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
+import { Form, InputGroup } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 // Mock API function (replace with actual API calls)
 const saveEmployeeDataToAPI = (data) => {
   return new Promise((resolve) => {
@@ -214,6 +216,52 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
     onFormChange(event.target.name, event.target.value);
   };
 
+  const handleFileChangeProfile=(event)=>{
+    const localFile = event.target.files[0];
+    if (
+      localFile.type === "image/png" ||
+      localFile.type === "image/jpeg" ||
+      localFile.type === "image/jpg"
+    ) {
+      const reader = new FileReader();
+      reader.onload = (r) => {
+        setFormData({
+          ...formData,
+          placeholderProfile: r.target.result,
+          profileImage: localFile,
+        });
+      };
+      reader.readAsDataURL(localFile);
+    } else {
+      toast.error("Invalid File Format only jpeg/jpg/png allowed");
+      setFormData({ ...formData, placeholderProfile: null, profileImage: null });
+    }
+  }
+const handleFileChangeSignature=(event)=>{
+  const localFile = event.target.files[0];
+  if (
+    localFile.type === "image/png" ||
+    localFile.type === "image/jpeg" ||
+    localFile.type === "image/jpg"
+  ) {
+    const reader = new FileReader();
+    reader.onload = (r) => {
+      setFormData({
+        ...formData,
+        placeholderSignature: r.target.result,
+        signatureImage: localFile,
+      });
+    };
+    reader.readAsDataURL(localFile);
+  } else {
+    toast.error("Invalid File Format only jpeg/jpg/png allowed");
+    setFormData({
+      ...formData,
+      placeholderSignature:null,
+      signatureImage: null,
+    });
+  }
+}
   return (
     <div>
       <h5 className='fw-bold'>Personal Details</h5>
@@ -269,6 +317,74 @@ function PersonalDetails({ onFormChange, formData,setFormData }) {
             helperText={errors.phoneNumber}
             className='mb-3'
           />
+           <Form.Group className="mb-3">
+              <Container className="text-center py-3 border" fluid>
+                <p className="text-muted">Image Preview</p>
+                <img
+                  className="img-fluid"
+                  style={{
+                    objectFit: "contain",
+                    maxHeight: "250px",
+                    width: "100%",
+                  }}
+                  src={formData.placeholderProfile}
+                  alt=""
+                />
+              </Container>
+              <Form.Label>Select Profile Image</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  onChange={(event) => handleFileChangeProfile(event)}
+                  type="file"
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    setFormData({
+                      ...formData,
+                      placeholderProfile: undefined,
+                      profileImage: null,
+                    });
+                  }}
+                >
+                  Clear
+                </Button>
+              </InputGroup>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Container className="text-center py-3 border">
+                <p className="text-muted">Image Preview</p>
+                <img
+                  className="img-fluid"
+                  style={{
+                    objectFit: "contain",
+                    maxHeight: "250px",
+                    width: "100%",
+                  }}
+                  src={formData.placeholderSignature}
+                  alt=""
+                />
+              </Container>
+              <Form.Label>Upload Signature Image</Form.Label>
+              <InputGroup>
+                <Form.Control
+                  onChange={(event) => handleFileChangeSignature(event)}
+                  type="file"
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setFormData({
+                      ...formData,
+                      placeholderSignature: undefined,
+                      signatureImage: null,
+                    });
+                  }}
+                >
+                  Clear
+                </Button>
+              </InputGroup>
+            </Form.Group>
     </div>
   )
 }

@@ -512,7 +512,7 @@ function NewLedgerAccountForm() {
           </Grid>
           <Grid className="myGridItem" item xs={12} sm={6}>
             <TextField
-              label="Account Name (same as firm name)"
+              label="Account Name"
               variant="standard"
               name="accountNameBank"
               value={formData.accountNameBank}

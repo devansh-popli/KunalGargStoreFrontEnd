@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import React, { useRef, useState } from "react";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   Container,
   Paper,
@@ -13,15 +13,17 @@ import {
   MenuItem,
   Grid,
 } from "@mui/material";
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+import { toast } from "react-toastify";
+import { Form, InputGroup, Spinner } from "react-bootstrap";
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
 const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
@@ -83,11 +85,118 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
     const files = e.target.files;
     setDocumentFiles(Array.from(files));
   };
+  const handleFileChangeDocument = (event, type) => {
+    const localFiles = event.target.files;
+    if (localFiles) {
+      Array.from(localFiles)?.map((localFile) => {
+        if (
+          localFile.type === "image/png" ||
+          localFile.type === "image/jpeg" ||
+          localFile.type === "image/jpg"
+        ) {
+          const reader = new FileReader();
+          reader.onload = (r) => {
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              placeholder: [
+                ...(prevFormData?.placeholder || []), // Initialize as an empty array if not present
+                r.target.result,
+              ],
+              ...(type === "passport" && {
+                passportDocumentFiles: localFile,
+              }),
+              ...(type === "pan" && {
+                panDocumentFiles: localFile,
+              }),
+              ...(type === "driving" && {
+                drivingDocumentFiles: localFile,
+              }),
+            }));
+            console.log(formData?.placeholder?.length);
+          };
+          reader.readAsDataURL(localFile);
+        } else {
+          toast.error("Invalid File Format only jpeg/jpg/png allowed");
+          setFormData({
+            ...formData,
+            placeholderSignature: null,
+            signatureImage: null,
+          });
+        }
+      });
+    }
+  };
+  const fileInputRef1= useRef(null);
+  const fileInputRef2= useRef(null);
+  const fileInputRef3= useRef(null);
+  const fileInputRef4= useRef(null);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  // const handleFileChangeDocument = (e,type) => {
+  //   const files = e.target.files;
+  //   if(files)
+  //   {
+  //     setIsLoading(true);
+  //     const imageFilesArray = Array.from(files);
+  //     setImageFiles([...imageFiles, ...imageFilesArray]);
+  //     const previewArray = imageFilesArray.map((file) => URL.createObjectURL(file)); 
+  //     setImagePreviews([...imagePreviews, ...previewArray]);
+  //     console.log(imagePreviews.length)
+  //     setIsLoading(false);
+  //   }
+  // };
   const [documentFiles, setDocumentFiles] = useState([]);
+  function openImageInNewTab(dataUrl) {
+    const newWindow = window.open();
+    newWindow.document.write(`<div style={{display:"flex",textAlign:"center"}}><img src="${dataUrl}" alt="Image"></div>`);
+  }
+  const triggerFileInputClick1 = () => {
+    if (fileInputRef1.current) {
+      fileInputRef1.current.click(); // Trigger a click on the file input
+    }
+  };
+  const triggerFileInputClick2 = () => {
+    if (fileInputRef2.current) {
+      fileInputRef2.current.click(); // Trigger a click on the file input
+    }
+  };
+  const triggerFileInputClick3 = () => {
+    if (fileInputRef3.current) {
+      fileInputRef3.current.click(); // Trigger a click on the file input
+    }
+  };
+  const triggerFileInputClick4 = () => {
+    if (fileInputRef4.current) {
+      fileInputRef4.current.click(); // Trigger a click on the file input
+    }
+  };
   return (
     <div>
+      {/* {JSON.stringify(formData.placeholder)} */}
       <h5 className="fw-bold">Employee Details</h5>
       {/* <label htmlFor="selectedDocument" className="mt-3"></label> */}
+      <Container className="text-center py-3 border">
+        <p className="text-muted">Image Preview</p>
+        <div className="d-flex ">
+          {formData.placeholder?.map((file, index) => (
+            //  <a href={file} target="_blank">
+            <img
+              key={index}
+              className="img-fluid mx-2"
+              style={{
+                objectFit: "contain",
+                maxHeight: "150px",
+                width: "100%",
+              }}
+              src={file}
+              alt=""
+              onClick={()=>openImageInNewTab(file)}
+            />
+            // </a>
+          ))}
+        </div>
+      </Container>
       <div className="d-flex mb-2 align-items-center">
         <TextField
           className=" w-80  "
@@ -99,15 +208,18 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           error={Boolean(errors.aadharCard)}
           helperText={errors.aadharCard}
         />
-         <Button
-         className="mx-2"
+<Button
+          className="mx-2"
           component="label"
+          onClick={triggerFileInputClick1}
           variant="contained"
           startIcon={<CloudUploadIcon />}
         >
-         
-          <VisuallyHiddenInput type="file" />
-        </Button>
+        </Button>  <Form.Control className="d-none"
+                ref={fileInputRef1}
+                  onChange={(event) => handleFileChangeDocument(event,"adhar")}
+                  type="file"
+                />
       </div>
       <div className="d-flex mb-2 align-items-center">
         <TextField
@@ -119,12 +231,19 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           onChange={handleInputChange}
           error={Boolean(errors.panCard)}
           helperText={errors.panCard}
-        /><Button
-        className="mx-2"
+        />
+        <Button
+          className="mx-2"
           component="label"
+          onClick={triggerFileInputClick2}
           variant="contained"
           startIcon={<CloudUploadIcon />}
-        ><VisuallyHiddenInput type="file" /></Button>
+        >
+        </Button>  <Form.Control className="d-none"
+                ref={fileInputRef2}
+                  onChange={(event) => handleFileChangeDocument(event,"pan")}
+                  type="file"
+                />
       </div>
       <div className="d-flex mb-2 align-items-center">
         <TextField
@@ -140,12 +259,15 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         <Button
           component="label"
           variant="contained"
-           className="mx-2"
+          className="mx-2"
+          onClick={triggerFileInputClick3}
           startIcon={<CloudUploadIcon />}
         >
-         
-          <VisuallyHiddenInput type="file" />
-        </Button>
+        </Button>  <Form.Control className="d-none"
+                ref={fileInputRef3}
+                  onChange={(event) => handleFileChangeDocument(event,"driving")}
+                  type="file"
+                />
       </div>
       <div className="d-flex mb-2 align-items-center">
         <TextField
@@ -158,15 +280,18 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           error={Boolean(errors.passportNo)}
           helperText={errors.passportNo}
         />
-          <Button
+        <Button
           component="label"
           variant="contained"
           className="mx-2"
+          onClick={triggerFileInputClick4}
           startIcon={<CloudUploadIcon />}
         >
-         
-          <VisuallyHiddenInput type="file" />
-        </Button>
+        </Button>  <Form.Control className="d-none"
+                ref={fileInputRef4}
+                  onChange={(event) => handleFileChangeDocument(event,"passport")}
+                  type="file"
+                />
       </div>
       <TextField
         className="mb-2"
@@ -202,8 +327,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         }}
         InputProps={{
           inputProps: {
-            placeholder: 'dd mm yy',
-            style: { textTransform: 'none' }, // Prevent uppercase transformation
+            placeholder: "dd mm yy",
+            style: { textTransform: "none" }, // Prevent uppercase transformation
           },
         }}
         helperText={errors.dateOfIssue}
@@ -223,8 +348,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         }}
         InputProps={{
           inputProps: {
-            placeholder: 'dd mm yy',
-            style: { textTransform: 'none' }, // Prevent uppercase transformation
+            placeholder: "dd mm yy",
+            style: { textTransform: "none" }, // Prevent uppercase transformation
           },
         }}
       />
