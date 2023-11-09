@@ -13,33 +13,34 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     const validateForm = () => {
       const newErrors = {};
   
-      if (!formData.nominee1.name) {
+      if (!formData[0]?.name) {
         newErrors.nominee1Name = 'Nominee 1 name is required';
       }
   
-      if (!formData.nominee1.relationship) {
+      if (!formData[0]?.relationship) {
         newErrors.nominee1Relationship = 'Nominee 1 relationship is required';
       }
   
-      if (!formData.nominee2.name) {
+      if (!formData[1]?.name) {
         newErrors.nominee2Name = 'Nominee 2 name is required';
       }
   
-      if (!formData.nominee2.relationship) {
+      if (!formData[1]?.relationship) {
         newErrors.nominee2Relationship = 'Nominee 2 relationship is required';
       }
   
       return newErrors;
     };
-  
-    const handleInputChange = (e, nomineeKey) => {
+    const handleInputChange = (e, nomineeIndex) => {
       const { name, value } = e.target;
+      const updatedNominees = [...formData.nominees]; // Clone the nominees array
+      updatedNominees[nomineeIndex] = {
+        ...updatedNominees[nomineeIndex],
+        [name]: value
+      };
       setFormData({
         ...formData,
-        [nomineeKey]: {
-          ...formData[nomineeKey],
-          [name]: value,
-        },
+        nominees: updatedNominees
       });
     };
   return (
@@ -50,8 +51,8 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     label="Name"
     name="name"
     fullWidth
-    value={formData.nominee1.name}
-    onChange={(e) => handleInputChange(e, 'nominee1')}
+    value={formData[0]?.name}
+    onChange={(e) => handleInputChange(e, '0')}
     error={Boolean(errors.nominee1Name)}
     helperText={errors.nominee1Name}
   />
@@ -59,8 +60,8 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     label="Relationship"
     name="relationship"
     fullWidth
-    value={formData.nominee1.relationship}
-    onChange={(e) => handleInputChange(e, 'nominee1')}
+    value={formData[0]?.relationship}
+    onChange={(e) => handleInputChange(e, '0')}
     error={Boolean(errors.nominee1Relationship)}
     helperText={errors.nominee1Relationship}
   />
@@ -68,15 +69,15 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     label="Mobile"
     name="mobile"
     fullWidth
-    value={formData.nominee1.mobile}
-    onChange={(e) => handleInputChange(e, 'nominee1')}
+    value={formData[0]?.mobile}
+    onChange={(e) => handleInputChange(e, '0')}
   />
   <TextField className="mb-2"
     label="Aadhar Card"
     name="aadharCard"
     fullWidth
-    value={formData.nominee1.aadharCard}
-    onChange={(e) => handleInputChange(e, 'nominee1')}
+    value={formData[0]?.aadharCard}
+    onChange={(e) => handleInputChange(e, '0')}
   />
 
 <h6 variant="h6">Enter Nominee 2 Details</h6>
@@ -84,8 +85,8 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     label="Name"
     name="name"
     fullWidth
-    value={formData.nominee2.name}
-    onChange={(e) => handleInputChange(e, 'nominee2')}
+    value={formData[1]?.name}
+    onChange={(e) => handleInputChange(e, '1')}
     error={Boolean(errors.nominee2Name)}
     helperText={errors.nominee2Name}
   />
@@ -93,8 +94,8 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     label="Relationship"
     name="relationship"
     fullWidth
-    value={formData.nominee2.relationship}
-    onChange={(e) => handleInputChange(e, 'nominee2')}
+    value={formData[1]?.relationship}
+    onChange={(e) => handleInputChange(e, '1')}
     error={Boolean(errors.nominee2Relationship)}
     helperText={errors.nominee2Relationship}
   />
@@ -102,15 +103,15 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     label="Mobile"
     name="mobile"
     fullWidth
-    value={formData.nominee2.mobile}
-    onChange={(e) => handleInputChange(e, 'nominee2')}
+    value={formData[1]?.mobile}
+    onChange={(e) => handleInputChange(e, '1')}
   />
   <TextField className="mb-2"
     label="Aadhar Card"
     name="aadharCard"
     fullWidth
-    value={formData.nominee2.aadharCard}
-    onChange={(e) => handleInputChange(e, 'nominee2')}
+    value={formData[1]?.aadharCard}
+    onChange={(e) => handleInputChange(e, '1')}
   /></div>
   )
 }

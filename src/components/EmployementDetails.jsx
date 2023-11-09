@@ -103,13 +103,16 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
                 r.target.result,
               ],
               ...(type === "passport" && {
-                passportDocumentFiles: localFile,
+                passportDocumentFiles: [...formData?.passportDocumentFiles || [],localFile],
               }),
               ...(type === "pan" && {
-                panDocumentFiles: localFile,
+                panDocumentFiles: [...formData?.panDocumentFiles || [],localFile],
               }),
               ...(type === "driving" && {
-                drivingDocumentFiles: localFile,
+                drivingDocumentFiles: [...formData?.drivingDocumentFiles || [],localFile],
+              }),
+              ...(type === "adhar" && {
+               aadharDocumentFiles: [...formData?.aadharDocumentFiles || [],localFile],
               }),
             }));
             console.log(formData?.placeholder?.length);
