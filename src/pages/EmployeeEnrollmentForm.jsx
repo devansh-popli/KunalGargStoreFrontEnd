@@ -123,9 +123,9 @@ function EmployeeEnrollmentForm() {
 
   return userContext.isLogin ? (
     <Container className="mt-3">
-      <h4 className="fw-bold">Employee Registration</h4>
+      <h4 className="fw-bold ">Employee Registration</h4>
       {/* {JSON.stringify(formData)} */}
-      <Stepper className="my-3" activeStep={activeStep}>
+      <Stepper className="hide-mobile" activeStep={activeStep}>
         {steps.map((label) => (
           <Step
             key={label}
@@ -154,7 +154,7 @@ function EmployeeEnrollmentForm() {
         ))}
       </Stepper>
       <div className="d-flex justify-content-center">
-        <Paper elevation={3} style={{ padding: "20px" }} className="w-50">
+        <Paper elevation={3} style={{ padding: "20px" }} className="w-custom">
           {activeStep === steps.length ? (
             <div>
               <Typography variant="h5">

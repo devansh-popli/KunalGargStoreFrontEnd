@@ -144,8 +144,25 @@ h6 {
 .MuiInputLabel-outlined + .MuiOutlinedInput-root {
   margin-top: 4px; /* Adjust the margin as needed */
 }
-@media screen {
-  .margin{
-    margin-top: 20px;
+.w-custom{
+  width: 45%;
+}
+.hide-mobile{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.custom-btn{
+  font-size: xx-small !important;
+  width: 100%;
+}
+@media (max-width:768px) {
+  .w-custom{
+    width: 95% !important;
+  }
+  .w-60{
+    width: 95% !important;
+  }
+  .hide-mobile{
+    display: none !important;
   }
 }

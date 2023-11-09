@@ -287,13 +287,13 @@ function NewLedgerAccountForm() {
               fullWidth
             />
           </Grid>
-          <Grid className="myGridItem" xs={4} sm={3}>
+          <Grid className="myGridItem" xs={3} sm={3}>
             <Button
               variant="outlined"
               color="primary"
               size="small"
               style={{fontSize:"11px"}}
-              className="mt-4 mx-3"
+              className="mt-4 mx-2 custom-btn"
               onClick={() => fetchGSTINDetails()}
             >
               fetch gst Details

@@ -6,7 +6,7 @@ export const BASE_URL='https://api.craftcastle.co.in'
 
 export const privateAxios=axios.create({
     baseURL:BASE_URL
-})
+}) 
 privateAxios.interceptors.request.use(
   (config) => {
     //request me modification krege

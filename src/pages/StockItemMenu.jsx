@@ -701,7 +701,7 @@ const StockItemMenu = () => {
         ))}
       </Stepper>
       <div className="d-flex justify-content-center mt-3">
-      <Paper elevation={3} style={{ padding: '20px' }} className='w-50'>
+      <Paper elevation={3} style={{ padding: '20px' }} className='w-custom'>
         <Typography>{getStepContent(activeStep)}</Typography>
         <Container className="mt-3">
           <Grid container spacing={2}>

@@ -9,13 +9,13 @@
 .dashboard{
   margin-left: 253px;
 
-  height: 100vh;
+  /* height: 100vh; */
 }
 .dashboard-active{
   margin-left: 0px;
   overflow: hidden;
  
-  height: 100vh;
+  /* height: 100vh; */
 }
 /* Change the color of the scrollbar thumb */
 ::-webkit-scrollbar-thumb {
