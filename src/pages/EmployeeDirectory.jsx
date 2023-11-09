@@ -63,7 +63,7 @@ console.log(event.target.value)
 
   return (
     <Container className="mt-3">
-      <h5>Employee Directory</h5>
+      <h4 className="fw-bold">Employee Directory</h4>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
