@@ -19,6 +19,7 @@ import { UserContext } from "../context/UserContext";
 import { Form, InputGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
+  getEmployeeCodeFromBackend,
   saveEmployeeDataToBackend,
   saveEmployeeDocumentToBackend,
 } from "../services/EmployeeDataService";
@@ -49,7 +50,14 @@ function EmployeeEnrollmentForm() {
   const [formData, setFormData] = useState({
     nominees: [],
   });
-
+  useEffect(()=>{
+    getEmployeeCodeFromBackend().then(data=>{
+      const nextNumericPart = parseInt(data.split("-")[1]) + 1;
+      setFormData({...formData,empCode:`EMP-${String(nextNumericPart).padStart(3, "0")}`})
+    }).catch(error=>{
+      toast.error("Internal Server Error")
+    })
+    },[])
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -370,6 +378,10 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
         error={Boolean(errors.empCode)}
         helperText={errors.empCode}
         className="mb-3"
+        disabled
+        InputLabelProps={{
+          shrink: formData.empCode ? true : false, // Set shrink to true if value is present
+        }}
       />
       <TextField
         label="First Name"

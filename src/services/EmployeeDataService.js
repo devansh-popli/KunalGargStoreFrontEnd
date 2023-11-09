@@ -11,6 +11,11 @@ export const getEmployeeDataFromBackend = (pageNum=0,pageSize=10,sortBy="firstNa
     .get(`/employee/list?pageNumber=${pageNum}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`)
     .then((data) => data.data);
 };
+export const getEmployeeCodeFromBackend = (pageNum=0,pageSize=10,sortBy="firstName",sortDir="asc") => {
+  return privateAxios
+    .get(`/employee/lastEmployeeCode`)
+    .then((data) => data.data);
+};
 export const saveEmployeeDocumentToBackend = (formData,type,file) => {
     console.log(formData,"printing formData")
     const employeeDocumentImage=new FormData()
