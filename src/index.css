@@ -1,6 +1,8 @@
 
 body {
-  background-color:  #faf9f8;/* Light gray or any other light color you prefer */
+  /* background-color:  #faf9f8;Light gray or any other light color you prefer
+   */
+   background-color: RGB(250, 249, 248) !important;
   /* font-family: 'Raleway', sans-serif !important; */
   font-family: 'Lexend', sans-serif !important;
 /* font-family: 'Raleway', sans-serif !important; */
@@ -155,12 +157,18 @@ h6 {
   font-size: xx-small !important;
   width: 100%;
 }
+.w-90{
+  width: 90%;
+}
 @media (max-width:768px) {
   .w-custom{
     width: 95% !important;
   }
   .w-60{
     width: 95% !important;
+  }
+  .w-90{
+    width: 100%;
   }
   .hide-mobile{
     display: none !important;

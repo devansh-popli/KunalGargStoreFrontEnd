@@ -291,7 +291,7 @@ export default function ViewStockItemMenu() {
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
-      <Paper sx={{ width: "90%" }}>
+      <Paper className="w-90">
         <TableContainer sx={{ maxHeight: 440 }}>
         <TextField
         className="w-50 m-4"
