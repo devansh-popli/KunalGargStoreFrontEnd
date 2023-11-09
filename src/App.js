@@ -35,6 +35,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { ZoomIn } from "@mui/icons-material";
 import Sidebar from "./components/Sidebar";
 import EmployeeEnrollmentForm from "./pages/EmployeeEnrollmentForm";
+import EmployeeDirectory from "./pages/EmployeeDirectory";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -92,6 +93,10 @@ function App() {
                 <Route
                   path="/employee-form"
                   element={<EmployeeEnrollmentForm />}
+                />
+                <Route
+                  path="/employee-directory"
+                  element={<EmployeeDirectory />}
                 />
               </Routes>
             </section>

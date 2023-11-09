@@ -11,6 +11,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
+import ImportContactsIcon from '@mui/icons-material/ImportContacts';
+import ContactsIcon from '@mui/icons-material/Contacts';
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -106,10 +108,26 @@ const Sidebar = ({ toggle, setToggle }) => {
           <ListItem disablePadding as={Link} to={"/employee-form"}>
             <ListItemButton>
               <ListItemIcon>
-                {<TableViewIcon className="text-white" />}
+                {<ContactsIcon className="text-white" />}
               </ListItemIcon>
               <ListItemText
                 primary={"Employee Form"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding as={Link} to={"/employee-directory"}>
+            <ListItemButton>
+              <ListItemIcon>
+                {<ImportContactsIcon className="text-white" />}
+              </ListItemIcon>
+              <ListItemText
+                primary={"Employee Directory"}
                 primaryTypographyProps={{
                   color: "white",
                   fontWeight: "medium",

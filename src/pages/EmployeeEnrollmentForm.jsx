@@ -57,12 +57,19 @@ function EmployeeEnrollmentForm() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
+  const excludedProperties = ['placeholderBankDocument', 'placeholderProfile','placeholderSignature','placeholder'];
   const handleSave = async () => {
     if (activeStep === steps.length - 1) {
       try {
         console.log(formData);
-        let res = await saveEmployeeDataToBackend(formData);
+        const filteredEmployeeData = Object.entries(formData).reduce((acc, [key, value]) => {
+          if (!excludedProperties.includes(key)) {
+            // Include the property in the new object
+            acc[key] = value;
+          }
+          return acc;
+        }, {});
+        let res = await saveEmployeeDataToBackend(filteredEmployeeData);
 
         if (formData.profileImage && res) {
           await saveEmployeeDocumentToBackend(res.id, "profileImage", formData.profileImage);
