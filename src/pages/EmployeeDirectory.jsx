@@ -46,18 +46,17 @@ const EmployeeDirectory = () => {
     setSearchTerm(event.target.value);
 console.log(event.target.value)
     if (event.target.value != "") {
-console.log("inside if")
-        const filteredEmployees = employees.filter((employee) =>
+        const filteredEmployees = oldemployees.filter((employee) =>
         Object.values(employee).some(
           (value) =>
             typeof value === "string" &&
-            value.toLowerCase().includes(searchTerm.toLowerCase())
+            value.toLowerCase().includes(event.target.value.toLowerCase())
         )
       );
+      console.log(filteredEmployees)
       setEmployees(filteredEmployees);
       // setPage(0); // Reset page when searching
     } else {
-        console.log("inside else")
       setEmployees(oldemployees);
     }
   };
