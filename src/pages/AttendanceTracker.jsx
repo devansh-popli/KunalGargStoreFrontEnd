@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AttendanceForm from "../components/AttendanceForm";
 import AttendanceTable from "../components/AttendanceTable";
 import Container from "@mui/material/Container";
@@ -9,9 +9,12 @@ import Toolbar from "@mui/material/Toolbar";
 import { List, ListItem } from "@mui/material";
 import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
 import { Col, Row } from "react-bootstrap";
+import { UserContext } from "../context/UserContext";
+import { Navigate } from "react-router-dom";
 function AttendanceTracker() {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const userContext=useContext(UserContext)
   useEffect(() => {
     getEmployeeDataFromBackend()
       .then((data) => {
@@ -40,7 +43,7 @@ function AttendanceTracker() {
     setAttendanceRecords([...attendanceRecords, newRecord]);
   };
 
-  return (
+  return userContext.isLogin ? (
     <Container className="mt-4">
       <h4 className="fw-bold">Attendance</h4>
 
@@ -49,11 +52,11 @@ function AttendanceTracker() {
         <AttendanceForm employees={employees} />
         </Col>
         <Col md={8}>
-        <AttendanceTable attendanceRecords={attendanceRecords} />
+        <AttendanceTable attendanceRecords={attendanceRecords} employeeList={employees} />
         </Col>
       </Row>
     </Container>
-  );
+  ):<Navigate to={"/"}/>;
 }
 
 export default AttendanceTracker;

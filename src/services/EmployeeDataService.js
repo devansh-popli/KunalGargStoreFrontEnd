@@ -24,3 +24,20 @@ export const saveEmployeeDocumentToBackend = (formData,type,file) => {
     .post(`/employee/upload/image/${formData}/${type}`, employeeDocumentImage)
     .then((data) => data.data);
 };
+
+export const saveAttendanceDataToBackend = (formData) => {
+  console.log(formData,"printing formData")
+return privateAxios
+  .post("/api/attendance", formData)
+  .then((data) => data.data);
+};
+export const getAttendanceDataFromBackend = (month,empCode,pageNum=0,pageSize=10,sortBy="employeeName",sortDir="asc") => {
+return privateAxios
+  .get(`/api/attendance?month=${month}&empCode=${empCode}&pageNumber=${pageNum}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`)
+  .then((data) => data.data);
+};
+export const getAttendanceDataByDateFromBackend = (date,empCode) => {
+return privateAxios
+  .get(`/api/attendance/findByEmpCodeAndDate?date=${date}&empCode=${empCode}`)
+  .then((data) => data.data);
+};
