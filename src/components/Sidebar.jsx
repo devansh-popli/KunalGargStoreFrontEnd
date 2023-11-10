@@ -34,6 +34,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import TableViewIcon from "@mui/icons-material/TableView";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 const Sidebar = ({ toggle, setToggle }) => {
   const userContext = useContext(UserContext);
   return (
@@ -128,6 +129,22 @@ const Sidebar = ({ toggle, setToggle }) => {
               </ListItemIcon>
               <ListItemText
                 primary={"Employee Directory"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding as={Link} to={"/attendance-tracker"}>
+            <ListItemButton>
+              <ListItemIcon>
+                {<CalendarMonthIcon className="text-white" />}
+              </ListItemIcon>
+              <ListItemText
+                primary={"Attendance Tracker"}
                 primaryTypographyProps={{
                   color: "white",
                   fontWeight: "medium",
