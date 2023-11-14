@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Carousel from 'react-bootstrap/Carousel';
+import Carousel from "react-bootstrap/Carousel";
 import {
   Container,
   Paper,
@@ -205,78 +205,25 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
       {/* <label htmlFor="selectedDocument" className="mt-3"></label> */}
       <Container className="text-center py-3 border">
         <p className="text-muted">Image Preview</p>
-        {/* <Carousel
-          plugins={[
-            "infinite",
-            "centered",
-            {
-              resolve: slidesToShowPlugin,
-              options: {
-                numberOfSlides: 3, // Adjust the numbe  dsdsdr of slides shown at a time
-              },
-            },
-            {
-              resolve: arrowsPlugin,
-              options: {
-                arrowLeft: (
-                  <ArrowBackIosNewIcon
-                    style={{
-                      color: "#78C2AD",
-                      background: "white",
-                      border: "0px solid white",
-                    }}
-                  />
-                ),
-                arrowLeftDisabled: (
-                  <ArrowBackIosNewIcon
-                    style={{
-                      color: "grey",
-                      background: "white",
-                      border: "0px solid white",
-                    }}
-                  />
-                ),
-                arrowRight: (
-                  <ArrowForwardIosIcon
-                    style={{
-                      color: "#78C2AD",
-                      background: "white",
-                      border: "0px solid white",
-                    }}
-                  />
-                ),
-                arrowRightDisabled: (
-                  <ArrowForwardIosIcon
-                    style={{
-                      color: "grey",
-                      background: "white",
-                      border: "0px solid white",
-                    }}
-                  />
-                ),
-                addArrowClickHandler: true,
-              },
-            },
-          ]}
-        ></Carousel> */}
-        <Carousel data-bs-theme="dark" indicators={false}>
-          {formData.placeholder?.map((file, index) => (
-            <Carousel.Item>
-              <img
-                key={index}
-                className="img-fluid mx-2"
-                style={{
-                  objectFit: "contain",
-                  maxHeight: "150px",
-                  width: "100%",
-                }}
-                src={file}
-                alt=""
-                onClick={() => openImageInNewTab(file)}
-              />
-            </Carousel.Item>
-          ))}
-        </Carousel>
+        {formData.placeholder && formData.placeholder.length > 0 && (
+          <Carousel data-bs-theme="dark" indicators={false} controls={formData.placeholder.length>0}>
+            {formData.placeholder.map((file, index) => (
+              <Carousel.Item key={index}>
+                <img
+                  className="img-fluid mx-2"
+                  style={{
+                    objectFit: "contain",
+                    maxHeight: "150px",
+                    width: "100%",
+                  }}
+                  src={file}
+                  alt=""
+                  onClick={() => openImageInNewTab(file)}
+                />
+              </Carousel.Item>
+            ))}
+          </Carousel>
+        )}
       </Container>
       <div className="d-flex my-2 align-items-center">
         <TextField
