@@ -213,7 +213,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           {
             resolve: slidesToShowPlugin,
             options: {
-              numberOfSlides: 3, // Adjust the number of slides shown at a time
+              numberOfSlides: 3, // Adjust the numbe  dsdsdr of slides shown at a time
             },
           },
           {
