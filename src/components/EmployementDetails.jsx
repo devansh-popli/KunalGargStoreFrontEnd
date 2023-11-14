@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import {
   Container,
   Paper,
@@ -14,6 +16,7 @@ import {
   Grid,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import Slider from 'react-slick';
 import { Form, InputGroup, Spinner } from "react-bootstrap";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -174,18 +177,25 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
       fileInputRef4.current.click(); // Trigger a click on the file input
     }
   };
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // You can adjust the number of slides shown at a time
+    slidesToScroll: 1,
+  };
   return (
+    
     <div>
       {/* {JSON.stringify(formData.placeholder)} */}
       <h5 className="fw-bold">Employee Details</h5>
       {/* <label htmlFor="selectedDocument" className="mt-3"></label> */}
       <Container className="text-center py-3 border">
         <p className="text-muted">Image Preview</p>
-        <div className="d-flex ">
-          {formData.placeholder?.map((file, index) => (
-            //  <a href={file} target="_blank">
+        <Slider {...settings}>
+        {formData.placeholder?.map((file, index) => (
+          <div key={index}>
             <img
-              key={index}
               className="img-fluid mx-2"
               style={{
                 objectFit: "contain",
@@ -194,13 +204,13 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
               }}
               src={file}
               alt=""
-              onClick={()=>openImageInNewTab(file)}
+              onClick={() => openImageInNewTab(file)}
             />
-            // </a>
-          ))}
-        </div>
+          </div>
+        ))}
+      </Slider>
       </Container>
-      <div className="d-flex mb-2 align-items-center">
+      <div className="d-flex my-2 align-items-center">
         <TextField
           className=" w-80  "
           label="Aadhar Card"

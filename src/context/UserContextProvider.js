@@ -6,6 +6,8 @@ export const UserContextProvider = ({children}) => {
     const [isLogin, setIsLogin] = useState();
     const [userData, setUserData] = useState();
     const [updatedAttendance, setUpdatedAttendance] = useState(null);
+    const [monthlyAttendance, setMonthlyAttendance] = useState(null);
+    const [dailyData, setDailyData] = useState(null);
     // const [fetchAttendanceRecord, setUserData] = useState();
     useEffect(() => {
         setIsLogin(isUserLoggedIn());
@@ -22,7 +24,7 @@ export const UserContextProvider = ({children}) => {
         setUserData(null)
     }
     return (
-        <UserContext.Provider value={{doLogin: doLogin ,isLogin:isLogin,userData:userData,doLogout:doLogout,updatedAttendance:updatedAttendance, setUpdatedAttendance:setUpdatedAttendance}}>
+        <UserContext.Provider value={{dailyData:dailyData,setDailyData:setDailyData,setMonthlyAttendance:setMonthlyAttendance,monthlyAttendance:monthlyAttendance,doLogin: doLogin ,isLogin:isLogin,userData:userData,doLogout:doLogout,updatedAttendance:updatedAttendance, setUpdatedAttendance:setUpdatedAttendance}}>
             {children}
         </UserContext.Provider>
     )

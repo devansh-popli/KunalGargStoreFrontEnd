@@ -19,26 +19,56 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { getAttendanceDataFromBackend } from "../services/EmployeeDataService";
+import {
+  getAttendanceDataFromBackend,
+  getAttendanceDataOfTodayFromBackend,
+} from "../services/EmployeeDataService";
 import { UserContext } from "../context/UserContext";
-
+import { toast } from "react-toastify";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 const AttendanceTable = ({ employeeList }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [showTotalHrs, setShowTotalHrs] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const indianTimeZone = "Asia/Kolkata";
+
+  const currentIndianDate = new Date()
+    .toLocaleDateString("en-IN", { timeZone: indianTimeZone })
+    .split("/")
+    .reverse()
+    .join("-");
   const userContext = useContext(UserContext);
   useEffect(() => {
-   let list= attendanceData.map((data) => {
-      if (data.id === userContext.updatedAttendance.id) {
-        data.inTime = userContext.updatedAttendance.inTime;
-        data.outTime = userContext.updatedAttendance.outTime;
-        return data
-      }
-    });
-    setAttendanceData(list)
+    if (selectedEmployee == "" && selectedMonth == "") {
+      getAttendanceDataOfTodayFromBackend(currentIndianDate)
+        .then((data) => {
+          setShowTotalHrs(false);
+          setAttendanceData(data.content);
+          userContext.setDailyData(data)
+          userContext.setMonthlyAttendance(null)
+        })
+        .catch((error) => {
+          toast.error("Internal Server Error While fetching todays record");
+        });
+    }
+    else{
+      setSelectedEmployee("") 
+      setSelectedMonth("")
+      getAttendanceDataOfTodayFromBackend(currentIndianDate)
+      .then((data) => {
+        setShowTotalHrs(false);
+        setAttendanceData(data.content);
+        userContext.setDailyData(data)
+        userContext.setMonthlyAttendance(null)
+      })
+      .catch((error) => {
+        toast.error("Internal Server Error While fetching todays record");
+      });
+    }
   }, [userContext.updatedAttendance]);
   const handleEmployeeChange = (event) => {
     setSelectedEmployee(event.target.value);
@@ -102,7 +132,7 @@ const AttendanceTable = ({ employeeList }) => {
   // });
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    setPage(newPage)
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -110,12 +140,29 @@ const AttendanceTable = ({ employeeList }) => {
     setPage(0);
   };
   const searchAttendanceData = () => {
-    getAttendanceDataFromBackend(selectedMonth, selectedEmployee).then(
-      (data) => {
-        setAttendanceData(data.content);
-      }
-    );
+    if (selectedMonth != "" && selectedEmployee != "") {
+      getAttendanceDataFromBackend(selectedMonth, selectedEmployee).then(
+        (data) => {
+          userContext.setMonthlyAttendance(data)
+          userContext.setDailyData(null)
+          setShowTotalHrs(true);
+          setAttendanceData(data.content);
+        }
+      );
+    } else {
+      toast.warn("Please select month and employee name!");
+    }
   };
+  function convertDecimalToHoursAndMinutes(decimalHours) {
+    // Extract the whole number part (hours)
+    const hours = Math.floor(decimalHours);
+  
+    // Calculate the decimal part as minutes
+    const minutes = Math.round((decimalHours - hours) * 60);
+  
+    return hours+"hrs :"+minutes+" mins"
+  }
+  
   return (
     <Paper elevation={3} style={{ padding: "20px", margin: "0px 20px" }}>
       <h5 className="fw-bold">Attendance Records</h5>
@@ -164,6 +211,52 @@ const AttendanceTable = ({ employeeList }) => {
           {" "}
           <SearchIcon /> Search
         </Button>
+        <Button
+          onClick={() => {
+            setSelectedEmployee("");
+            setSelectedMonth("");
+            getAttendanceDataOfTodayFromBackend(currentIndianDate)
+              .then((data) => {
+                setShowTotalHrs(false);
+                setAttendanceData(data.content);
+                userContext.setDailyData(data)
+                userContext.setMonthlyAttendance(null)
+              })
+              .catch((error) => {
+                toast.error(
+                  "Internal Server Error While fetching todays record"
+                );
+              });
+          }}
+          startIcon={<RestartAltIcon />}
+          variant="outlined"
+        >
+          Reset
+        </Button>
+        {showTotalHrs && (
+          <h6 className="ms-2" style={{width:'30%'}}>
+            <small>Total Hrs:{" "}
+            {convertDecimalToHoursAndMinutes(attendanceData.reduce((accumulator, currentTime) => {
+              const now = new Date(); // Get the current time
+
+              const [inHours, inMinutes] = currentTime?.inTime
+                ? currentTime.inTime.split(":").map(Number)
+                : [0, 0];
+
+              let [outHours, outMinutes] = currentTime?.outTime
+                ? currentTime.outTime.split(":").map(Number)
+                : [now.getHours(), now.getMinutes()]; // Use current time if outTime is not available
+
+              // Calculate the duration in minutes and add it to the accumulator
+              return (
+                accumulator +
+                Math.abs(
+                  outHours * 60 + outMinutes - (inHours * 60 + inMinutes)
+                )
+              );
+            }, 0) / 60)}</small>
+          </h6>
+        )}
       </div>
 
       <TableContainer>
@@ -182,10 +275,10 @@ const AttendanceTable = ({ employeeList }) => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((entry, index) => (
                 <TableRow key={index}>
-                  <TableCell>{entry.attendanceDate}</TableCell>
-                  <TableCell>{entry.employeeName}</TableCell>
-                  <TableCell>{entry.inTime}</TableCell>
-                  <TableCell>{entry.outTime}</TableCell>
+                  <TableCell>{entry?.attendanceDate}</TableCell>
+                  <TableCell>{entry?.employeeName}</TableCell>
+                  <TableCell>{entry?.inTime}</TableCell>
+                  <TableCell>{entry?.outTime}</TableCell>
                   <TableCell>
                     <IconButton
                       aria-controls={`actions-menu-${index}`}
@@ -217,7 +310,7 @@ const AttendanceTable = ({ employeeList }) => {
         count={attendanceData.length}
         rowsPerPage={rowsPerPage}
         page={page}
-        onChangePage={handleChangePage}
+        onPageChange={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </Paper>
