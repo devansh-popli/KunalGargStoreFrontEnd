@@ -31,7 +31,7 @@ return privateAxios
   .post("/api/attendance", formData)
   .then((data) => data.data);
 };
-export const getAttendanceDataFromBackend = (month,empCode,pageNum=0,pageSize=10,sortBy="employeeName",sortDir="asc") => {
+export const getAttendanceDataFromBackend = (month,empCode,pageNum=0,pageSize=31,sortBy="attendanceDate",sortDir="desc") => {
 return privateAxios
   .get(`/api/attendance?month=${month}&empCode=${empCode}&pageNumber=${pageNum}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`)
   .then((data) => data.data);
@@ -39,5 +39,10 @@ return privateAxios
 export const getAttendanceDataByDateFromBackend = (date,empCode) => {
 return privateAxios
   .get(`/api/attendance/findByEmpCodeAndDate?date=${date}&empCode=${empCode}`)
+  .then((data) => data.data);
+};
+export const getAttendanceDataOfTodayFromBackend = (date) => {
+return privateAxios
+  .get(`/api/attendance/findByToday?date=${date}`)
   .then((data) => data.data);
 };

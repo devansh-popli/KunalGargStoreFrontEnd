@@ -11,6 +11,8 @@ import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
 import { Col, Row } from "react-bootstrap";
 import { UserContext } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
+import AttendanceChart from "../components/AttendanceChart";
+import WorkHoursPieChart from "../components/WorkHoursPieChart";
 function AttendanceTracker() {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -42,14 +44,13 @@ function AttendanceTracker() {
 
     setAttendanceRecords([...attendanceRecords, newRecord]);
   };
-
   return userContext.isLogin ? (
-    <Container className="mt-4">
-      <h4 className="fw-bold">Attendance</h4>
-
+    <Container className="mt-2">
       <Row>
         <Col md={4}>
         <AttendanceForm employees={employees} />
+        <AttendanceChart  data={userContext.monthlyAttendance}/>
+        <WorkHoursPieChart data={userContext.dailyData}/>
         </Col>
         <Col md={8}>
         <AttendanceTable attendanceRecords={attendanceRecords} employeeList={employees} />

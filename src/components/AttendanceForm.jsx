@@ -17,6 +17,11 @@ import { toast } from "react-toastify";
 
 const AttendanceForm = ({ employees }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
+  
+const indianTimeZone = 'Asia/Kolkata';
+const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: indianTimeZone }).split('/').reverse().join('-');
+
+
   const [time, setTime] = useState("");
   const [timeOut, setTimeOut] = useState("");
   const userContext = useContext(UserContext);
@@ -37,7 +42,7 @@ const AttendanceForm = ({ employees }) => {
     console.log("Time In: ", time);
     let oldattendance = null;
     await getAttendanceDataByDateFromBackend(
-      new Date().toISOString().split("T")[0],
+      currentIndianDate,
       selectedEmployee
     ).then((data) => {
       if (data.id != null) {
@@ -58,7 +63,7 @@ const AttendanceForm = ({ employees }) => {
       employeeName: employee[0].firstName + " " + employee[0].lastName,
       inTime: time,
       outTime: oldattendance?.outTime,
-      attendanceDate: new Date().toISOString(),
+      attendanceDate: currentIndianDate,
     })
       .then((data) => {
         toast.success("Intime Updated Successfully");
@@ -74,7 +79,7 @@ const AttendanceForm = ({ employees }) => {
     console.log("Time Out: ", time);
     let oldattendance = null;
     await getAttendanceDataByDateFromBackend(
-      new Date().toISOString().split("T")[0],
+      currentIndianDate,
       selectedEmployee
     ).then((data) => {
       if (data.id != null) {
@@ -94,7 +99,7 @@ const AttendanceForm = ({ employees }) => {
       employeeName: employee[0].firstName + " " + employee[0].lastName,
       inTime: oldattendance?.inTime,
       outTime: time,
-      attendanceDate: new Date().toISOString(),
+      attendanceDate: currentIndianDate,
     })
       .then((data) => {
         toast.success("Outime Updated Successfully");
@@ -136,7 +141,7 @@ const AttendanceForm = ({ employees }) => {
         label="Date"
         type="date"
         disabled
-        defaultValue={new Date().toISOString().split("T")[0]}
+        defaultValue={currentIndianDate}
         fullWidth
         InputLabelProps={{
           shrink: true,

@@ -14,7 +14,11 @@ import {
   Grid,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import Carousel, { Dots, slidesToShowPlugin,arrowsPlugin } from '@brainhubeu/react-carousel';
+import '@brainhubeu/react-carousel/lib/style.css';  
 import { Form, InputGroup, Spinner } from "react-bootstrap";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -103,16 +107,28 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
                 r.target.result,
               ],
               ...(type === "passport" && {
-                passportDocumentFiles: [...formData?.passportDocumentFiles || [],localFile],
+                passportDocumentFiles: [
+                  ...(formData?.passportDocumentFiles || []),
+                  localFile,
+                ],
               }),
               ...(type === "pan" && {
-                panDocumentFiles: [...formData?.panDocumentFiles || [],localFile],
+                panDocumentFiles: [
+                  ...(formData?.panDocumentFiles || []),
+                  localFile,
+                ],
               }),
               ...(type === "driving" && {
-                drivingDocumentFiles: [...formData?.drivingDocumentFiles || [],localFile],
+                drivingDocumentFiles: [
+                  ...(formData?.drivingDocumentFiles || []),
+                  localFile,
+                ],
               }),
               ...(type === "adhar" && {
-               aadharDocumentFiles: [...formData?.aadharDocumentFiles || [],localFile],
+                aadharDocumentFiles: [
+                  ...(formData?.aadharDocumentFiles || []),
+                  localFile,
+                ],
               }),
             }));
             console.log(formData?.placeholder?.length);
@@ -129,10 +145,10 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
       });
     }
   };
-  const fileInputRef1= useRef(null);
-  const fileInputRef2= useRef(null);
-  const fileInputRef3= useRef(null);
-  const fileInputRef4= useRef(null);
+  const fileInputRef1 = useRef(null);
+  const fileInputRef2 = useRef(null);
+  const fileInputRef3 = useRef(null);
+  const fileInputRef4 = useRef(null);
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -143,7 +159,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
   //     setIsLoading(true);
   //     const imageFilesArray = Array.from(files);
   //     setImageFiles([...imageFiles, ...imageFilesArray]);
-  //     const previewArray = imageFilesArray.map((file) => URL.createObjectURL(file)); 
+  //     const previewArray = imageFilesArray.map((file) => URL.createObjectURL(file));
   //     setImagePreviews([...imagePreviews, ...previewArray]);
   //     console.log(imagePreviews.length)
   //     setIsLoading(false);
@@ -152,7 +168,9 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
   const [documentFiles, setDocumentFiles] = useState([]);
   function openImageInNewTab(dataUrl) {
     const newWindow = window.open();
-    newWindow.document.write(`<div style={{display:"flex",textAlign:"center"}}><img src="${dataUrl}" alt="Image"></div>`);
+    newWindow.document.write(
+      `<div style={{display:"flex",textAlign:"center"}}><img src="${dataUrl}" alt="Image"></div>`
+    );
   }
   const triggerFileInputClick1 = () => {
     if (fileInputRef1.current) {
@@ -174,6 +192,13 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
       fileInputRef4.current.click(); // Trigger a click on the file input
     }
   };
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1, // You can adjust the number of slides shown at a time
+    slidesToScroll: 1,
+  };
   return (
     <div>
       {/* {JSON.stringify(formData.placeholder)} */}
@@ -181,26 +206,46 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
       {/* <label htmlFor="selectedDocument" className="mt-3"></label> */}
       <Container className="text-center py-3 border">
         <p className="text-muted">Image Preview</p>
-        <div className="d-flex ">
-          {formData.placeholder?.map((file, index) => (
-            //  <a href={file} target="_blank">
-            <img
-              key={index}
-              className="img-fluid mx-2"
-              style={{
-                objectFit: "contain",
-                maxHeight: "150px",
-                width: "100%",
-              }}
-              src={file}
-              alt=""
-              onClick={()=>openImageInNewTab(file)}
-            />
-            // </a>
-          ))}
-        </div>
+        <Carousel
+        plugins={[
+          'infinite',
+          'centered',
+          {
+            resolve: slidesToShowPlugin,
+            options: {
+              numberOfSlides: 3, // Adjust the number of slides shown at a time
+            },
+          },
+          {
+            resolve: arrowsPlugin,
+            options: {
+              arrowLeft: <ArrowBackIosNewIcon style={{ color: '#78C2AD' ,background:"white",border:"0px solid white"}}/>,
+              arrowLeftDisabled:<ArrowBackIosNewIcon style={{ color: 'grey',background:"white",border:"0px solid white" }}/>,
+              arrowRight: <ArrowForwardIosIcon style={{ color: '#78C2AD' ,background:"white",border:"0px solid white"}}/>,
+              arrowRightDisabled: <ArrowForwardIosIcon style={{ color: 'grey',background:"white",border:"0px solid white" }}/>,
+              addArrowClickHandler: true,
+            }
+          }
+        ]}
+      >
+        
+        {formData.placeholder?.map((file, index) => (
+          <img
+            key={index}
+            className="img-fluid mx-2"
+            style={{
+              objectFit: 'contain',
+              maxHeight: '150px',
+              width: '100%',
+            }}
+            src={file}
+            alt=""
+            onClick={() => openImageInNewTab(file)}
+          />
+        ))}
+      </Carousel>
       </Container>
-      <div className="d-flex mb-2 align-items-center">
+      <div className="d-flex my-2 align-items-center">
         <TextField
           className=" w-80  "
           label="Aadhar Card"
@@ -211,18 +256,19 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           error={Boolean(errors.aadharCard)}
           helperText={errors.aadharCard}
         />
-<Button
+        <Button
           className="mx-2"
           component="label"
           onClick={triggerFileInputClick1}
           variant="contained"
           startIcon={<CloudUploadIcon />}
-        >
-        </Button>  <Form.Control className="d-none"
-                ref={fileInputRef1}
-                  onChange={(event) => handleFileChangeDocument(event,"adhar")}
-                  type="file"
-                />
+        ></Button>{" "}
+        <Form.Control
+          className="d-none"
+          ref={fileInputRef1}
+          onChange={(event) => handleFileChangeDocument(event, "adhar")}
+          type="file"
+        />
       </div>
       <div className="d-flex mb-2 align-items-center">
         <TextField
@@ -241,12 +287,13 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           onClick={triggerFileInputClick2}
           variant="contained"
           startIcon={<CloudUploadIcon />}
-        >
-        </Button>  <Form.Control className="d-none"
-                ref={fileInputRef2}
-                  onChange={(event) => handleFileChangeDocument(event,"pan")}
-                  type="file"
-                />
+        ></Button>{" "}
+        <Form.Control
+          className="d-none"
+          ref={fileInputRef2}
+          onChange={(event) => handleFileChangeDocument(event, "pan")}
+          type="file"
+        />
       </div>
       <div className="d-flex mb-2 align-items-center">
         <TextField
@@ -265,12 +312,13 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           className="mx-2"
           onClick={triggerFileInputClick3}
           startIcon={<CloudUploadIcon />}
-        >
-        </Button>  <Form.Control className="d-none"
-                ref={fileInputRef3}
-                  onChange={(event) => handleFileChangeDocument(event,"driving")}
-                  type="file"
-                />
+        ></Button>{" "}
+        <Form.Control
+          className="d-none"
+          ref={fileInputRef3}
+          onChange={(event) => handleFileChangeDocument(event, "driving")}
+          type="file"
+        />
       </div>
       <div className="d-flex mb-2 align-items-center">
         <TextField
@@ -289,12 +337,13 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           className="mx-2"
           onClick={triggerFileInputClick4}
           startIcon={<CloudUploadIcon />}
-        >
-        </Button>  <Form.Control className="d-none"
-                ref={fileInputRef4}
-                  onChange={(event) => handleFileChangeDocument(event,"passport")}
-                  type="file"
-                />
+        ></Button>{" "}
+        <Form.Control
+          className="d-none"
+          ref={fileInputRef4}
+          onChange={(event) => handleFileChangeDocument(event, "passport")}
+          type="file"
+        />
       </div>
       <TextField
         className="mb-2"
