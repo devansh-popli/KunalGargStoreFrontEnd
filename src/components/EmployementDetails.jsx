@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import {
   Container,
   Paper,
@@ -200,6 +202,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
     slidesToScroll: 1,
   };
   return (
+    
     <div>
       {/* {JSON.stringify(formData.placeholder)} */}
       <h5 className="fw-bold">Employee Details</h5>
@@ -245,6 +248,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         ))}
       </Carousel>
       </Container>
+      <div className="d-flex my-2 align-items-center">
       <div className="d-flex my-2 align-items-center">
         <TextField
           className=" w-80  "

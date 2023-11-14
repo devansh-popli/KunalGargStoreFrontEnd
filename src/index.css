@@ -79,7 +79,7 @@ h6 {
 }
 .MuiInputLabel-root {
   font-size: 14px !important; /* Adjust the font size as needed */
-  /* color: #333; Adjust the color as needed */
+  /* color: #78C2AD; Adjust the color as needed */
   /* You can add other styles here, such as font-weight, text-transform, etc. */
 }
 /* Adjust the font size for placeholder text */
@@ -94,12 +94,12 @@ h6 {
 }
 .MuiInputLabel-root.MuiInputLabel-formControl {
   font-size: 14px !important; /* Adjust the font size as needed */
-  /* color: #333; Adjust the color as needed */
+  /* color: #78C2AD; Adjust the color as needed */
   /* You can add other styles here, such as font-weight, text-transform, etc. */
 }
 .MuiInputLabel-root.Mui-focused {
   font-size: 14px !important; /* Adjust the font size as needed */
-  /* color: #333; Adjust the color as needed */
+  /* color: #78C2AD; Adjust the color as needed */
   /* You can add other styles here, such as font-weight, text-transform, etc. */
 }
 .MuiOutlinedInput-root {
@@ -112,6 +112,36 @@ h6 {
   padding: 8px 16px; /* Adjust the padding as needed */
   font-size: 14px; /* Adjust the font size as needed */
 }
+
+/* Add this CSS to your stylesheets */
+.slick-dots {
+  bottom: 10px; /* Adjust the distance from the bottom as needed */
+}
+
+.slick-dots li {
+  margin: 0 5px; /* Adjust the space between dots */
+  list-style: none;
+  display: inline-block;
+}
+
+.slick-dots li button {
+  font-size: 12px; /* Adjust the font size of the dots */
+  color: #78C2AD; /* Adjust the color of the dots */
+  border: 1px solid #78C2AD; /* Adjust the border color of the dots */
+  border-radius: 50%; /* Make the dots circular */
+  background-color: transparent; /* Set the background color of the dots */
+  padding: 5px; /* Adjust the padding of the dots */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slick-dots li.slick-active button {
+  background-color: #78C2AD; /* Adjust the background color of the active dot */
+  color: #fff; /* Adjust the color of the active dot */
+}
+
+
+
 
 .w-80{
   width: 84.95% !important;
