@@ -48,7 +48,7 @@ const WorkHoursPieChart = ({ data }) => {
 
     // Calculate total work hours for each employee
     attendanceData.forEach((entry) => {
-      const totalHours = calculateTotalHours(entry.inTime, entry.outTime);
+      const totalHours = calculateTotalHours(entry?.inTime, entry?.outTime?entry.outTime:new Date().getHours+":"+new Date().getMinutes);
       if (employeeWorkHours.hasOwnProperty(entry.employeeName)) {
         employeeWorkHours[entry.employeeName] += totalHours;
       } else {
@@ -67,7 +67,7 @@ const WorkHoursPieChart = ({ data }) => {
 
   const calculateTotalHours = (inTime, outTime) => {
     const inTimeParts = inTime.split(':');
-    const outTimeParts = outTime.split(':');
+    const outTimeParts = outTime?outTime.split(':'):[new Date().getHours,new Date().getMinutes()];
 
     const inDateTime = new Date(0, 0, 0, inTimeParts[0], inTimeParts[1]);
     const outDateTime = new Date(0, 0, 0, outTimeParts[0], outTimeParts[1]);
