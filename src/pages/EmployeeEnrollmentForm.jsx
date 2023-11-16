@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   Stepper,
   Step,
@@ -7,8 +7,10 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
+import Webcam from "react-webcam";
 import { Container, TextField } from "@mui/material";
 import ProfileDetails from "../components/ProfileDetails";
+import "react-tooltip/dist/react-tooltip.css";
 import EmployementDetails from "../components/EmployementDetails";
 import NomineeDetails from "../components/NomineeDetails";
 import BankDetails from "../components/BankDetails";
@@ -18,6 +20,8 @@ import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { Form, InputGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import {
   getEmployeeCodeFromBackend,
   saveEmployeeDataToBackend,
@@ -50,14 +54,20 @@ function EmployeeEnrollmentForm() {
   const [formData, setFormData] = useState({
     nominees: [],
   });
-  useEffect(()=>{
-    getEmployeeCodeFromBackend().then(data=>{
-      const nextNumericPart = parseInt(data.split("-")[1]) + 1;
-      setFormData({...formData,empCode:`EMP-${String(nextNumericPart).padStart(3, "0")}`})
-    }).catch(error=>{
-      toast.error("Internal Server Error")
-    })
-    },[])
+
+  useEffect(() => {
+    getEmployeeCodeFromBackend()
+      .then((data) => {
+        const nextNumericPart = parseInt(data.split("-")[1]) + 1;
+        setFormData({
+          ...formData,
+          empCode: `EMP-${String(nextNumericPart).padStart(3, "0")}`,
+        });
+      })
+      .catch((error) => {
+        toast.error("Internal Server Error");
+      });
+  }, []);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -65,60 +75,88 @@ function EmployeeEnrollmentForm() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  const excludedProperties = ['placeholderBankDocument', 'placeholderProfile','placeholderSignature','placeholder'];
+  const excludedProperties = [
+    "placeholderBankDocument",
+    "placeholderProfile",
+    "placeholderSignature",
+    "placeholder",
+  ];
   const handleSave = async () => {
     if (activeStep === steps.length - 1) {
       try {
         console.log(formData);
-        const filteredEmployeeData = Object.entries(formData).reduce((acc, [key, value]) => {
-          if (!excludedProperties.includes(key)) {
-            // Include the property in the new object
-            acc[key] = value;
-          }
-          return acc;
-        }, {});
+        const filteredEmployeeData = Object.entries(formData).reduce(
+          (acc, [key, value]) => {
+            if (!excludedProperties.includes(key)) {
+              // Include the property in the new object
+              acc[key] = value;
+            }
+            return acc;
+          },
+          {}
+        );
         let res = await saveEmployeeDataToBackend(filteredEmployeeData);
 
         if (formData.profileImage && res) {
-          await saveEmployeeDocumentToBackend(res.id, "profileImage", formData.profileImage);
+          await saveEmployeeDocumentToBackend(
+            res.id,
+            "profileImage",
+            formData.profileImage
+          );
         }
-        
+
         if (formData.signatureImage && res) {
-          await saveEmployeeDocumentToBackend(res.id, "signature", formData.signatureImage);
+          await saveEmployeeDocumentToBackend(
+            res.id,
+            "signature",
+            formData.signatureImage
+          );
         }
-        
+
         // Use Promise.all for parallel execution of asynchronous calls
         if (formData.panDocumentFiles && res) {
-          await Promise.all(formData.panDocumentFiles.map(doc =>
-            saveEmployeeDocumentToBackend(res.id, "pan", doc)
-          ));
+          await Promise.all(
+            formData.panDocumentFiles.map((doc) =>
+              saveEmployeeDocumentToBackend(res.id, "pan", doc)
+            )
+          );
         }
-        
+
         if (formData.drivingDocumentFiles && res) {
-          await Promise.all(formData.drivingDocumentFiles.map(doc =>
-            saveEmployeeDocumentToBackend(res.id, "driving", doc)
-          ));
+          await Promise.all(
+            formData.drivingDocumentFiles.map((doc) =>
+              saveEmployeeDocumentToBackend(res.id, "driving", doc)
+            )
+          );
         }
-        
+
         if (formData.passportDocumentFiles && res) {
-          await Promise.all(formData.passportDocumentFiles.map(doc =>
-            saveEmployeeDocumentToBackend(res.id, "passport", doc)
-          ));
+          await Promise.all(
+            formData.passportDocumentFiles.map((doc) =>
+              saveEmployeeDocumentToBackend(res.id, "passport", doc)
+            )
+          );
         }
-        
+
         if (formData.aadharDocumentFiles && res) {
-          await Promise.all(formData.aadharDocumentFiles.map(doc =>
-            saveEmployeeDocumentToBackend(res.id, "aadhar", doc)
-          ));
+          await Promise.all(
+            formData.aadharDocumentFiles.map((doc) =>
+              saveEmployeeDocumentToBackend(res.id, "aadhar", doc)
+            )
+          );
         }
-        
+
         if (formData.bankDocumentImage && res) {
-          await saveEmployeeDocumentToBackend(res.id, "bankDocument", formData.bankDocumentImage);
+          await saveEmployeeDocumentToBackend(
+            res.id,
+            "bankDocument",
+            formData.bankDocumentImage
+          );
         }
         toast("Form data saved successfully!");
         // You can redirect the user to another page here.
       } catch (error) {
-        console.log(error)
+        console.log(error);
         toast("Failed to save form data. Please try again.");
       }
     } else {
@@ -310,7 +348,28 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
   // useEffect(() => {
   //   console.log('State updated:', formData);
   // }, [formData]);
-  const handleFileChangeProfile = (event) => {
+  const handleFileChangeProfile = (event,type='file') => {
+    if(type=='cam')
+    {
+      if (showCamera) {
+        const imageSrc = webcamRef.current.getScreenshot();
+        console.log(imageSrc); // You can use this image source for further processing or uploading.
+        setFormData(
+          {
+            ...formData,
+            placeholderProfile: imageSrc,
+            profileImage: dataURLtoFile(imageSrc, 'captured_image.jpg'),
+          })
+        webcamRef.current.video.srcObject
+          .getTracks()
+          .forEach((track) => track.stop());
+        setShowCamera(false);
+      } else {
+        setShowCamera(true);
+      }
+    }
+    else{
+
     const localFile = event.target.files[0];
     console.log(localFile);
     if (
@@ -338,9 +397,43 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
         placeholderProfile: null,
         profileImage: null,
       });
-    }
+    }       
+  }
   };
-  const handleFileChangeSignature = (event) => {
+  const dataURLtoFile = (dataURL, filename) => {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  };
+  const handleFileChangeSignature = (event,type='file') => {
+    if(type=='cam')
+    {
+      if (showCameraSignature) {
+        const imageSrc = webcamRefSignature.current.getScreenshot();
+        console.log(imageSrc); // You can use this image source for further processing or uploading.
+        setFormData(
+          {
+            ...formData,
+            placeholderSignature: imageSrc,
+            signatureImage: dataURLtoFile(imageSrc, 'captured_image.jpg'),
+          })
+          webcamRefSignature.current.video.srcObject
+          .getTracks()
+          .forEach((track) => track.stop());
+        setShowCameraSignature(false);
+      } else {
+        setShowCameraSignature(true);
+      }
+    }
+    else{
     const localFile = event.target.files[0];
     if (
       localFile.type === "image/png" ||
@@ -364,6 +457,14 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
         signatureImage: null,
       });
     }
+  }
+  };
+  const webcamRef = useRef(null);
+  const webcamRefSignature = useRef(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const [showCameraSignature, setShowCameraSignature] = useState(false);
+  const captureImage = () => {
+ 
   };
   return (
     <div>
@@ -439,24 +540,52 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
           />
         </Container>
         <Form.Label>Select Profile Image</Form.Label>
-        <InputGroup>
-          <Form.Control
-            onChange={(event) => handleFileChangeProfile(event)}
-            type="file"
-          />
-          <Button
-            variant="outline-secondary"
-            onClick={() => {
-              setFormData({
-                ...formData,
-                placeholderProfile: undefined,
-                profileImage: null,
-              });
-            }}
-          >
-            Clear
-          </Button>
-        </InputGroup>
+
+        {showCamera && (
+          <div className="text-center">
+            <Webcam
+              width={300}
+              height={200}
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+            />
+          </div>
+        )}
+        <div className="d-flex align-items-center">
+          <div>
+            <Button
+              data-for="happyFace"
+              onClick={(event)=>handleFileChangeProfile(event,'cam')}
+              variant="outlined"
+              type="error"
+              data-tooltip-id="my-tooltip" data-tooltip-content="Take Photo"
+            >
+              <CameraAltIcon />
+            </Button>
+            <ReactTooltip id="my-tooltip" place="bottom" type="info" effect="solid" />
+          </div>
+
+          <span className="mx-2">or</span>
+          <InputGroup>
+            <Form.Control
+              onChange={(event) => handleFileChangeProfile(event)}
+              type="file"
+            />
+            <Button
+              variant="outline-secondary"
+              onClick={() => {
+                setFormData({
+                  ...formData,
+                  placeholderProfile: undefined,
+                  profileImage: null,
+                });
+              }}
+            >
+              Clear
+            </Button>
+          </InputGroup>
+        </div>
       </Form.Group>
       <Form.Group className="mb-3">
         <Container className="text-center py-3 border">
@@ -472,7 +601,32 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
             alt=""
           />
         </Container>
+        {showCameraSignature && (
+          <div className="text-center">
+            <Webcam
+              width={300}
+              height={200}
+              audio={false}
+              ref={webcamRefSignature}
+              screenshotFormat="image/jpeg"
+            />
+          </div>
+        )}
         <Form.Label>Upload Signature Image</Form.Label>
+        <div className="d-flex align-items-center">
+          <div>
+            <Button
+              onClick={(event)=>handleFileChangeSignature(event,'cam')}
+              variant="outlined"
+              type="error"
+              data-tooltip-id="my-tooltip2" data-tooltip-content="Take Photo"
+            >
+              <CameraAltIcon />
+            </Button>
+            <ReactTooltip id="my-tooltip2" place="bottom" type="info" effect="solid" />
+          </div>
+
+          <span className="mx-2">or</span>
         <InputGroup>
           <Form.Control
             onChange={(event) => handleFileChangeSignature(event)}
@@ -491,6 +645,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
             Clear
           </Button>
         </InputGroup>
+        </div>
       </Form.Group>
     </div>
   );

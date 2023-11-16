@@ -13,9 +13,13 @@ import {
   IconButton,
   Container,
 } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import PreviewIcon from '@mui/icons-material/Preview';
 import SearchIcon from "@mui/icons-material/Search";
 import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
 import { toast } from "react-toastify";
+import { Preview } from "@mui/icons-material";
+import { Button } from "react-bootstrap";
 
 const EmployeeDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -91,13 +95,13 @@ console.log(event.target.value)
               <TableCell style={{ width: "15%" }}>Designation</TableCell>
               <TableCell style={{ width: "15%" }}>Mobile No</TableCell>
               <TableCell style={{ width: "15%" }}>Location</TableCell>
-              <TableCell style={{ width: "15%" }}>Blood Group</TableCell>
+              <TableCell style={{ width: "15%" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {employees
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((employee) => (
+              .map((employee,index) => (
                 <TableRow key={employee.id}>
                   <TableCell>{employee.empCode}</TableCell>
                   <TableCell>
@@ -107,7 +111,7 @@ console.log(event.target.value)
                   <TableCell>{employee.designation}</TableCell>
                   <TableCell>{employee.phoneNumber}</TableCell>
                   <TableCell>{employee.cityTehsil}</TableCell>
-                  <TableCell>{employee.bloodGroup}</TableCell>
+                  <TableCell><div className="d-flex"><Button variant="outlined"><EditIcon/></Button><Button variant="outlined"><Preview/></Button></div></TableCell>
                 </TableRow>
               ))}
           </TableBody>
