@@ -13,13 +13,14 @@ import {
   IconButton,
   Container,
 } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import PreviewIcon from '@mui/icons-material/Preview';
+import EditIcon from "@mui/icons-material/Edit";
+import PreviewIcon from "@mui/icons-material/Preview";
 import SearchIcon from "@mui/icons-material/Search";
 import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
 import { toast } from "react-toastify";
 import { Preview } from "@mui/icons-material";
 import { Button } from "react-bootstrap";
+import { Tooltip } from "react-tooltip";
 
 const EmployeeDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,16 +49,16 @@ const EmployeeDirectory = () => {
   };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-console.log(event.target.value)
+    console.log(event.target.value);
     if (event.target.value != "") {
-        const filteredEmployees = oldemployees.filter((employee) =>
+      const filteredEmployees = oldemployees.filter((employee) =>
         Object.values(employee).some(
           (value) =>
             typeof value === "string" &&
             value.toLowerCase().includes(event.target.value.toLowerCase())
         )
       );
-      console.log(filteredEmployees)
+      console.log(filteredEmployees);
       setEmployees(filteredEmployees);
       // setPage(0); // Reset page when searching
     } else {
@@ -101,7 +102,7 @@ console.log(event.target.value)
           <TableBody>
             {employees
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((employee,index) => (
+              .map((employee, index) => (
                 <TableRow key={employee.id}>
                   <TableCell>{employee.empCode}</TableCell>
                   <TableCell>
@@ -111,7 +112,23 @@ console.log(event.target.value)
                   <TableCell>{employee.designation}</TableCell>
                   <TableCell>{employee.phoneNumber}</TableCell>
                   <TableCell>{employee.cityTehsil}</TableCell>
-                  <TableCell><div className="d-flex"><Button variant="outlined"><EditIcon/></Button><Button variant="outlined"><Preview/></Button></div></TableCell>
+                  <TableCell>
+                    <div className="d-flex">
+                      <Button variant="outlined" data-tooltip-id="my-tooltip" data-tooltip-content="Edit Employee">
+                        <EditIcon />
+                      </Button>
+                      <Tooltip
+                        id="my-tooltip"
+                        place="bottom"
+                        type="info"
+                        effect="solid"
+                      />
+                      <Button variant="outlined" data-tooltip-id="my-tooltip2" data-tooltip-content="View Employee">
+                        <Preview />
+                      </Button>
+                      <Tooltip id="my-tooltip2" place="bottom" type="info" effect="solid" />
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

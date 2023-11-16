@@ -16,6 +16,7 @@ import {
   Button,
   IconButton,
   Menu,
+  Tooltip,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -26,6 +27,7 @@ import {
 import { UserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { Delete } from "@mui/icons-material";
 const AttendanceTable = ({ employeeList }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -48,26 +50,25 @@ const AttendanceTable = ({ employeeList }) => {
         .then((data) => {
           setShowTotalHrs(false);
           setAttendanceData(data.content);
-          userContext.setDailyData(data)
-          userContext.setMonthlyAttendance(null)
+          userContext.setDailyData(data);
+          userContext.setMonthlyAttendance(null);
         })
         .catch((error) => {
           toast.error("Internal Server Error While fetching todays record");
         });
-    }
-    else{
-      setSelectedEmployee("") 
-      setSelectedMonth("")
+    } else {
+      setSelectedEmployee("");
+      setSelectedMonth("");
       getAttendanceDataOfTodayFromBackend(currentIndianDate)
-      .then((data) => {
-        setShowTotalHrs(false);
-        setAttendanceData(data.content);
-        userContext.setDailyData(data)
-        userContext.setMonthlyAttendance(null)
-      })
-      .catch((error) => {
-        toast.error("Internal Server Error While fetching todays record");
-      });
+        .then((data) => {
+          setShowTotalHrs(false);
+          setAttendanceData(data.content);
+          userContext.setDailyData(data);
+          userContext.setMonthlyAttendance(null);
+        })
+        .catch((error) => {
+          toast.error("Internal Server Error While fetching todays record");
+        });
     }
   }, [userContext.updatedAttendance]);
   const handleEmployeeChange = (event) => {
@@ -132,7 +133,7 @@ const AttendanceTable = ({ employeeList }) => {
   // });
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -143,8 +144,8 @@ const AttendanceTable = ({ employeeList }) => {
     if (selectedMonth != "" && selectedEmployee != "") {
       getAttendanceDataFromBackend(selectedMonth, selectedEmployee).then(
         (data) => {
-          userContext.setMonthlyAttendance(data)
-          userContext.setDailyData(null)
+          userContext.setMonthlyAttendance(data);
+          userContext.setDailyData(null);
           setShowTotalHrs(true);
           setAttendanceData(data.content);
         }
@@ -156,15 +157,19 @@ const AttendanceTable = ({ employeeList }) => {
   function convertDecimalToHoursAndMinutes(decimalHours) {
     // Extract the whole number part (hours)
     const hours = Math.floor(decimalHours);
-  
+
     // Calculate the decimal part as minutes
     const minutes = Math.round((decimalHours - hours) * 60);
-  
-    return hours+"hrs :"+minutes+" mins"
+
+    return hours + "hrs :" + minutes + " mins";
   }
-  
+
   return (
-    <Paper elevation={3} style={{ padding: "20px", margin: "0px 20px" }}>
+    <Paper
+      elevation={3}
+      style={{ padding: "20px", margin: "0px 20px" }}
+      className="mt-1"
+    >
       <h5 className="fw-bold">Attendance Records</h5>
       <div
         style={{ marginBottom: "20px", display: "flex", alignItems: "center" }}
@@ -219,8 +224,8 @@ const AttendanceTable = ({ employeeList }) => {
               .then((data) => {
                 setShowTotalHrs(false);
                 setAttendanceData(data.content);
-                userContext.setDailyData(data)
-                userContext.setMonthlyAttendance(null)
+                userContext.setDailyData(data);
+                userContext.setMonthlyAttendance(null);
               })
               .catch((error) => {
                 toast.error(
@@ -234,27 +239,31 @@ const AttendanceTable = ({ employeeList }) => {
           Reset
         </Button>
         {showTotalHrs && (
-          <h6 className="ms-2" style={{width:'30%'}}>
-            <small>Total Hrs:{" "}
-            {convertDecimalToHoursAndMinutes(attendanceData.reduce((accumulator, currentTime) => {
-              const now = new Date(); // Get the current time
+          <h6 className="ms-2" style={{ width: "30%" }}>
+            <small>
+              Total Hrs:{" "}
+              {convertDecimalToHoursAndMinutes(
+                attendanceData.reduce((accumulator, currentTime) => {
+                  const now = new Date(); // Get the current time
 
-              const [inHours, inMinutes] = currentTime?.inTime
-                ? currentTime.inTime.split(":").map(Number)
-                : [0, 0];
+                  const [inHours, inMinutes] = currentTime?.inTime
+                    ? currentTime.inTime.split(":").map(Number)
+                    : [0, 0];
 
-              let [outHours, outMinutes] = currentTime?.outTime
-                ? currentTime.outTime.split(":").map(Number)
-                : [now.getHours(), now.getMinutes()]; // Use current time if outTime is not available
+                  let [outHours, outMinutes] = currentTime?.outTime
+                    ? currentTime.outTime.split(":").map(Number)
+                    : [now.getHours(), now.getMinutes()]; // Use current time if outTime is not available
 
-              // Calculate the duration in minutes and add it to the accumulator
-              return (
-                accumulator +
-                Math.abs(
-                  outHours * 60 + outMinutes - (inHours * 60 + inMinutes)
-                )
-              );
-            }, 0) / 60)}</small>
+                  // Calculate the duration in minutes and add it to the accumulator
+                  return (
+                    accumulator +
+                    Math.abs(
+                      outHours * 60 + outMinutes - (inHours * 60 + inMinutes)
+                    )
+                  );
+                }, 0) / 60
+              )}
+            </small>
           </h6>
         )}
       </div>
@@ -280,23 +289,11 @@ const AttendanceTable = ({ employeeList }) => {
                   <TableCell>{entry?.inTime}</TableCell>
                   <TableCell>{entry?.outTime}</TableCell>
                   <TableCell>
-                    <IconButton
-                      aria-controls={`actions-menu-${index}`}
-                      aria-haspopup="true"
-                      onClick={handleMenuOpen}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id={`actions-menu-${index}`}
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleMenuClose}
-                    >
-                      {/* <MenuItem onClick={handleEdit}>Edit</MenuItem> */}
-                      <MenuItem onClick={handleDelete}>Delete</MenuItem>
-                    </Menu>
+                    <Tooltip title="Delete">
+                      <IconButton>
+                        <Delete color="error" />
+                      </IconButton>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

@@ -41,28 +41,39 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
     // Handle the logic for marking time in
     console.log("Time In: ", time);
     let oldattendance = null;
+    if(selectedEmployee=="")
+    {
+      toast.error("employee is not selected")
+      return
+    }
+    if(time!=null && time !="")
+    {
+
     await getAttendanceDataByDateFromBackend(
       currentIndianDate,
       selectedEmployee
     ).then((data) => {
-      if (data.id != null) {
         oldattendance = data;
-      }
     });
+    if(oldattendance.inTime && !oldattendance.outTime)
+    {
+      toast.error("First Fill Out time of old record!")
+      return
+    }
     let employee = employees.filter((employee) => {
       if (employee.empCode === selectedEmployee) return employee;
     });
-    if(oldattendance?.outTime<time){
-      toast.warn("Intime should be before Outtime")
-      return
-    }
+    // if(oldattendance?.outTime<time){
+    //   toast.warn("Intime should be before Outtime")
+    //   return
+    // }
     console.log(employee);
     await saveAttendanceDataToBackend({
-      id: oldattendance?.id,
+      // id: oldattendance?.id,
       empCode: selectedEmployee,
       employeeName: employee[0].firstName + " " + employee[0].lastName,
       inTime: time,
-      outTime: oldattendance?.outTime,
+      outTime: null,
       attendanceDate: currentIndianDate,
     })
       .then((data) => {
@@ -71,21 +82,35 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
       })
       .catch((error) => {
         toast.error("Error while saving attendance");
-      });
+      });       
+    }
+    else{
+      toast.error("Please select in time")
+    }
   };
 
   const handleTimeOutButtonClick = async () => {
     // Handle the logic for marking time out
     console.log("Time Out: ", time);
+    if(selectedEmployee=="")
+    {
+      toast.error("employee is not selected")
+      return
+    }
+    if( time!=null && time !="")
+    {
     let oldattendance = null;
     await getAttendanceDataByDateFromBackend(
       currentIndianDate,
       selectedEmployee
     ).then((data) => {
-      if (data.id != null) {
         oldattendance = data;
-      }
     });
+    if(!oldattendance.inTime)
+    {
+      toast.error("No In time is not there for this user!")
+      return
+    }
     if(oldattendance.inTime>time){
       toast.warn("Out time should be after Intime")
       return
@@ -108,6 +133,10 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
       .catch((error) => {
         toast.error("Error while saving attendance");
       });
+    }
+    else{
+      toast.error("Please select Out Time")
+    }
   };
 
   // Dummy employee list, replace it with your actual list
@@ -116,7 +145,7 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
   return (
     <Paper
       elevation={3}
-      style={{ padding: "20px", maxWidth: "400px", margin: "auto" }}
+      style={{ padding: "20px", maxWidth: "400px", margin: "auto" }} className="mt-1"
     >
       <h5 className="fw-bold">Attendance</h5>
       <FormControl fullWidth style={{ marginBottom: "20px" }}>

@@ -12,10 +12,11 @@ import { privateAxios } from "../services/AxiosService";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 // import { Container } from "react-bootstrap";
-import { Button, Container, TextField } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
+import { Button, Container, IconButton, TextField, Tooltip } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
 import { toast } from "react-toastify";
+import { Delete } from "@mui/icons-material";
 const columns = [
   {
     id: "accountCode",
@@ -86,7 +87,7 @@ const columns = [
     minWidth: 100,
     align: "right",
     // format: (value) => value.toFixed(2),
-  }
+  },
   // {
   //   id: 'cgst',
   //   label: 'CGST @',
@@ -293,13 +294,18 @@ export default function ViewStockItemMenu() {
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
       <Paper className="w-90">
         <TableContainer sx={{ maxHeight: 440 }}>
-        <TextField
-        className="w-50 m-4"
-        label={<><SearchIcon/><span className="ms-4">Search</span></>}
-        variant="outlined"
-        // value={searchTerm}
-        // onChange={(e) => setSearchTerm(e.target.value)}
-      />
+          <TextField
+            className="w-50 m-4"
+            label={
+              <>
+                <SearchIcon />
+                <span className="ms-4">Search</span>
+              </>
+            }
+            variant="outlined"
+            // value={searchTerm}
+            // onChange={(e) => setSearchTerm(e.target.value)}
+          />
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               {/* <TableRow>
@@ -335,27 +341,47 @@ export default function ViewStockItemMenu() {
                       role="checkbox"
                       tabIndex={-1}
                       key={row.accountCode}
-                      
                     >
-                      {columns.map((column,index) => {
+                      {columns.map((column, index) => {
                         const value = row[column.id];
-                        return  index==columns.length-1? (
-                         <>
-                         <TableCell key={column.id} align={column.align}>
-                            <Button variant="contained" color="error" onClick={()=>{
-                              deleteStockItemMenuById(row.stockItemId).then((data)=>{
-                                toast.success("Record Deleted Successfully!!")
-                               let newStockItems= stockItems.content.filter((item)=>item.stockItemId!=row.stockItemId)
-                               setStockItems({...stockItems,content:newStockItems,totalElements:stockItems.totalElements-1})
-                              }).catch(error=>{
-                                toast.error("Error while deleted Record")
-                              })
-                            }}>delete</Button>
-                          </TableCell>
-                         </>
-                        ) 
-                          :(<TableCell key={column.id} align={column.align} style={{ cursor: "pointer" }}
-                          onClick={() => navigateToEdit(row.accountCode)}>
+                        return index == columns.length - 1 ? (
+                          <>
+                            <TableCell key={column.id} align={column.align}>
+                              <Tooltip title="Delete" color="dark">
+                                <IconButton onClick={() => {
+                                  deleteStockItemMenuById(row.stockItemId)
+                                    .then((data) => {
+                                      toast.success(
+                                        "Record Deleted Successfully!!"
+                                      );
+                                      let newStockItems =
+                                        stockItems.content.filter(
+                                          (item) =>
+                                            item.stockItemId != row.stockItemId
+                                        );
+                                      setStockItems({
+                                        ...stockItems,
+                                        content: newStockItems,
+                                        totalElements:
+                                          stockItems.totalElements - 1,
+                                      });
+                                    })
+                                    .catch((error) => {
+                                      toast.error("Error while deleted Record");
+                                    });
+                                }}>
+                                  <Delete color="error" />
+                                </IconButton>
+                              </Tooltip>
+                            </TableCell>
+                          </>
+                        ) : (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ cursor: "pointer" }}
+                            onClick={() => navigateToEdit(row.accountCode)}
+                          >
                             {column.format && typeof value === "number"
                               ? column.format(value)
                               : value}

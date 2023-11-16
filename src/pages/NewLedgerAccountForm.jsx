@@ -10,6 +10,8 @@ import {
   TextareaAutosize,
   Container,
   Paper,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -30,7 +32,13 @@ import {
 import { states } from "../auth/HelperAuth";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
-
+import SaveIcon from "@mui/icons-material/Save";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import AddIcon from "@mui/icons-material/Add";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import { Delete } from "@mui/icons-material";
 function NewLedgerAccountForm() {
   const [nextAccountCode, setNextAccountCode] = useState("");
 
@@ -136,7 +144,6 @@ function NewLedgerAccountForm() {
         const nextNumericPart = parseInt(lastAccountCode.split("-")[1]) + 1;
         setNextAccountCode(`abc-${String(nextNumericPart).padStart(3, "0")}`);
         setFormData({
-          ...formData,
           accountCode: `abc-${String(nextNumericPart).padStart(3, "0")}`,
         });
       })
@@ -243,65 +250,70 @@ function NewLedgerAccountForm() {
   const stateList = states;
   const userContext = useContext(UserContext);
   return userContext.isLogin ? (
-    <Container className="mt-3"> 
+    <Container className="mt-3">
       {/* {JSON.stringify(formData)} */}
       <h4 className="fw-bold">New Ledger Account Form</h4>
       <div className="d-flex justify-content-center">
-      <Paper elevation={3} style={{ padding: '20px' }} className='w-60'>
-      <form onSubmit={handleSubmit}>
-        <Grid className="myGridItem" container spacing={3} alignItems={"center"}>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="A/c Code"
-              variant="standard"
-              name="accountCode"
-              disabled
-              value={formData.accountCode}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem mx-1" item xs={8} sm={4}>
-            <TextField
-              label="GST No."
-              variant="standard"
-              name="gstNo"
-              value={formData.gstNo}
-              onChange={(event) => {
-                const firstTwoDigits = event.target.value.substring(0, 2);
-
-                // Find the state corresponding to the first two digits
-                const state = stateList.filter(
-                  (state) => state?.code === firstTwoDigits
-                )[0];
-                // if (event.target.value.length == 15) {
-
-                // }
-                setFormData({
-                  ...formData,
-                  gstNo: event.target.value.toUpperCase(),
-                  pan: event.target.value.substring(2, 12).toUpperCase(),
-                  state: state?.state.trim(),
-                });
-              }}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" xs={3} sm={3}>
-            <Button
-              variant="outlined"
-              color="primary"
-              size="small"
-              style={{fontSize:"11px"}}
-              className="mt-4 mx-2 custom-btn"
-              onClick={() => fetchGSTINDetails()}
+        <Paper elevation={3} style={{ padding: "20px" }} className="w-60">
+          <form onSubmit={handleSubmit}>
+            <Grid
+              className="myGridItem"
+              container
+              spacing={3}
+              alignItems={"center"}
             >
-              fetch gst Details
-            </Button>
-          </Grid>
-          {/* {stateList.filter(state=>state.code=='04')[0].state} */}
-          {/* {formData.state} */}
-          {/* <Grid className="myGridItem"
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="A/c Code"
+                  variant="standard"
+                  name="accountCode"
+                  disabled
+                  value={formData.accountCode}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem mx-1" item xs={8} sm={4}>
+                <TextField
+                  label="GST No."
+                  variant="standard"
+                  name="gstNo"
+                  value={formData.gstNo}
+                  onChange={(event) => {
+                    const firstTwoDigits = event.target.value.substring(0, 2);
+
+                    // Find the state corresponding to the first two digits
+                    const state = stateList.filter(
+                      (state) => state?.code === firstTwoDigits
+                    )[0];
+                    // if (event.target.value.length == 15) {
+
+                    // }
+                    setFormData({
+                      ...formData,
+                      gstNo: event.target.value.toUpperCase(),
+                      pan: event.target.value.substring(2, 12).toUpperCase(),
+                      state: state?.state.trim(),
+                    });
+                  }}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" xs={3} sm={3}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  style={{ fontSize: "11px" }}
+                  className="mt-4 mx-2 custom-btn"
+                  onClick={() => fetchGSTINDetails()}
+                >
+                  fetch gst Details
+                </Button>
+              </Grid>
+              {/* {stateList.filter(state=>state.code=='04')[0].state} */}
+              {/* {formData.state} */}
+              {/* <Grid className="myGridItem"
             item
             xs={12}
             spacing={2}
@@ -347,277 +359,315 @@ function NewLedgerAccountForm() {
               </Button>
             </Grid>
           </Grid> */}
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="A/c Name"
-              variant="standard"
-              name="accountName"
-              value={formData.accountName}
-              onChange={(event) => {
-                // handleChange()
-                setFormData({
-                  ...formData,
-                  accountName: event.target.value,
-                  accountNameBank: event.target.value,
-                });
-              }}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <FormControl fullWidth variant="standard">
-              <InputLabel>MSMED Status</InputLabel>
-              <Select
-                name="msmedStatus"
-                value={formData.msmedStatus}
-                onChange={handleChange}
-              >
-                <MenuItem value="Micro Enterprises">Micro Enterprises</MenuItem>
-                <MenuItem value="Small Enterprises">Small Enterprises</MenuItem>
-                <MenuItem value="Medium Enterprises">
-                  Medium Enterprises
-                </MenuItem>
-                <MenuItem value="Not Covered in MSMED">
-                  Not Covered in MSMED
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="Opening Balance"
-              variant="standard"
-              name="openingBalance"
-              value={formData.openingBalance}
-              onChange={handleChange}
-              fullWidth
-              type="number"
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={12}>
-            <FormControl fullWidth>
-              <TextField
-                label="Address"
-                variant="standard" // Set the desired variant here
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                // multiline
-                // rows={3}
-              />
-            </FormControl>
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="City"
-              variant="standard"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <FormControl fullWidth variant="standard">
-              <InputLabel>State</InputLabel>
-              <Select
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-              >
-                {stateList.map((state) => (
-                  <MenuItem value={state.state}>{state.state}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="Pincode"
-              variant="standard"
-              name="pincode"
-              value={formData.pincode}
-              onChange={handleChange}
-              fullWidth
-              type="number"
-            />
-          </Grid>
-        
-        
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="Contact No."
-              variant="standard"
-              name="contactNo"
-              value={formData.contactNo}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="Email Id/Area"
-              variant="standard"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={4}>
-            <TextField
-              label="PAN"
-              variant="standard"
-              name="pan"
-              value={formData.pan}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={6}>
-            <FormControl fullWidth variant="standard">
-              <InputLabel>Turnover Below 10 Cr</InputLabel>
-              <Select
-                name="turnoverBelow10Cr"
-                value={formData.turnoverBelow10Cr}
-                onChange={handleChange}
-              >
-                <MenuItem value="yes">Yes</MenuItem>
-                <MenuItem value="no">No</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={6}>
-            <FormControl fullWidth variant="standard">
-              <InputLabel>Whether Approved</InputLabel>
-              <Select
-                name="approved"
-                value={formData.approved}
-                onChange={handleChange}
-              >
-                <MenuItem value="yes">Yes</MenuItem>
-                <MenuItem value="no">No</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={6}>
-            <TextField
-              label="Account Num"
-              variant="standard"
-              name="accountNum"
-              value={formData.accountNum}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={6}>
-            <TextField
-              label="Account Name"
-              variant="standard"
-              name="accountNameBank"
-              value={formData.accountNameBank}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={6}>
-            <TextField
-              label="IFSC"
-              variant="standard"
-              name="ifsc"
-              value={formData.ifsc}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-          <Grid className="myGridItem" item xs={12} sm={6}>
-            <TextField
-              label="Branch"
-              variant="standard"
-              name="branch"
-              value={formData.branch}
-              onChange={handleChange}
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-        <Container fluid>
-          <Row className="mt-2">
-            <Col>
-              <Button
-              size="small"
-                variant="contained"
-                onClick={() => addNewData()}
-                style={{ backgroundColor: "#78C2AD", color: "white" }}
-              >
-                Add New Data
-              </Button>
-              <Button
-              size="small"
-                variant="contained"
-                color="secondary"
-                onClick={() => handleEvent("previous")}
-                style={{ backgroundColor: "#F2A73D", color: "white" }}
-                className="m-2"
-              >
-                Previous
-              </Button>
-              <Button
-              size="small"
-                variant="contained"
-                color="secondary"
-                onClick={() => handleEvent("next")}
-                style={{ backgroundColor: "#FF5E5B", color: "white" }}
-                className="m-2"
-              >
-                Next
-              </Button>
-              <Button
-              size="small"
-                variant="contained"
-                color="secondary"
-                onClick={() => handleEvent("first")}
-                style={{ backgroundColor: "#55B4B0", color: "white" }}
-                className="m-2"
-              >
-                First
-              </Button>
-              <Button
-              size="small"
-                variant="contained"
-                color="secondary"
-                onClick={() => handleEvent("last")}
-                style={{ backgroundColor: "#ACD7E5", color: "white" }}
-                className="m-2"
-              >
-                Last
-              </Button>
-              <Button
-              size="small"
-                variant="contained"
-                color="error"
-                onClick={deleteData}
-                style={{ backgroundColor: "#F17300", color: "white" }}
-                className="float-right my-2"
-              >
-                Delete
-              </Button>
-              <Button
-              size="small"
-                type="submit"
-                variant="contained"
-                color="success"
-                onClick={handleSubmit}
-                style={{ backgroundColor: "#1DB954", color: "white" }}
-                className="float-right m-2"
-              >
-                Save
-              </Button>
-            </Col>
-          </Row>
-        </Container>
-      </form>
-      </Paper>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="A/c Name"
+                  variant="standard"
+                  name="accountName"
+                  value={formData.accountName}
+                  onChange={(event) => {
+                    // handleChange()
+                    setFormData({
+                      ...formData,
+                      accountName: event.target.value,
+                      accountNameBank: event.target.value,
+                    });
+                  }}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <FormControl fullWidth variant="standard">
+                  <InputLabel>MSMED Status</InputLabel>
+                  <Select
+                    name="msmedStatus"
+                    value={formData.msmedStatus}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="Micro Enterprises">
+                      Micro Enterprises
+                    </MenuItem>
+                    <MenuItem value="Small Enterprises">
+                      Small Enterprises
+                    </MenuItem>
+                    <MenuItem value="Medium Enterprises">
+                      Medium Enterprises
+                    </MenuItem>
+                    <MenuItem value="Not Covered in MSMED">
+                      Not Covered in MSMED
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="Opening Balance"
+                  variant="standard"
+                  name="openingBalance"
+                  value={formData.openingBalance}
+                  onChange={handleChange}
+                  fullWidth
+                  type="number"
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={12}>
+                <FormControl fullWidth>
+                  <TextField
+                    label="Address"
+                    variant="standard" // Set the desired variant here
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    // multiline
+                    // rows={3}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="City"
+                  variant="standard"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <FormControl fullWidth variant="standard">
+                  <InputLabel>State</InputLabel>
+                  <Select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                  >
+                    {stateList.map((state) => (
+                      <MenuItem value={state.state}>{state.state}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="Pincode"
+                  variant="standard"
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  fullWidth
+                  type="number"
+                />
+              </Grid>
+
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="Contact No."
+                  variant="standard"
+                  name="contactNo"
+                  value={formData.contactNo}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="Email Id/Area"
+                  variant="standard"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+                <TextField
+                  label="PAN"
+                  variant="standard"
+                  name="pan"
+                  value={formData.pan}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={6}>
+                <FormControl fullWidth variant="standard">
+                  <InputLabel>Turnover Below 10 Cr</InputLabel>
+                  <Select
+                    name="turnoverBelow10Cr"
+                    value={formData.turnoverBelow10Cr}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="yes">Yes</MenuItem>
+                    <MenuItem value="no">No</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={6}>
+                <FormControl fullWidth variant="standard">
+                  <InputLabel>Whether Approved</InputLabel>
+                  <Select
+                    name="approved"
+                    value={formData.approved}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="yes">Yes</MenuItem>
+                    <MenuItem value="no">No</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={6}>
+                <TextField
+                  label="Account Num"
+                  variant="standard"
+                  name="accountNum"
+                  value={formData.accountNum}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={6}>
+                <TextField
+                  label="Account Name"
+                  variant="standard"
+                  name="accountNameBank"
+                  value={formData.accountNameBank}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={6}>
+                <TextField
+                  label="IFSC"
+                  variant="standard"
+                  name="ifsc"
+                  value={formData.ifsc}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={6}>
+                <TextField
+                  label="Branch"
+                  variant="standard"
+                  name="branch"
+                  value={formData.branch}
+                  onChange={handleChange}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+            <Container fluid>
+              <Row className="mt-2">
+                <Col>
+                  {/* <Button
+                    size="small"
+                    variant="contained"
+                    
+                    style={{ backgroundColor: "#78C2AD", color: "white" }}
+                  >
+                    Add New Data
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    
+                    style={{ backgroundColor: "#F2A73D", color: "white" }}
+                    className="m-2"
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    
+                    style={{ backgroundColor: "#FF5E5B", color: "white" }}
+                    className="m-2"
+                  >
+                    Next
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    
+                    style={{ backgroundColor: "#55B4B0", color: "white" }}
+                    className="m-2"
+                  >
+                    First
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    
+                    style={{ backgroundColor: "#ACD7E5", color: "white" }}
+                    className="m-2"
+                  >
+                    Last
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="error"
+                    
+                    style={{ backgroundColor: "#F17300", color: "white" }}
+                    className="float-right my-2"
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    size="small"
+                    type="submit"
+                    variant="contained"
+                    color="success"
+                    
+                    style={{ backgroundColor: "#1DB954", color: "white" }}
+                    className="float-right m-2"
+                  >
+                    Save
+                  </Button> */}
+                  <Tooltip title="Delete">
+                    <IconButton onClick={deleteData}>
+                      <Delete color="error" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Previous">
+                    <IconButton onClick={() => handleEvent("previous")}>
+                      <ArrowBackIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Next">
+                    <IconButton onClick={() => handleEvent("next")}>
+                      <ArrowForwardIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Add New Data">
+                    <IconButton onClick={() => addNewData()}>
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Go to First Page">
+                    <IconButton onClick={() => handleEvent("first")}>
+                      <FirstPageIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Go to Last Page">
+                    <IconButton onClick={() => handleEvent("last")}>
+                      <LastPageIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Save">
+                    <IconButton onClick={handleSubmit}>
+                      <SaveIcon style={{color:"#78C2AD"}} />
+                    </IconButton>
+                  </Tooltip>
+                </Col>
+              </Row>
+            </Container>
+          </form>
+        </Paper>
       </div>
     </Container>
   ) : (

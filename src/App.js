@@ -70,7 +70,7 @@ function App() {
       <UserContextProvider>
         <BrowserRouter>
           <div className={toggle?"dashboard":"dashboard-active"}>
-            <ToastContainer draggable transition={Zoom} position="top-right" />
+            <ToastContainer draggable transition={Zoom} position="top-right" theme="colored" />
             <Sidebar toggle={toggle} setToggle={setToggle} />
             <section>
               <NavbarComponent setToggle={setToggle} />
