@@ -79,3 +79,8 @@ export const getAttendanceDataOfTodayFromBackend = (
       return data.data;
     });
 };
+export const deleteAttendanceDataByDateFromBackend = (attendanceId) => {
+  return privateAxios
+    .delete(`/api/attendance/${attendanceId}`)
+    .then((data) => data.data);
+};

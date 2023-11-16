@@ -21,6 +21,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
+  deleteAttendanceDataByDateFromBackend,
   getAttendanceDataFromBackend,
   getAttendanceDataOfTodayFromBackend,
 } from "../services/EmployeeDataService";
@@ -290,7 +291,10 @@ const AttendanceTable = ({ employeeList }) => {
                   <TableCell>{entry?.outTime}</TableCell>
                   <TableCell>
                     <Tooltip title="Delete">
-                      <IconButton>
+                      <IconButton onClick={()=>{
+                        deleteAttendanceDataByDateFromBackend(entry.id)
+                        setAttendanceData(attendanceData.filter(data=>data.id!=entry.id))
+                      }}>
                         <Delete color="error" />
                       </IconButton>
                     </Tooltip>
