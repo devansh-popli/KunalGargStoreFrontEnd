@@ -628,17 +628,19 @@ function NewLedgerAccountForm() {
                   >
                     Save
                   </Button> */}
+                  <div className="d-flex justify-content-end">
+
                   <Tooltip title="Delete">
                     <IconButton onClick={deleteData}>
                       <Delete color="error" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Previous">
+                  <Tooltip title="View Previous Data">
                     <IconButton onClick={() => handleEvent("previous")}>
                       <ArrowBackIcon />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Next">
+                  <Tooltip title="View Next Data">
                     <IconButton onClick={() => handleEvent("next")}>
                       <ArrowForwardIcon />
                     </IconButton>
@@ -663,6 +665,7 @@ function NewLedgerAccountForm() {
                       <SaveIcon style={{color:"#78C2AD"}} />
                     </IconButton>
                   </Tooltip>
+                  </div>
                 </Col>
               </Row>
             </Container>

@@ -7,7 +7,7 @@ import {
   Button,
 } from '@mui/material';
 
-const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
+const NomineeDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
@@ -47,7 +47,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     <div>  
 <h5 className='fw-bold'>Nominee Details</h5>
   <h6 variant="h6" className=''>Enter Nominee 1 Details</h6>
-              <TextField className="mb-2"
+              <TextField disabled={readOnly} className="mb-2"
     label="Name"
     name="name"
     fullWidth
@@ -56,7 +56,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     error={Boolean(errors.nominee1Name)}
     helperText={errors.nominee1Name}
   />
-  <TextField className="mb-2"
+  <TextField disabled={readOnly} className="mb-2"
     label="Relationship"
     name="relationship"
     fullWidth
@@ -65,14 +65,14 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     error={Boolean(errors.nominee1Relationship)}
     helperText={errors.nominee1Relationship}
   />
-  <TextField className="mb-2"
+  <TextField disabled={readOnly} className="mb-2"
     label="Mobile"
     name="mobile"
     fullWidth
     value={formData[0]?.mobile}
     onChange={(e) => handleInputChange(e, '0')}
   />
-  <TextField className="mb-2"
+  <TextField disabled={readOnly} className="mb-2"
     label="Aadhar Card"
     name="aadharCard"
     fullWidth
@@ -81,7 +81,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
   />
 
 <h6 variant="h6">Enter Nominee 2 Details</h6>
-  <TextField className="mb-2"
+  <TextField disabled={readOnly} className="mb-2"
     label="Name"
     name="name"
     fullWidth
@@ -90,7 +90,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     error={Boolean(errors.nominee2Name)}
     helperText={errors.nominee2Name}
   />
-  <TextField className="mb-2"
+  <TextField disabled={readOnly} className="mb-2"
     label="Relationship"
     name="relationship"
     fullWidth
@@ -99,14 +99,14 @@ const NomineeDetails = ({ onFormChange, formData, setFormData }) => {
     error={Boolean(errors.nominee2Relationship)}
     helperText={errors.nominee2Relationship}
   />
-  <TextField className="mb-2"
+  <TextField disabled={readOnly} className="mb-2"
     label="Mobile"
     name="mobile"
     fullWidth
     value={formData[1]?.mobile}
     onChange={(e) => handleInputChange(e, '1')}
   />
-  <TextField className="mb-2"
+  <TextField disabled={readOnly} className="mb-2"
     label="Aadhar Card"
     name="aadharCard"
     fullWidth

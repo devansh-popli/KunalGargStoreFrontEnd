@@ -16,7 +16,7 @@ import NomineeDetails from "../components/NomineeDetails";
 import BankDetails from "../components/BankDetails";
 import MedicalDetails from "../components/MedicalDetails";
 import EmployeementDetails from "../components/EmployeementDetails";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { Form, InputGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -24,6 +24,8 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import {
   getEmployeeCodeFromBackend,
+  getEmployeeImageByType,
+  getEmployeeImageByTypeURl,
   saveEmployeeDataToBackend,
   saveEmployeeDocumentToBackend,
 } from "../services/EmployeeDataService";
@@ -48,25 +50,69 @@ const steps = [
   "Employment",
 ];
 
-function EmployeeEnrollmentForm() {
+function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,setSelectedEmployee,readOnly }) {
   const userContext = useContext(UserContext);
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     nominees: [],
   });
-
+  const navigate= useNavigate()
+  const setUpdateFormData =  (employee) => {
+    let aadharImage = null;
+    let drivingImage = null;
+    let panCardImage = null;
+    let passportImage = null;
+    let signatureImage = null;
+    let profileImage = null;
+    let bankDocumentImage;
+    if (employee.aadharImageId)
+      aadharImage =  getEmployeeImageByTypeURl(employee.id, "aadhar");
+    if (employee.drivingImageId)
+      drivingImage =  getEmployeeImageByTypeURl(employee.id, "driving");
+    if (employee.panCardImageId)
+      panCardImage =  getEmployeeImageByTypeURl(employee.id, "pan");
+    if (employee.passportImageId)
+      passportImage =  getEmployeeImageByTypeURl(employee.id, "passport");
+    if (employee.signatureImageId)
+      signatureImage =  getEmployeeImageByTypeURl(employee.id, "signature");
+    if (employee.profileImageId)
+      profileImage =  getEmployeeImageByTypeURl(employee.id, "profileImage");
+    if (employee.bankDocumentImageId)
+      bankDocumentImage =  getEmployeeImageByTypeURl(
+        employee.id,
+        "bankDocument"
+      );
+      console.log(bankDocumentImage)
+    employee.placeholderBankDocument = bankDocumentImage;
+    employee.placeholderProfile = profileImage;
+    employee.placeholderSignature = signatureImage;
+    employee.placeholder = [
+      aadharImage,
+      drivingImage,
+      panCardImage,
+      passportImage,
+    ];
+    setFormData(
+      employee
+    );
+  };
   useEffect(() => {
-    getEmployeeCodeFromBackend()
-      .then((data) => {
-        const nextNumericPart = parseInt(data.split("-")[1]) + 1;
-        setFormData({
-          ...formData,
-          empCode: `EMP-${String(nextNumericPart).padStart(3, "0")}`,
+    if (selectedEmployee) {
+      // setFormData();
+      setUpdateFormData(selectedEmployee);
+    } else {
+      getEmployeeCodeFromBackend()
+        .then((data) => {
+          const nextNumericPart = parseInt(data.split("-")[1]) + 1;
+          setFormData({
+            ...formData,
+            empCode: `EMP-${String(nextNumericPart).padStart(3, "0")}`,
+          });
+        })
+        .catch((error) => {
+          toast.error("Internal Server Error");
         });
-      })
-      .catch((error) => {
-        toast.error("Internal Server Error");
-      });
+    }
   }, []);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -153,7 +199,10 @@ function EmployeeEnrollmentForm() {
             formData.bankDocumentImage
           );
         }
-        toast("Form data saved successfully!");
+        toast.success("Form data saved successfully!");
+        navigate("/employee-directory")
+        setSelectedEmployee(res)
+        handleClose()
         // You can redirect the user to another page here.
       } catch (error) {
         console.log(error);
@@ -178,36 +227,44 @@ function EmployeeEnrollmentForm() {
     <Container className="mt-3">
       <h4 className="fw-bold ">Employee Registration</h4>
       {/* {JSON.stringify(formData)} */}
-      <Stepper className="hide-mobile" activeStep={activeStep}>
-        {steps.map((label) => (
-          <Step
-            key={label}
-            sx={{
-              "& .MuiStepLabel-root .Mui-completed": {
-                color: "#78C2AD", // circle color (COMPLETED)
-              },
-              "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
-                {
-                  color: "grey.500", // Just text label (COMPLETED)
+      {paper && (
+        <Stepper className="hide-mobile" activeStep={activeStep}>
+          {steps.map((label) => (
+            <Step
+              key={label}
+              sx={{
+                "& .MuiStepLabel-root .Mui-completed": {
+                  color: "#78C2AD", // circle color (COMPLETED)
                 },
-              "& .MuiStepLabel-root .Mui-active": {
-                color: "#78C2AD", // circle color (ACTIVE)
-              },
-              "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
-                {
-                  color: "grey.500", // Just text label (ACTIVE)
+                "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
+                  {
+                    color: "grey.500", // Just text label (COMPLETED)
+                  },
+                "& .MuiStepLabel-root .Mui-active": {
+                  color: "#78C2AD", // circle color (ACTIVE)
                 },
-              "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
-                fill: "white", // circle's number (ACTIVE)
-              },
-            }}
-          >
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+                "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
+                  {
+                    color: "grey.500", // Just text label (ACTIVE)
+                  },
+                "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                  fill: "white", // circle's number (ACTIVE)
+                },
+              }}
+            >
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      )}
       <div className="d-flex justify-content-center">
-        <Paper elevation={3} style={{ padding: "20px" }} className="w-custom">
+        <Paper
+          elevation={3}
+          style={
+            paper ? { padding: "20px" } : { margin: "0px", padding: "10px" }
+          }
+          className={paper ? "w-custom" : "w-100"}
+        >
           {activeStep === steps.length ? (
             <div>
               <Typography variant="h5">
@@ -222,6 +279,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {activeStep === 1 && (
@@ -230,6 +288,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {activeStep === 2 && (
@@ -238,6 +297,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {activeStep === 3 && (
@@ -246,6 +306,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {activeStep === 4 && (
@@ -254,6 +315,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {activeStep === 5 && (
@@ -262,6 +324,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {activeStep === 6 && (
@@ -270,6 +333,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {activeStep === 7 && (
@@ -278,6 +342,7 @@ function EmployeeEnrollmentForm() {
                   onFormChange={handleFormChange}
                   formData={formData}
                   setFormData={setFormData}
+                  readOnly={readOnly}
                 />
               )}
               {/* Add sections for other steps */}
@@ -295,6 +360,7 @@ function EmployeeEnrollmentForm() {
                   style={{ backgroundColor: "#78C2AD" }}
                   variant="contained"
                   onClick={handleSave}
+                  className={activeStep === steps.length - 1 && readOnly?"d-none":""}
                 >
                   {activeStep === steps.length - 1 ? "Submit" : "Next"}
                 </Button>
@@ -309,7 +375,7 @@ function EmployeeEnrollmentForm() {
   );
 }
 
-function PersonalDetails({ onFormChange, formData, setFormData }) {
+function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -348,18 +414,16 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
   // useEffect(() => {
   //   console.log('State updated:', formData);
   // }, [formData]);
-  const handleFileChangeProfile = (event,type='file') => {
-    if(type=='cam')
-    {
+  const handleFileChangeProfile = (event, type = "file") => {
+    if (type == "cam") {
       if (showCamera) {
         const imageSrc = webcamRef.current.getScreenshot();
         console.log(imageSrc); // You can use this image source for further processing or uploading.
-        setFormData(
-          {
-            ...formData,
-            placeholderProfile: imageSrc,
-            profileImage: dataURLtoFile(imageSrc, 'captured_image.jpg'),
-          })
+        setFormData({
+          ...formData,
+          placeholderProfile: imageSrc,
+          profileImage: dataURLtoFile(imageSrc, "captured_image.jpg"),
+        });
         webcamRef.current.video.srcObject
           .getTracks()
           .forEach((track) => track.stop());
@@ -367,41 +431,39 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
       } else {
         setShowCamera(true);
       }
-    }
-    else{
-
-    const localFile = event.target.files[0];
-    console.log(localFile);
-    if (
-      localFile.type === "image/png" ||
-      localFile.type === "image/jpeg" ||
-      localFile.type === "image/jpg"
-    ) {
-      const reader = new FileReader();
-      reader.onload = (r) => {
-        console.log(localFile, "2");
-        setFormData(
-          {
-            ...formData,
-            placeholderProfile: r.target.result,
-            profileImage: localFile,
-          },
-          () => {}
-        );
-      };
-      reader.readAsDataURL(localFile);
     } else {
-      toast.error("Invalid File Format only jpeg/jpg/png allowed");
-      setFormData({
-        ...formData,
-        placeholderProfile: null,
-        profileImage: null,
-      });
-    }       
-  }
+      const localFile = event.target.files[0];
+      console.log(localFile);
+      if (
+        localFile.type === "image/png" ||
+        localFile.type === "image/jpeg" ||
+        localFile.type === "image/jpg"
+      ) {
+        const reader = new FileReader();
+        reader.onload = (r) => {
+          console.log(localFile, "2");
+          setFormData(
+            {
+              ...formData,
+              placeholderProfile: r.target.result,
+              profileImage: localFile,
+            },
+            () => {}
+          );
+        };
+        reader.readAsDataURL(localFile);
+      } else {
+        toast.error("Invalid File Format only jpeg/jpg/png allowed");
+        setFormData({
+          ...formData,
+          placeholderProfile: null,
+          profileImage: null,
+        });
+      }
+    }
   };
   const dataURLtoFile = (dataURL, filename) => {
-    const arr = dataURL.split(',');
+    const arr = dataURL.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
     let n = bstr.length;
@@ -413,63 +475,58 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
 
     return new File([u8arr], filename, { type: mime });
   };
-  const handleFileChangeSignature = (event,type='file') => {
-    if(type=='cam')
-    {
+  const handleFileChangeSignature = (event, type = "file") => {
+    if (type == "cam") {
       if (showCameraSignature) {
         const imageSrc = webcamRefSignature.current.getScreenshot();
         console.log(imageSrc); // You can use this image source for further processing or uploading.
-        setFormData(
-          {
-            ...formData,
-            placeholderSignature: imageSrc,
-            signatureImage: dataURLtoFile(imageSrc, 'captured_image.jpg'),
-          })
-          webcamRefSignature.current.video.srcObject
+        setFormData({
+          ...formData,
+          placeholderSignature: imageSrc,
+          signatureImage: dataURLtoFile(imageSrc, "captured_image.jpg"),
+        });
+        webcamRefSignature.current.video.srcObject
           .getTracks()
           .forEach((track) => track.stop());
         setShowCameraSignature(false);
       } else {
         setShowCameraSignature(true);
       }
-    }
-    else{
-    const localFile = event.target.files[0];
-    if (
-      localFile.type === "image/png" ||
-      localFile.type === "image/jpeg" ||
-      localFile.type === "image/jpg"
-    ) {
-      const reader = new FileReader();
-      reader.onload = (r) => {
+    } else {
+      const localFile = event.target.files[0];
+      if (
+        localFile.type === "image/png" ||
+        localFile.type === "image/jpeg" ||
+        localFile.type === "image/jpg"
+      ) {
+        const reader = new FileReader();
+        reader.onload = (r) => {
+          setFormData({
+            ...formData,
+            placeholderSignature: r.target.result,
+            signatureImage: localFile,
+          });
+        };
+        reader.readAsDataURL(localFile);
+      } else {
+        toast.error("Invalid File Format only jpeg/jpg/png allowed");
         setFormData({
           ...formData,
-          placeholderSignature: r.target.result,
-          signatureImage: localFile,
+          placeholderSignature: null,
+          signatureImage: null,
         });
-      };
-      reader.readAsDataURL(localFile);
-    } else {
-      toast.error("Invalid File Format only jpeg/jpg/png allowed");
-      setFormData({
-        ...formData,
-        placeholderSignature: null,
-        signatureImage: null,
-      });
+      }
     }
-  }
   };
   const webcamRef = useRef(null);
   const webcamRefSignature = useRef(null);
   const [showCamera, setShowCamera] = useState(false);
   const [showCameraSignature, setShowCameraSignature] = useState(false);
-  const captureImage = () => {
- 
-  };
+  const captureImage = () => {};
   return (
     <div>
       <h5 className="fw-bold">Personal Details</h5>
-      <TextField
+      <TextField 
         label="Employee Code"
         variant="outlined"
         name="empCode"
@@ -484,7 +541,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
           shrink: formData.empCode ? true : false, // Set shrink to true if value is present
         }}
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="First Name"
         variant="outlined"
         name="firstName"
@@ -495,7 +552,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
         helperText={errors.firstName}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="Last Name"
         name="lastName"
         fullWidth
@@ -505,7 +562,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
         helperText={errors.lastName}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="Email"
         name="email"
         fullWidth
@@ -515,7 +572,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
         helperText={errors.email}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="Phone Number"
         name="phoneNumber"
         fullWidth
@@ -527,7 +584,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
       />
       <Form.Group className="mb-3">
         <Container className="text-center py-3 border" fluid>
-          <p className="text-muted">Image Preview</p>
+          <p className="text-muted">Profile Image Preview</p>
           <img
             className="img-fluid"
             style={{
@@ -539,6 +596,8 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
             alt=""
           />
         </Container>
+        <div className={readOnly?"d-none":""}>
+
         <Form.Label>Select Profile Image</Form.Label>
 
         {showCamera && (
@@ -549,21 +608,27 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
-            />
+              />
           </div>
         )}
         <div className="d-flex align-items-center">
           <div>
             <Button
               data-for="happyFace"
-              onClick={(event)=>handleFileChangeProfile(event,'cam')}
+              onClick={(event) => handleFileChangeProfile(event, "cam")}
               variant="outlined"
               type="error"
-              data-tooltip-id="my-tooltip" data-tooltip-content="Take Photo"
-            >
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content="Take Photo"
+              >
               <CameraAltIcon />
             </Button>
-            <ReactTooltip id="my-tooltip" place="bottom" type="info" effect="solid" />
+            <ReactTooltip
+              id="my-tooltip"
+              place="bottom"
+              type="info"
+              effect="solid"
+              />
           </div>
 
           <span className="mx-2">or</span>
@@ -571,7 +636,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
             <Form.Control
               onChange={(event) => handleFileChangeProfile(event)}
               type="file"
-            />
+              />
             <Button
               variant="outline-secondary"
               onClick={() => {
@@ -581,15 +646,16 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
                   profileImage: null,
                 });
               }}
-            >
+              >
               Clear
             </Button>
           </InputGroup>
         </div>
+              </div>
       </Form.Group>
       <Form.Group className="mb-3">
         <Container className="text-center py-3 border">
-          <p className="text-muted">Image Preview</p>
+          <p className="text-muted">Signature Image Preview</p>
           <img
             className="img-fluid"
             style={{
@@ -601,6 +667,7 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
             alt=""
           />
         </Container>
+       <div className={readOnly?"d-none":""}> 
         {showCameraSignature && (
           <div className="text-center">
             <Webcam
@@ -616,42 +683,49 @@ function PersonalDetails({ onFormChange, formData, setFormData }) {
         <div className="d-flex align-items-center">
           <div>
             <Button
-              onClick={(event)=>handleFileChangeSignature(event,'cam')}
+              onClick={(event) => handleFileChangeSignature(event, "cam")}
               variant="outlined"
               type="error"
-              data-tooltip-id="my-tooltip2" data-tooltip-content="Take Photo"
+              data-tooltip-id="my-tooltip2"
+              data-tooltip-content="Take Photo"
             >
               <CameraAltIcon />
             </Button>
-            <ReactTooltip id="my-tooltip2" place="bottom" type="info" effect="solid" />
+            <ReactTooltip
+              id="my-tooltip2"
+              place="bottom"
+              type="info"
+              effect="solid"
+            />
           </div>
 
           <span className="mx-2">or</span>
-        <InputGroup>
-          <Form.Control
-            onChange={(event) => handleFileChangeSignature(event)}
-            type="file"
-          />
-          <Button
-            variant="outline"
-            onClick={() => {
-              setFormData({
-                ...formData,
-                placeholderSignature: undefined,
-                signatureImage: null,
-              });
-            }}
-          >
-            Clear
-          </Button>
-        </InputGroup>
+          <InputGroup>
+            <Form.Control
+              onChange={(event) => handleFileChangeSignature(event)}
+              type="file"
+            />
+            <Button
+              variant="outline"
+              onClick={() => {
+                setFormData({
+                  ...formData,
+                  placeholderSignature: undefined,
+                  signatureImage: null,
+                });
+              }}
+            >
+              Clear
+            </Button>
+          </InputGroup>
+        </div>
         </div>
       </Form.Group>
     </div>
   );
 }
 
-function Address({ onFormChange, formData, setFormData }) {
+function Address({ onFormChange, formData, setFormData,readOnly }) {
   const handleChange = (event) => {
     onFormChange(event.target.name, event.target.value);
   };
@@ -690,7 +764,7 @@ function Address({ onFormChange, formData, setFormData }) {
   return (
     <div>
       <h5 className="fw-bold">Address</h5>
-      <TextField
+      <TextField disabled={readOnly}
         label="House No"
         name="houseNo"
         fullWidth
@@ -700,7 +774,7 @@ function Address({ onFormChange, formData, setFormData }) {
         helperText={errors.houseNo}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="Street"
         name="street"
         fullWidth
@@ -710,7 +784,7 @@ function Address({ onFormChange, formData, setFormData }) {
         helperText={errors.street}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="Landmark"
         name="landmark"
         fullWidth
@@ -720,7 +794,7 @@ function Address({ onFormChange, formData, setFormData }) {
         helperText={errors.landmark}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="City / Tehsil"
         name="cityTehsil"
         fullWidth
@@ -730,7 +804,7 @@ function Address({ onFormChange, formData, setFormData }) {
         helperText={errors.cityTehsil}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="Postcode"
         name="postcode"
         fullWidth

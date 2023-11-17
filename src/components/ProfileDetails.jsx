@@ -10,7 +10,7 @@ import {
     Select,
     MenuItem,
   } from '@mui/material';
-const ProfileDetails = ({ onFormChange, formData, setFormData }) => {
+const ProfileDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
@@ -41,7 +41,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData }) => {
     <h5 className="fw-bold">Profile Details</h5>
       <FormControl fullWidth>
         <InputLabel>Designation</InputLabel>
-        <Select
+        <Select disabled={readOnly}
           name="designation"
           value={formData.designation}
           onChange={handleInputChange}
@@ -57,7 +57,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData }) => {
       </FormControl>
       <FormControl fullWidth className="mb-3">
         <InputLabel>Job Experience</InputLabel>
-        <Select
+        <Select disabled={readOnly}
           name="jobExperience"
           value={formData.jobExperience}
           onChange={handleInputChange}
@@ -68,7 +68,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData }) => {
           <MenuItem value="Yes">Yes</MenuItem>
         </Select>
       </FormControl>
-      <TextField
+      <TextField disabled={readOnly}
         label="Job Experience in Months/Years"
         name="jobExperience"
         fullWidth
@@ -78,7 +78,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData }) => {
         helperText={errors.jobExperience}
         className="mb-3"
       />
-      <TextField
+      <TextField disabled={readOnly}
         label="Job Experience Location"
         name="jobExperienceLocation"
         fullWidth

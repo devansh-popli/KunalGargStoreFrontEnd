@@ -1,4 +1,4 @@
-import { privateAxios } from "./AxiosService";
+import { BASE_URL, privateAxios } from "./AxiosService";
 
 export const saveEmployeeDataToBackend = (formData) => {
   console.log(formData, "printing formData");
@@ -61,6 +61,9 @@ export const getAttendanceDataByDateFromBackend = (date, empCode) => {
   return privateAxios
     .get(`/api/attendance/findByEmpCodeAndDate?date=${date}&empCode=${empCode}`)
     .then((data) => data.data);
+};
+export const getEmployeeImageByTypeURl = (employeeId, type) => {
+  return `${BASE_URL}/employee/image/${employeeId}/${type}`;
 };
 export const getAttendanceDataOfTodayFromBackend = (
   date,

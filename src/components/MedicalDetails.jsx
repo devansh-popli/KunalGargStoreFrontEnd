@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 
 
-const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
+const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
     
   const [errors, setErrors] = useState({});
 
@@ -60,7 +60,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
       <h5 className='fw-bold'>Medical</h5>
       <FormControl fullWidth className="mb-2">
         <InputLabel>Disability Status</InputLabel>
-        <Select
+        <Select disabled={readOnly}
           name="disabilityStatus"
           value={formData.disabilityStatus}
           onChange={handleInputChange}
@@ -72,7 +72,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
           <MenuItem value="Not Applicable">Not Applicable</MenuItem>
         </Select>
       </FormControl>
-      <TextField className="mb-2"
+      <TextField disabled={readOnly} className="mb-2"
         label="Height (Cm)"
         name="height"
         fullWidth
@@ -81,7 +81,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.height)}
         helperText={errors.height}
       />
-      <TextField className="mb-2"
+      <TextField disabled={readOnly} className="mb-2"
         label="Weight (Kg)"
         name="weight"
         fullWidth
@@ -90,7 +90,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.weight)}
         helperText={errors.weight}
       />
-      <TextField className="mb-2"
+      <TextField disabled={readOnly} className="mb-2"
         label="Blood Group"
         name="bloodGroup"
         fullWidth
@@ -99,7 +99,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.bloodGroup)}
         helperText={errors.bloodGroup}
       />
-      <TextField className="mb-2"
+      <TextField disabled={readOnly} className="mb-2"
         label="Disease"
         name="disease"
         fullWidth
@@ -108,7 +108,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
       />
       <FormControl fullWidth className="mb-2">
         <InputLabel>COVID-19 Vaccination</InputLabel>
-        <Select
+        <Select disabled={readOnly}
           name="covidVaccination"
           value={formData.covidVaccination}
           onChange={handleInputChange}
@@ -122,7 +122,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
       </FormControl>
       {formData.covidVaccination === 'Double + Booster Vaccinated' && (
         <>
-          <TextField className="mb-2"
+          <TextField disabled={readOnly} className="mb-2"
             label="Doctor's Name"
             name="doctorName"
             fullWidth
@@ -131,7 +131,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData }) => {
             error={Boolean(errors.doctorName)}
             helperText={errors.doctorName}
           />
-          <TextField className="mb-2"
+          <TextField disabled={readOnly} className="mb-2"
             label="Doctor's Phone No"
             name="doctorPhone"
             fullWidth

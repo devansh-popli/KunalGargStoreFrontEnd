@@ -5,7 +5,7 @@ import { Container, Paper, Typography, TextField, Button } from "@mui/material";
 import { toast } from "react-toastify";
 import { Form } from "react-bootstrap";
 
-const BankDetails = ({ onFormChange, formData, setFormData }) => {
+const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -83,7 +83,7 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
   return (
     <div>
       <h5 className="fw-bold">Bank Details</h5>
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Name of Bank"
         name="nameOfBank"
@@ -94,7 +94,7 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
         helperText={errors.nameOfBank}
       />
 
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Branch"
         name="branch"
@@ -104,7 +104,7 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.branch)}
         helperText={errors.branch}
       />
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Account Holder Name"
         name="accountHolderName"
@@ -114,7 +114,7 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.accountHolderName)}
         helperText={errors.accountHolderName}
       />
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Account Number"
         name="accountNo"
@@ -124,7 +124,7 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.accountNo)}
         helperText={errors.accountNo}
       />
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="IFSC Number"
         name="ifscNo"
@@ -136,7 +136,7 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
       />
       <Form.Group className="mb-3">
         <Container className="text-center py-3 border">
-          <p className="text-muted">Image Preview</p>
+          <p className="text-muted">Bank Document Image Preview</p>
           <img
             className="img-fluid"
             style={{
@@ -148,12 +148,14 @@ const BankDetails = ({ onFormChange, formData, setFormData }) => {
             alt=""
           />
         </Container>
+        <div className={readOnly?"d-none":""}>
         <Form.Label className="my-1">Upload Bank Document Image</Form.Label>
         <Form.Control
           ref={fileInputRef}
           onChange={(event) => handleFileChangeDocument(event, "adhar")}
           type="file"
-        />
+          />
+          </div>
       </Form.Group>
     </div>
   );

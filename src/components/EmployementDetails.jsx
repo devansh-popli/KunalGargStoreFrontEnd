@@ -29,7 +29,7 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
+const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -226,8 +226,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         )}
       </Container>
       <div className="d-flex my-2 align-items-center">
-        <TextField
-          className=" w-80  "
+        <TextField disabled={readOnly}
+          className={readOnly?"w-100":"w-80"}
           label="Aadhar Card"
           name="aadharCard"
           fullWidth
@@ -237,8 +237,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           helperText={errors.aadharCard}
         />
         <Button
-          className="mx-2"
-          component="label"
+          className={readOnly?"d-none":"mx-2"}
+         component="label"
           onClick={triggerFileInputClick1}
           variant="contained"
           startIcon={<CloudUploadIcon />}
@@ -251,8 +251,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField
-          className=" w-80"
+        <TextField disabled={readOnly}
+          className={readOnly?"w-100":"w-80"}
           label="PAN Card"
           name="panCard"
           fullWidth
@@ -262,7 +262,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           helperText={errors.panCard}
         />
         <Button
-          className="mx-2"
+          className={readOnly?"d-none":"mx-2"}
           component="label"
           onClick={triggerFileInputClick2}
           variant="contained"
@@ -276,8 +276,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField
-          className="w-80"
+        <TextField disabled={readOnly}
+          className={readOnly?"w-100":"w-80"}
           label="Driving License No"
           name="drivingLicenseNo"
           fullWidth
@@ -289,7 +289,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         <Button
           component="label"
           variant="contained"
-          className="mx-2"
+          className={readOnly?"d-none":"mx-2"}
           onClick={triggerFileInputClick3}
           startIcon={<CloudUploadIcon />}
         ></Button>{" "}
@@ -301,8 +301,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField
-          className=" w-80 "
+        <TextField disabled={readOnly}
+          className={readOnly?"w-100":"w-80"}
           label="Passport No"
           name="passportNo"
           fullWidth
@@ -314,7 +314,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         <Button
           component="label"
           variant="contained"
-          className="mx-2"
+          className={readOnly?"d-none":"mx-2"}
           onClick={triggerFileInputClick4}
           startIcon={<CloudUploadIcon />}
         ></Button>{" "}
@@ -325,7 +325,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           type="file"
         />
       </div>
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Police Verification Station"
         name="policeVerificationStation"
@@ -335,7 +335,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.policeVerificationStation)}
         helperText={errors.policeVerificationStation}
       />
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Certificate No"
         name="policeVerificationCertificateNo"
@@ -345,7 +345,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         error={Boolean(errors.policeVerificationCertificateNo)}
         helperText={errors.policeVerificationCertificateNo}
       />
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Date of Issue"
         name="dateOfIssue"
@@ -365,7 +365,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
         }}
         helperText={errors.dateOfIssue}
       />
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Date of Expiry"
         name="dateOfExpiry"
@@ -385,7 +385,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData }) => {
           },
         }}
       />
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Issued By"
         name="issuedBy"

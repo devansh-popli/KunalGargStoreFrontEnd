@@ -10,7 +10,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-const EmployeementDetails = ({ onFormChange, formData, setFormData }) => {
+const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) => {
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -52,7 +52,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData }) => {
     <div>
       <h5 className="fw-bold">Employment Details</h5>
       {" "}
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2 mt-3"
         label="Date of Joining"
         name="dateOfJoining"
@@ -96,7 +96,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData }) => {
           <MenuItem value="Casual">Casual</MenuItem>
         </Select>
       </FormControl>
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Monthly Salary"
         name="monthlySalary"
@@ -107,7 +107,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData }) => {
         helperText={errors.salary}
       />
       {formData.employmentHours === "Part Time" && (
-        <TextField
+        <TextField disabled={readOnly}
           className="mb-2"
           label="Hourly Rate"
           name="hourlyRate"
@@ -118,7 +118,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData }) => {
           helperText={errors.hourlyRate}
         />
       )}
-      <TextField
+      <TextField disabled={readOnly}
         className="mb-2"
         label="Weekly Off Day"
         name="weeklyOffDay"
