@@ -198,6 +198,12 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
     slidesToShow: 1, // You can adjust the number of slides shown at a time
     slidesToScroll: 1,
   };
+  const [index, setIndex] = useState(1);
+
+  const handleSelect = (selectedIndex) => {
+    setIndex(selectedIndex);
+  };
+
   return (
     <div>
       {/* {JSON.stringify(formData.placeholder)} */}
@@ -206,9 +212,9 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
       <Container className="text-center py-3 border">
         <p className="text-muted">Image Preview</p>
         {formData.placeholder && formData.placeholder.length > 0 && (
-          <Carousel data-bs-theme="dark" indicators={false} controls={formData.placeholder.length>0}>
-            {formData.placeholder.map((file, index) => (
-              <Carousel.Item key={index}>
+          <Carousel activeIndex={index} onSelect={handleSelect} data-bs-theme="dark" indicators={false} controls={formData.placeholder.length>0}>
+            {formData.placeholder.map((file, index) =>file && (
+                <Carousel.Item key={index}>
                 <img
                   className="img-fluid mx-2"
                   style={{
@@ -221,6 +227,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
                   onClick={() => openImageInNewTab(file)}
                 />
               </Carousel.Item>
+                
             ))}
           </Carousel>
         )}

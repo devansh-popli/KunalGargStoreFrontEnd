@@ -87,9 +87,9 @@ function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,set
     employee.placeholderProfile = profileImage;
     employee.placeholderSignature = signatureImage;
     employee.placeholder = [
-      aadharImage,
-      drivingImage,
-      panCardImage,
+      aadharImage  ,
+      drivingImage ,
+      panCardImage ,
       passportImage,
     ];
     setFormData(
