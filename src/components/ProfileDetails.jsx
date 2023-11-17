@@ -13,24 +13,7 @@ import {
 const ProfileDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
     const [errors, setErrors] = useState({});
 
-    const validateForm = () => {
-      const newErrors = {};
-  
-      if (!formData.designation) {
-        newErrors.designation = 'Designation is required';
-      }
-      if (!formData.jobExperience) {
-        newErrors.jobExperience = 'Job experience is required';
-      }
-  
-      if (!formData.jobExperienceLocation) {
-        newErrors.jobExperienceLocation = 'Job experience location is required';
-      }
-      if (!formData.jobExperience) {
-        newErrors.jobExperience = 'Job experience is required';
-      }
-      return newErrors;
-    };
+    
   
     const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -70,12 +53,12 @@ const ProfileDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
       </FormControl>
       <TextField disabled={readOnly}
         label="Job Experience in Months/Years"
-        name="jobExperience"
+        name="jobExperienceInMonths"
         fullWidth
-        value={formData.jobExperience}
+        value={formData.jobExperienceInMonths}
         onChange={handleInputChange}
-        error={Boolean(errors.jobExperience)}
-        helperText={errors.jobExperience}
+        error={Boolean(errors.jobExperienceInMonths)}
+        helperText={errors.jobExperienceInMonths}
         className="mb-3"
       />
       <TextField disabled={readOnly}

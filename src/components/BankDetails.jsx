@@ -8,32 +8,7 @@ import { Form } from "react-bootstrap";
 const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.nameOfBank) {
-      newErrors.nameOfBank = "Name of Bank is required";
-    }
-
-    if (!formData.branch) {
-      newErrors.branch = "Branch is required";
-    }
-
-    if (!formData.accountHolderName) {
-      newErrors.accountHolderName = "Account Holder Name is required";
-    }
-
-    if (!formData.accountNo) {
-      newErrors.accountNo = "Account Number is required";
-    }
-
-    if (!formData.ifscNo) {
-      newErrors.ifscNo = "IFSC Number is required";
-    }
-
-    return newErrors;
-  };
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

@@ -16,40 +16,6 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
     
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.disabilityStatus) {
-      newErrors.disabilityStatus = 'Disability status is required';
-    }
-
-    if (!formData.height) {
-      newErrors.height = 'Height is required';
-    }
-
-    if (!formData.weight) {
-      newErrors.weight = 'Weight is required';
-    }
-
-    if (!formData.bloodGroup) {
-      newErrors.bloodGroup = 'Blood group is required';
-    }
-
-    if (!formData.covidVaccination) {
-      newErrors.covidVaccination = 'COVID-19 vaccination status is required';
-    }
-
-    if (formData.covidVaccination === 'Double + Booster Vaccinated' && !formData.doctorName) {
-      newErrors.doctorName = 'Doctor name is required for booster vaccination';
-    }
-
-    if (formData.covidVaccination === 'Double + Booster Vaccinated' && !formData.doctorPhone) {
-      newErrors.doctorPhone = 'Doctor phone is required for booster vaccination';
-    }
-
-    return newErrors;
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

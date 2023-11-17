@@ -32,53 +32,6 @@ const VisuallyHiddenInput = styled("input")({
 const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.aadharCard) {
-      newErrors.aadharCard = "Aadhar card is required";
-    }
-
-    if (!formData.panCard) {
-      newErrors.panCard = "PAN card is required";
-    }
-
-    if (!formData.drivingLicenseNo) {
-      newErrors.drivingLicenseNo = "Driving license number is required";
-    }
-
-    if (!formData.passportNo) {
-      newErrors.passportNo = "Passport number is required";
-    }
-
-    if (!formData.policeVerificationStation) {
-      newErrors.policeVerificationStation =
-        "Police verification station is required";
-    }
-
-    if (!formData.policeVerificationCertificateNo) {
-      newErrors.policeVerificationCertificateNo =
-        "Certificate number is required";
-    }
-
-    if (!formData.dateOfIssue) {
-      newErrors.dateOfIssue = "Date of issue is required";
-    }
-
-    if (!formData.dateOfExpiry) {
-      newErrors.dateOfExpiry = "Date of expiry is required";
-    }
-
-    if (!formData.issuedBy) {
-      newErrors.issuedBy = "Issued by is required";
-    }
-
-    if (documentFiles.length === 0) {
-      newErrors.documents = "Please upload at least one document";
-    }
-
-    return newErrors;
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -212,7 +165,7 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
       <Container className="text-center py-3 border">
         <p className="text-muted">Image Preview</p>
         {formData.placeholder && formData.placeholder.length > 0 && (
-          <Carousel activeIndex={index} onSelect={handleSelect} data-bs-theme="dark" indicators={false} controls={formData.placeholder.length>0}>
+          <Carousel  data-bs-theme="dark" indicators={false} controls={formData.placeholder.length>0}>
             {formData.placeholder.map((file, index) =>file && (
                 <Carousel.Item key={index}>
                 <img

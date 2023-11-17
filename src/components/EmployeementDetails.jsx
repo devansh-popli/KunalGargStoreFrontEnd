@@ -13,35 +13,7 @@ import {
 const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) => {
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.dateOfJoining) {
-      newErrors.dateOfJoining = "Date of Joining is required";
-    }
-
-    if (!formData.employmentHours) {
-      newErrors.employmentHours = "Employment Hours is required";
-    }
-
-    if (!formData.employmentStatus) {
-      newErrors.employmentStatus = "Employment Status is required";
-    }
-
-    if (!formData.monthlySalary && !formData.dailyRate) {
-      newErrors.salary = "Monthly Salary or Daily Rate is required";
-    }
-
-    if (formData.employmentHours === "Part Time" && !formData.hourlyRate) {
-      newErrors.hourlyRate = "Hourly Rate is required for Part-Time employment";
-    }
-
-    if (!formData.weeklyOffDay) {
-      newErrors.weeklyOffDay = "Weekly Off Day is required";
-    }
-
-    return newErrors;
-  };
+ 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

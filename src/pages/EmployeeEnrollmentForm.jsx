@@ -50,14 +50,20 @@ const steps = [
   "Employment",
 ];
 
-function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,setSelectedEmployee,readOnly }) {
+function EmployeeEnrollmentForm({
+  paper = true,
+  selectedEmployee,
+  handleClose,
+  setSelectedEmployee,
+  readOnly,
+}) {
   const userContext = useContext(UserContext);
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     nominees: [],
   });
-  const navigate= useNavigate()
-  const setUpdateFormData =  (employee) => {
+  const navigate = useNavigate();
+  const setUpdateFormData = (employee) => {
     let aadharImage = null;
     let drivingImage = null;
     let panCardImage = null;
@@ -66,35 +72,33 @@ function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,set
     let profileImage = null;
     let bankDocumentImage;
     if (employee.aadharImageId)
-      aadharImage =  getEmployeeImageByTypeURl(employee.id, "aadhar");
+      aadharImage = getEmployeeImageByTypeURl(employee.id, "aadhar");
     if (employee.drivingImageId)
-      drivingImage =  getEmployeeImageByTypeURl(employee.id, "driving");
+      drivingImage = getEmployeeImageByTypeURl(employee.id, "driving");
     if (employee.panCardImageId)
-      panCardImage =  getEmployeeImageByTypeURl(employee.id, "pan");
+      panCardImage = getEmployeeImageByTypeURl(employee.id, "pan");
     if (employee.passportImageId)
-      passportImage =  getEmployeeImageByTypeURl(employee.id, "passport");
+      passportImage = getEmployeeImageByTypeURl(employee.id, "passport");
     if (employee.signatureImageId)
-      signatureImage =  getEmployeeImageByTypeURl(employee.id, "signature");
+      signatureImage = getEmployeeImageByTypeURl(employee.id, "signature");
     if (employee.profileImageId)
-      profileImage =  getEmployeeImageByTypeURl(employee.id, "profileImage");
+      profileImage = getEmployeeImageByTypeURl(employee.id, "profileImage");
     if (employee.bankDocumentImageId)
-      bankDocumentImage =  getEmployeeImageByTypeURl(
+      bankDocumentImage = getEmployeeImageByTypeURl(
         employee.id,
         "bankDocument"
       );
-      console.log(bankDocumentImage)
+    console.log(bankDocumentImage);
     employee.placeholderBankDocument = bankDocumentImage;
     employee.placeholderProfile = profileImage;
     employee.placeholderSignature = signatureImage;
     employee.placeholder = [
-      aadharImage  ,
-      drivingImage ,
-      panCardImage ,
+      aadharImage,
+      drivingImage,
+      panCardImage,
       passportImage,
     ];
-    setFormData(
-      employee
-    );
+    setFormData(employee);
   };
   useEffect(() => {
     if (selectedEmployee) {
@@ -130,6 +134,15 @@ function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,set
   const handleSave = async () => {
     if (activeStep === steps.length - 1) {
       try {
+        if (activeStep == 7) {
+          console.log(formData)
+          let errors = validateForm8();
+          console.log(errors);
+          Object.entries(errors).forEach(([key, value]) => {
+            toast.error(`${key}: ${value}`);
+          });
+          if (Object.keys(errors).length != 0) return;
+        }
         console.log(formData);
         const filteredEmployeeData = Object.entries(formData).reduce(
           (acc, [key, value]) => {
@@ -200,15 +213,74 @@ function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,set
           );
         }
         toast.success("Form data saved successfully!");
-        navigate("/employee-directory")
-        setSelectedEmployee(res)
-        handleClose()
+        navigate("/employee-directory");
+        setSelectedEmployee(res);
+        handleClose();
         // You can redirect the user to another page here.
       } catch (error) {
         console.log(error);
         toast("Failed to save form data. Please try again.");
       }
     } else {
+      if (activeStep == 0) {
+        let errors = validateForm1();
+        console.log(errors);
+        Object.entries(errors).forEach(([key, value]) => {
+          toast.error(`${key}: ${value}`);
+        });
+        if (Object.keys(errors).length != 0) return;
+      }
+      if (activeStep == 1) {
+        let errors = validateForm2();
+        console.log(errors);
+        Object.entries(errors).forEach(([key, value]) => {
+          toast.error(`${key}: ${value}`);
+        });
+        if (Object.keys(errors).length != 0) return;
+      }
+      if (activeStep == 2) {
+        let errors = validateForm3();
+        console.log(errors);
+        Object.entries(errors).forEach(([key, value]) => {
+          toast.error(`${key}: ${value}`);
+        });
+        if (Object.keys(errors).length != 0) return;
+      }
+      if (activeStep == 3) {
+        let errors = validateForm4();
+        console.log(errors);
+        Object.entries(errors).forEach(([key, value]) => {
+          toast.error(`${key}: ${value}`);
+        });
+        if (Object.keys(errors).length != 0) return;
+      }
+      if (activeStep == 4) {
+        console.log(formData)
+        let errors = validateForm5();
+        console.log(errors);
+        Object.entries(errors).forEach(([key, value]) => {
+          toast.error(`${key}: ${value}`);
+        });
+        if (Object.keys(errors).length != 0) return;
+      }
+      if (activeStep == 5) {
+        console.log(formData)
+        let errors = validateForm6();
+        console.log(errors);
+        Object.entries(errors).forEach(([key, value]) => {
+          toast.error(`${key}: ${value}`);
+        });
+        if (Object.keys(errors).length != 0) return;
+      }
+      if (activeStep == 6) {
+        console.log(formData)
+        let errors = validateForm7();
+        console.log(errors);
+        Object.entries(errors).forEach(([key, value]) => {
+          toast.error(`${key}: ${value}`);
+        });
+        if (Object.keys(errors).length != 0) return;
+      }
       handleNext();
     }
   };
@@ -222,7 +294,237 @@ function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,set
   //     email: '',
   //     phoneNumber: '',
   //   });
+  const validateForm1 = () => {
+    const newErrors = {};
 
+    if (!formData.firstName) {
+      newErrors.firstName = "First name is required";
+    }
+    if (!formData.empCode) {
+      newErrors.empCode = "Employee Code is required";
+    }
+
+    if (!formData.lastName) {
+      newErrors.lastName = "Last name is required";
+    }
+
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!formData.phoneNumber) {
+      newErrors.phoneNumber = "Phone number is required";
+    }
+
+    return newErrors;
+  };
+  const validateForm2 = () => {
+    const newErrors = {};
+
+    if (!formData.houseNo) {
+      newErrors.houseNo = "House No is required";
+    }
+
+    if (!formData.street) {
+      newErrors.street = "Street is required";
+    }
+
+    if (!formData.landmark) {
+      newErrors.landmark = "Landmark is required";
+    }
+
+    if (!formData.cityTehsil) {
+      newErrors.cityTehsil = "City/Tehsil is required";
+    }
+
+    if (!formData.postcode) {
+      newErrors.postcode = "Postcode is required";
+    }
+
+    return newErrors;
+  };
+  const validateForm3 = () => {
+    const newErrors = {};
+
+    if (!formData.designation) {
+      newErrors.designation = "Designation is required";
+    }
+    if (!formData.jobExperience) {
+      newErrors.jobExperience = "Job experience is required";
+    }
+
+    if (!formData.jobExperienceLocation) {
+      newErrors.jobExperienceLocation = "Job experience location is required";
+    }
+    if (formData.jobExperience == "Yes" && !formData.jobExperienceInMonths) {
+      newErrors.jobExperienceInMonths = "Job experience in Months is required";
+    }
+    return newErrors;
+  };
+  const validateForm4 = () => {
+    const newErrors = {};
+
+    let filledDocumentCount = 0;
+
+    if (formData.aadharCard) {
+      filledDocumentCount++;
+    }
+
+    if (formData.panCard) {
+      filledDocumentCount++;
+    }
+
+    if (formData.drivingLicenseNo) {
+      filledDocumentCount++;
+    }
+
+    if (formData.passportNo) {
+      filledDocumentCount++;
+    }
+
+    if (filledDocumentCount < 3) {
+      newErrors.general = "At least three documents are required";
+    }
+
+    if (!formData.policeVerificationStation) {
+      newErrors.policeVerificationStation =
+        "Police verification station is required";
+    }
+
+    if (!formData.policeVerificationCertificateNo) {
+      newErrors.policeVerificationCertificateNo =
+        "Certificate number is required";
+    }
+
+    if (!formData.dateOfIssue) {
+      newErrors.dateOfIssue = "Date of issue is required";
+    }
+
+    if (!formData.dateOfExpiry) {
+      newErrors.dateOfExpiry = "Date of expiry is required";
+    }
+
+    if (!formData.issuedBy) {
+      newErrors.issuedBy = "Issued by is required";
+    }
+
+    if (!formData.placeholder || formData.placeholder?.length < 3) {
+      newErrors.documents = "Please upload at least 3 document";
+    }
+
+    return newErrors;
+  };
+  const validateForm5 = () => {
+    const newErrors = {};
+
+    if (!formData?.nominees[0]?.name) {
+      newErrors.nominee1Name = "Nominee 1 name is required";
+    }
+
+    if (!formData?.nominees[0]?.relationship) {
+      newErrors.nominee1Relationship = "Nominee 1 relationship is required";
+    }
+
+    if (!formData?.nominees[1]?.name) {
+      newErrors.nominee2Name = "Nominee 2 name is required";
+    }
+
+    if (!formData?.nominees[1]?.relationship) {
+      newErrors.nominee2Relationship = "Nominee 2 relationship is required";
+    }
+
+    return newErrors;
+  };
+  const validateForm6 = () => {
+    const newErrors = {};
+
+    if (!formData.nameOfBank) {
+      newErrors.nameOfBank = "Name of Bank is required";
+    }
+
+    if (!formData.branch) {
+      newErrors.branch = "Branch is required";
+    }
+
+    if (!formData.accountHolderName) {
+      newErrors.accountHolderName = "Account Holder Name is required";
+    }
+
+    if (!formData.accountNo) {
+      newErrors.accountNo = "Account Number is required";
+    }
+
+    if (!formData.ifscNo) {
+      newErrors.ifscNo = "IFSC Number is required";
+    }
+
+    return newErrors;
+  };
+
+  const validateForm7 = () => {
+    const newErrors = {};
+
+    if (!formData.disabilityStatus) {
+      newErrors.disabilityStatus = 'Disability status is required';
+    }
+
+    if (!formData.height) {
+      newErrors.height = 'Height is required';
+    }
+
+    if (!formData.weight) {
+      newErrors.weight = 'Weight is required';
+    }
+
+    if (!formData.bloodGroup) {
+      newErrors.bloodGroup = 'Blood group is required';
+    }
+
+    if (!formData.covidVaccination) {
+      newErrors.covidVaccination = 'COVID-19 vaccination status is required';
+    }
+
+    if (formData.covidVaccination === 'Double + Booster Vaccinated' && !formData.doctorName) {
+      newErrors.doctorName = 'Doctor name is required for booster vaccination';
+    }
+
+    if (formData.covidVaccination === 'Double + Booster Vaccinated' && !formData.doctorPhone) {
+      newErrors.doctorPhone = 'Doctor phone is required for booster vaccination';
+    }
+
+    return newErrors;
+  };
+  const validateForm8 = () => {
+    const newErrors = {};
+
+    if (!formData.dateOfJoining) {
+      newErrors.dateOfJoining = "Date of Joining is required";
+    }
+
+    if (!formData.employmentHours) {
+      newErrors.employmentHours = "Employment Hours is required";
+    }
+
+    if (!formData.employmentStatus) {
+      newErrors.employmentStatus = "Employment Status is required";
+    }
+
+    if (!formData.monthlySalary && !formData.dailyRate) {
+      newErrors.salary = "Monthly Salary or Daily Rate is required";
+    }
+
+    if (formData.employmentHours === "Part Time" && !formData.hourlyRate) {
+      newErrors.hourlyRate = "Hourly Rate is required for Part-Time employment";
+    }
+
+    if (!formData.weeklyOffDay) {
+      newErrors.weeklyOffDay = "Weekly Off Day is required";
+    }
+
+    return newErrors;
+  };
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold ">Employee Registration</h4>
@@ -360,7 +662,9 @@ function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,set
                   style={{ backgroundColor: "#78C2AD" }}
                   variant="contained"
                   onClick={handleSave}
-                  className={activeStep === steps.length - 1 && readOnly?"d-none":""}
+                  className={
+                    activeStep === steps.length - 1 && readOnly ? "d-none" : ""
+                  }
                 >
                   {activeStep === steps.length - 1 ? "Submit" : "Next"}
                 </Button>
@@ -375,35 +679,9 @@ function EmployeeEnrollmentForm({ paper = true, selectedEmployee,handleClose,set
   );
 }
 
-function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
+function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.firstName) {
-      newErrors.firstName = "First name is required";
-    }
-    if (!formData.empCode) {
-      newErrors.empCode = "Employee Code is required";
-    }
-
-    if (!formData.lastName) {
-      newErrors.lastName = "Last name is required";
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.phoneNumber) {
-      newErrors.phoneNumber = "Phone number is required";
-    }
-
-    return newErrors;
-  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -526,7 +804,7 @@ function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
   return (
     <div>
       <h5 className="fw-bold">Personal Details</h5>
-      <TextField 
+      <TextField
         label="Employee Code"
         variant="outlined"
         name="empCode"
@@ -541,7 +819,8 @@ function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
           shrink: formData.empCode ? true : false, // Set shrink to true if value is present
         }}
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="First Name"
         variant="outlined"
         name="firstName"
@@ -552,7 +831,8 @@ function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
         helperText={errors.firstName}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Last Name"
         name="lastName"
         fullWidth
@@ -562,7 +842,8 @@ function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
         helperText={errors.lastName}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Email"
         name="email"
         fullWidth
@@ -572,7 +853,8 @@ function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
         helperText={errors.email}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Phone Number"
         name="phoneNumber"
         fullWidth
@@ -596,62 +878,61 @@ function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
             alt=""
           />
         </Container>
-        <div className={readOnly?"d-none":""}>
+        <div className={readOnly ? "d-none" : ""}>
+          <Form.Label>Select Profile Image</Form.Label>
 
-        <Form.Label>Select Profile Image</Form.Label>
-
-        {showCamera && (
-          <div className="text-center">
-            <Webcam
-              width={300}
-              height={200}
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
+          {showCamera && (
+            <div className="text-center">
+              <Webcam
+                width={300}
+                height={200}
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
               />
-          </div>
-        )}
-        <div className="d-flex align-items-center">
-          <div>
-            <Button
-              data-for="happyFace"
-              onClick={(event) => handleFileChangeProfile(event, "cam")}
-              variant="outlined"
-              type="error"
-              data-tooltip-id="my-tooltip"
-              data-tooltip-content="Take Photo"
+            </div>
+          )}
+          <div className="d-flex align-items-center">
+            <div>
+              <Button
+                data-for="happyFace"
+                onClick={(event) => handleFileChangeProfile(event, "cam")}
+                variant="outlined"
+                type="error"
+                data-tooltip-id="my-tooltip"
+                data-tooltip-content="Take Photo"
               >
-              <CameraAltIcon />
-            </Button>
-            <ReactTooltip
-              id="my-tooltip"
-              place="bottom"
-              type="info"
-              effect="solid"
+                <CameraAltIcon />
+              </Button>
+              <ReactTooltip
+                id="my-tooltip"
+                place="bottom"
+                type="info"
+                effect="solid"
               />
-          </div>
+            </div>
 
-          <span className="mx-2">or</span>
-          <InputGroup>
-            <Form.Control
-              onChange={(event) => handleFileChangeProfile(event)}
-              type="file"
+            <span className="mx-2">or</span>
+            <InputGroup>
+              <Form.Control
+                onChange={(event) => handleFileChangeProfile(event)}
+                type="file"
               />
-            <Button
-              variant="outline-secondary"
-              onClick={() => {
-                setFormData({
-                  ...formData,
-                  placeholderProfile: undefined,
-                  profileImage: null,
-                });
-              }}
+              <Button
+                variant="outline-secondary"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    placeholderProfile: undefined,
+                    profileImage: null,
+                  });
+                }}
               >
-              Clear
-            </Button>
-          </InputGroup>
+                Clear
+              </Button>
+            </InputGroup>
+          </div>
         </div>
-              </div>
       </Form.Group>
       <Form.Group className="mb-3">
         <Container className="text-center py-3 border">
@@ -667,95 +948,69 @@ function PersonalDetails({ onFormChange, formData, setFormData,readOnly }) {
             alt=""
           />
         </Container>
-       <div className={readOnly?"d-none":""}> 
-        {showCameraSignature && (
-          <div className="text-center">
-            <Webcam
-              width={300}
-              height={200}
-              audio={false}
-              ref={webcamRefSignature}
-              screenshotFormat="image/jpeg"
-            />
-          </div>
-        )}
-        <Form.Label>Upload Signature Image</Form.Label>
-        <div className="d-flex align-items-center">
-          <div>
-            <Button
-              onClick={(event) => handleFileChangeSignature(event, "cam")}
-              variant="outlined"
-              type="error"
-              data-tooltip-id="my-tooltip2"
-              data-tooltip-content="Take Photo"
-            >
-              <CameraAltIcon />
-            </Button>
-            <ReactTooltip
-              id="my-tooltip2"
-              place="bottom"
-              type="info"
-              effect="solid"
-            />
-          </div>
+        <div className={readOnly ? "d-none" : ""}>
+          {showCameraSignature && (
+            <div className="text-center">
+              <Webcam
+                width={300}
+                height={200}
+                audio={false}
+                ref={webcamRefSignature}
+                screenshotFormat="image/jpeg"
+              />
+            </div>
+          )}
+          <Form.Label>Upload Signature Image</Form.Label>
+          <div className="d-flex align-items-center">
+            <div>
+              <Button
+                onClick={(event) => handleFileChangeSignature(event, "cam")}
+                variant="outlined"
+                type="error"
+                data-tooltip-id="my-tooltip2"
+                data-tooltip-content="Take Photo"
+              >
+                <CameraAltIcon />
+              </Button>
+              <ReactTooltip
+                id="my-tooltip2"
+                place="bottom"
+                type="info"
+                effect="solid"
+              />
+            </div>
 
-          <span className="mx-2">or</span>
-          <InputGroup>
-            <Form.Control
-              onChange={(event) => handleFileChangeSignature(event)}
-              type="file"
-            />
-            <Button
-              variant="outline"
-              onClick={() => {
-                setFormData({
-                  ...formData,
-                  placeholderSignature: undefined,
-                  signatureImage: null,
-                });
-              }}
-            >
-              Clear
-            </Button>
-          </InputGroup>
-        </div>
+            <span className="mx-2">or</span>
+            <InputGroup>
+              <Form.Control
+                onChange={(event) => handleFileChangeSignature(event)}
+                type="file"
+              />
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    placeholderSignature: undefined,
+                    signatureImage: null,
+                  });
+                }}
+              >
+                Clear
+              </Button>
+            </InputGroup>
+          </div>
         </div>
       </Form.Group>
     </div>
   );
 }
 
-function Address({ onFormChange, formData, setFormData,readOnly }) {
+function Address({ onFormChange, formData, setFormData, readOnly }) {
   const handleChange = (event) => {
     onFormChange(event.target.name, event.target.value);
   };
   const [errors, setErrors] = useState({});
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.houseNo) {
-      newErrors.houseNo = "House No is required";
-    }
-
-    if (!formData.street) {
-      newErrors.street = "Street is required";
-    }
-
-    if (!formData.landmark) {
-      newErrors.landmark = "Landmark is required";
-    }
-
-    if (!formData.cityTehsil) {
-      newErrors.cityTehsil = "City/Tehsil is required";
-    }
-
-    if (!formData.postcode) {
-      newErrors.postcode = "Postcode is required";
-    }
-
-    return newErrors;
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -764,7 +1019,8 @@ function Address({ onFormChange, formData, setFormData,readOnly }) {
   return (
     <div>
       <h5 className="fw-bold">Address</h5>
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="House No"
         name="houseNo"
         fullWidth
@@ -774,7 +1030,8 @@ function Address({ onFormChange, formData, setFormData,readOnly }) {
         helperText={errors.houseNo}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Street"
         name="street"
         fullWidth
@@ -784,7 +1041,8 @@ function Address({ onFormChange, formData, setFormData,readOnly }) {
         helperText={errors.street}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Landmark"
         name="landmark"
         fullWidth
@@ -794,7 +1052,8 @@ function Address({ onFormChange, formData, setFormData,readOnly }) {
         helperText={errors.landmark}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="City / Tehsil"
         name="cityTehsil"
         fullWidth
@@ -804,7 +1063,8 @@ function Address({ onFormChange, formData, setFormData,readOnly }) {
         helperText={errors.cityTehsil}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Postcode"
         name="postcode"
         fullWidth
