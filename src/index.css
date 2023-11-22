@@ -204,3 +204,8 @@ h6 {
     display: none !important;
   }
 }
+.error-message {
+  color: #DA5B53;
+  font-size: 12px;
+  margin-top: 5px; /* Adjust as needed */
+}

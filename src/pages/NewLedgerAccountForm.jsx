@@ -12,6 +12,11 @@ import {
   Paper,
   Tooltip,
   IconButton,
+  FormControlLabel,
+  Checkbox,
+  RadioGroup,
+  Radio,
+  FormLabel,
 } from "@mui/material";
 import { Col, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -62,7 +67,28 @@ function NewLedgerAccountForm() {
     getLedgerAccountByAction(action, formData.accountCode)
       .then((data) => {
         toast.success(action + " data fetched");
-        setFormData(data);
+        setFormData((prevData) => ({
+          ...prevData,
+          id: data?.id || "",
+          accountCode: data?.accountCode || "",
+          gstNo: data?.gstNo || "",
+          accountName: data?.accountName || "",
+          address: data?.address || "",
+          city: data?.city || "",
+          pincode: data?.pincode || "",
+          state: data?.state || "",
+          openingBalance: data?.openingBalance || "",
+          msmedStatus: data?.msmedStatus || "",
+          contactNo: data?.contactNo || "",
+          email: data?.email || "",
+          pan: data?.pan || "",
+          turnoverBelow10Cr: data?.turnoverBelow10Cr || "",
+          approved: data?.approved || "",
+          accountNum: data?.accountNum || "",
+          accountNameBank: data?.accountNameBank || "",
+          ifsc: data?.ifsc || "",
+          branch: data?.branch || "",
+        }));
       })
       .catch((error) => {
         if (error.response.data.message == "source cannot be null") {
@@ -203,17 +229,88 @@ function NewLedgerAccountForm() {
         toast.error("Error Occurred in fetching gst details");
       });
   };
+  const validateAccountName = (value) => {
+    return value.trim() !== "" ? null : "A/c Name is required";
+  };
+
+  const validateAccountCode = (value) => {
+    return value.trim() !== "" ? null : "A/c Code is required";
+  };
+
+  const validateCity = (value) => {
+    return value.trim() !== "" ? null : "City is required";
+  };
+
+  const validateState = (value) => {
+    return value.trim() !== "" ? null : "State is required";
+  };
+
+  const validateContactNo = (value) => {
+    // Add your specific validation logic for contact number
+    return value.trim() !== "" ? null : "Contact No is required";
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
+    let error = null;
+    switch (name) {
+      case "accountName":
+        error = validateAccountName(value);
+        break;
+      case "accountCode":
+        error = validateAccountCode(value);
+        break;
+      case "city":
+        error = validateCity(value);
+        break;
+      case "state":
+        error = validateState(value);
+        break;
+      case "contactNo":
+        error = validateContactNo(value);
+        break;
+      default:
+        break;
+    }
+
     setFormData({
       ...formData,
       [name]: value,
+      [`${name}Error`]: error,
     });
   };
 
   const handleSubmit = async (e) => {
     // You can handle form submission logic here
     e.preventDefault();
+    // Validate form fields
+    console.log(JSON.stringify(formData));
+    const accountNameError = validateAccountName(formData?.accountName || "");
+    const accountCodeError = validateAccountCode(formData?.accountCode || "");
+    const cityError = validateCity(formData?.city || "");
+    const stateError = validateState(formData?.state || "");
+    const contactNoError = validateContactNo(formData?.contactNo || "");
+
+    // Check if there are any validation errors
+    if (
+      accountNameError ||
+      accountCodeError ||
+      cityError ||
+      stateError ||
+      contactNoError
+    ) {
+      // If there are errors, update the state to display them
+      setFormData({
+        ...formData,
+        accountNameError: accountNameError,
+        accountCodeError: accountCodeError,
+        cityError: cityError,
+        stateError: stateError,
+        contactNoError: contactNoError,
+      });
+      toast.error("Fill All Required Fields");
+      return; // Exit the function if there are errors
+    }
     await saveLedgerAccount(formData)
       .then(async (data) => {
         console.log(data);
@@ -246,15 +343,19 @@ function NewLedgerAccountForm() {
         console.log(error);
       });
   };
+  const [selectedOption, setSelectedOption] = useState("");
 
+  const handleOptionChange = (event) => {
+    setFormData({ ...formData, approved: event.target.value });
+  };
   const stateList = states;
   const userContext = useContext(UserContext);
   return userContext.isLogin ? (
     <Container className="mt-3">
       {/* {JSON.stringify(formData)} */}
-      <h4 className="fw-bold">New Ledger Account Form</h4>
       <div className="d-flex justify-content-center">
         <Paper elevation={3} style={{ padding: "20px" }} className="w-60">
+          <h4 className="fw-bold mb-3">New Ledger Account Form</h4>
           <form onSubmit={handleSubmit}>
             <Grid
               className="myGridItem"
@@ -271,7 +372,36 @@ function NewLedgerAccountForm() {
                   value={formData.accountCode}
                   onChange={handleChange}
                   fullWidth
+                  error={Boolean(formData.accountCodeError)}
                 />
+                {formData.accountCodeError && (
+                  <div
+                    className="error-message"
+                    style={{ position: "absolute" }}
+                  >
+                    {formData.accountCodeError}
+                  </div>
+                )}
+              </Grid>
+              <Grid className="myGridItem" item xs={12} sm={6}>
+                <RadioGroup
+                  aria-label="supplier-customer"
+                  name="supplier-customer-group"
+                  value={formData.approved}
+                  onChange={handleOptionChange}
+                  style={{ display: "flex", flexDirection: "row" }}
+                >
+                  <FormControlLabel
+                    value="supplier"
+                    control={<Radio color="primary" />}
+                    label="Supplier"
+                  />
+                  <FormControlLabel
+                    value="customer"
+                    control={<Radio color="primary" />}
+                    label="Customer"
+                  />
+                </RadioGroup>
               </Grid>
               <Grid className="myGridItem mx-1" item xs={8} sm={4}>
                 <TextField
@@ -299,7 +429,7 @@ function NewLedgerAccountForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid className="myGridItem" xs={3} sm={3}>
+              <Grid className="myGridItem" xs={3} sm={4}>
                 <Button
                   variant="outlined"
                   color="primary"
@@ -367,14 +497,25 @@ function NewLedgerAccountForm() {
                   value={formData.accountName}
                   onChange={(event) => {
                     // handleChange()
+                    let error = validateAccountName(event.target.value);
                     setFormData({
                       ...formData,
                       accountName: event.target.value,
                       accountNameBank: event.target.value,
+                      [`accountNameError`]: error,
                     });
                   }}
                   fullWidth
+                  error={Boolean(formData.accountNameError)}
                 />
+                {formData.accountNameError && (
+                  <div
+                    className="error-message"
+                    style={{ position: "absolute" }}
+                  >
+                    {formData.accountNameError}
+                  </div>
+                )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <FormControl fullWidth variant="standard">
@@ -431,7 +572,16 @@ function NewLedgerAccountForm() {
                   value={formData.city}
                   onChange={handleChange}
                   fullWidth
+                  error={Boolean(formData.cityError)}
                 />
+                {formData.cityError && (
+                  <div
+                    className="error-message"
+                    style={{ position: "absolute" }}
+                  >
+                    {formData.cityError}
+                  </div>
+                )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <FormControl fullWidth variant="standard">
@@ -440,12 +590,21 @@ function NewLedgerAccountForm() {
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
+                    error={Boolean(formData.stateError)}
                   >
                     {stateList.map((state) => (
                       <MenuItem value={state.state}>{state.state}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
+                {formData.stateError && (
+                  <div
+                    className="error-message"
+                    style={{ position: "absolute" }}
+                  >
+                    {formData.stateError}
+                  </div>
+                )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
@@ -467,7 +626,16 @@ function NewLedgerAccountForm() {
                   value={formData.contactNo}
                   onChange={handleChange}
                   fullWidth
+                  error={Boolean(formData.contactNoError)}
                 />
+                {formData.contactNoError && (
+                  <div
+                    className="error-message"
+                    style={{ position: "absolute" }}
+                  >
+                    {formData.contactNoError}
+                  </div>
+                )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
@@ -489,20 +657,29 @@ function NewLedgerAccountForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid className="myGridItem" item xs={12} sm={6}>
-                <FormControl fullWidth variant="standard">
-                  <InputLabel>Turnover Below 10 Cr</InputLabel>
-                  <Select
-                    name="turnoverBelow10Cr"
-                    value={formData.turnoverBelow10Cr}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="yes">Yes</MenuItem>
-                    <MenuItem value="no">No</MenuItem>
-                  </Select>
-                </FormControl>
+              <Grid className="myGridItem" item xs={12} sm={4}>
+              <FormLabel component="legend" >Turnover Below 10 Cr</FormLabel>
+                <RadioGroup
+                  
+                  aria-label="turnoverBelow10Cr"
+                  name="turnoverBelow10Cr"
+                  value={formData.turnoverBelow10Cr}
+                  onChange={handleChange}
+                  style={{ display: "flex", flexDirection: "row" }}
+                >
+                  <FormControlLabel
+                    value="yes"
+                    control={<Radio color="primary" />}
+                    label="Yes"
+                  />
+                  <FormControlLabel
+                    value="no"
+                    control={<Radio color="primary" />}
+                    label="No"
+                  />
+                </RadioGroup>
               </Grid>
-              <Grid className="myGridItem" item xs={12} sm={6}>
+              {/* <Grid className="myGridItem" item xs={12} sm={6}>
                 <FormControl fullWidth variant="standard">
                   <InputLabel>Whether Approved</InputLabel>
                   <Select
@@ -514,8 +691,8 @@ function NewLedgerAccountForm() {
                     <MenuItem value="no">No</MenuItem>
                   </Select>
                 </FormControl>
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={6}>
+              </Grid> */}
+              <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Account Num"
                   variant="standard"
@@ -525,7 +702,7 @@ function NewLedgerAccountForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid className="myGridItem" item xs={12} sm={6}>
+              <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Account Name"
                   variant="standard"
@@ -535,7 +712,7 @@ function NewLedgerAccountForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid className="myGridItem" item xs={12} sm={6}>
+              <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="IFSC"
                   variant="standard"
@@ -545,7 +722,7 @@ function NewLedgerAccountForm() {
                   fullWidth
                 />
               </Grid>
-              <Grid className="myGridItem" item xs={12} sm={6}>
+              <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Branch"
                   variant="standard"
@@ -629,42 +806,41 @@ function NewLedgerAccountForm() {
                     Save
                   </Button> */}
                   <div className="d-flex justify-content-end">
-
-                  <Tooltip title="Delete">
-                    <IconButton onClick={deleteData}>
-                      <Delete color="error" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="View Previous Data">
-                    <IconButton onClick={() => handleEvent("previous")}>
-                      <ArrowBackIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="View Next Data">
-                    <IconButton onClick={() => handleEvent("next")}>
-                      <ArrowForwardIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Add New Data">
-                    <IconButton onClick={() => addNewData()}>
-                      <AddIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Go to First Page">
-                    <IconButton onClick={() => handleEvent("first")}>
-                      <FirstPageIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Go to Last Page">
-                    <IconButton onClick={() => handleEvent("last")}>
-                      <LastPageIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Save">
-                    <IconButton onClick={handleSubmit}>
-                      <SaveIcon style={{color:"#78C2AD"}} />
-                    </IconButton>
-                  </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton onClick={deleteData}>
+                        <Delete color="error" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="View Previous Data">
+                      <IconButton onClick={() => handleEvent("previous")}>
+                        <ArrowBackIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="View Next Data">
+                      <IconButton onClick={() => handleEvent("next")}>
+                        <ArrowForwardIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Add New Data">
+                      <IconButton onClick={() => addNewData()}>
+                        <AddIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Go to First Page">
+                      <IconButton onClick={() => handleEvent("first")}>
+                        <FirstPageIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Go to Last Page">
+                      <IconButton onClick={() => handleEvent("last")}>
+                        <LastPageIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Save">
+                      <IconButton onClick={handleSubmit}>
+                        <SaveIcon style={{ color: "#78C2AD" }} />
+                      </IconButton>
+                    </Tooltip>
                   </div>
                 </Col>
               </Row>
