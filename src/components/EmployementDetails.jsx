@@ -83,7 +83,6 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
                 ],
               }),
             }));
-            console.log(formData?.placeholder?.length);
           };
           reader.readAsDataURL(localFile);
         } else {

@@ -80,7 +80,6 @@ const EmployeeDirectory = () => {
   };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    console.log(event.target.value);
     if (event.target.value != "") {
       const filteredEmployees = oldemployees.filter((employee) =>
         Object.values(employee).some(
@@ -89,7 +88,6 @@ const EmployeeDirectory = () => {
             value.toLowerCase().includes(event.target.value.toLowerCase())
         )
       );
-      console.log(filteredEmployees);
       setEmployees(filteredEmployees);
       // setPage(0); // Reset page when searching
     } else {

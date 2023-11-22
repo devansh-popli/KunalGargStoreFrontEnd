@@ -26,7 +26,6 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   }
   const onDrop = useCallback((acceptedFiles) => {
     // Handle the dropped files here, e.g., upload to the server or process locally
-    console.log("Accepted Files:", acceptedFiles);
   }, []);
   const handleFileChangeDocument = (event, type) => {
     const localFile = event.target.files[0];

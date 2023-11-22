@@ -284,7 +284,6 @@ function NewLedgerAccountForm() {
     // You can handle form submission logic here
     e.preventDefault();
     // Validate form fields
-    console.log(JSON.stringify(formData));
     const accountNameError = validateAccountName(formData?.accountName || "");
     const accountCodeError = validateAccountCode(formData?.accountCode || "");
     const cityError = validateCity(formData?.city || "");
@@ -313,7 +312,6 @@ function NewLedgerAccountForm() {
     }
     await saveLedgerAccount(formData)
       .then(async (data) => {
-        console.log(data);
         toast.success("data saved successfully");
         await fetchLastAccountCode();
         setFormData((prevData) => ({

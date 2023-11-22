@@ -88,7 +88,6 @@ function EmployeeEnrollmentForm({
         employee.id,
         "bankDocument"
       );
-    console.log(bankDocumentImage);
     employee.placeholderBankDocument = bankDocumentImage;
     employee.placeholderProfile = profileImage;
     employee.placeholderSignature = signatureImage;
@@ -135,15 +134,12 @@ function EmployeeEnrollmentForm({
     if (activeStep === steps.length - 1) {
       try {
         if (activeStep == 7) {
-          console.log(formData)
           let errors = validateForm8();
-          console.log(errors);
           Object.entries(errors).forEach(([key, value]) => {
             toast.error(`${key}: ${value}`);
           });
           if (Object.keys(errors).length != 0) return;
         }
-        console.log(formData);
         const filteredEmployeeData = Object.entries(formData).reduce(
           (acc, [key, value]) => {
             if (!excludedProperties.includes(key)) {
@@ -218,13 +214,11 @@ function EmployeeEnrollmentForm({
         handleClose();
         // You can redirect the user to another page here.
       } catch (error) {
-        console.log(error);
         toast("Failed to save form data. Please try again.");
       }
     } else {
       if (activeStep == 0) {
         let errors = validateForm1();
-        console.log(errors);
         Object.entries(errors).forEach(([key, value]) => {
           toast.error(`${key}: ${value}`);
         });
@@ -232,7 +226,6 @@ function EmployeeEnrollmentForm({
       }
       if (activeStep == 1) {
         let errors = validateForm2();
-        console.log(errors);
         Object.entries(errors).forEach(([key, value]) => {
           toast.error(`${key}: ${value}`);
         });
@@ -240,7 +233,6 @@ function EmployeeEnrollmentForm({
       }
       if (activeStep == 2) {
         let errors = validateForm3();
-        console.log(errors);
         Object.entries(errors).forEach(([key, value]) => {
           toast.error(`${key}: ${value}`);
         });
@@ -248,34 +240,27 @@ function EmployeeEnrollmentForm({
       }
       if (activeStep == 3) {
         let errors = validateForm4();
-        console.log(errors);
         Object.entries(errors).forEach(([key, value]) => {
           toast.error(`${key}: ${value}`);
         });
         if (Object.keys(errors).length != 0) return;
       }
       if (activeStep == 4) {
-        console.log(formData)
         let errors = validateForm5();
-        console.log(errors);
         Object.entries(errors).forEach(([key, value]) => {
           toast.error(`${key}: ${value}`);
         });
         if (Object.keys(errors).length != 0) return;
       }
       if (activeStep == 5) {
-        console.log(formData)
         let errors = validateForm6();
-        console.log(errors);
         Object.entries(errors).forEach(([key, value]) => {
           toast.error(`${key}: ${value}`);
         });
         if (Object.keys(errors).length != 0) return;
       }
       if (activeStep == 6) {
-        console.log(formData)
         let errors = validateForm7();
-        console.log(errors);
         Object.entries(errors).forEach(([key, value]) => {
           toast.error(`${key}: ${value}`);
         });
@@ -690,13 +675,11 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
     onFormChange(event.target.name, event.target.value);
   };
   // useEffect(() => {
-  //   console.log('State updated:', formData);
   // }, [formData]);
   const handleFileChangeProfile = (event, type = "file") => {
     if (type == "cam") {
       if (showCamera) {
         const imageSrc = webcamRef.current.getScreenshot();
-        console.log(imageSrc); // You can use this image source for further processing or uploading.
         setFormData({
           ...formData,
           placeholderProfile: imageSrc,
@@ -711,7 +694,6 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
       }
     } else {
       const localFile = event.target.files[0];
-      console.log(localFile);
       if (
         localFile.type === "image/png" ||
         localFile.type === "image/jpeg" ||
@@ -719,7 +701,6 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
       ) {
         const reader = new FileReader();
         reader.onload = (r) => {
-          console.log(localFile, "2");
           setFormData(
             {
               ...formData,
@@ -757,7 +738,6 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
     if (type == "cam") {
       if (showCameraSignature) {
         const imageSrc = webcamRefSignature.current.getScreenshot();
-        console.log(imageSrc); // You can use this image source for further processing or uploading.
         setFormData({
           ...formData,
           placeholderSignature: imageSrc,

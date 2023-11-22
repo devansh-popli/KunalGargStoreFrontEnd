@@ -32,7 +32,6 @@ const userContext=useContext(UserContext)
                 navigate("/home")
                 toast.success("Logged In Successfully")
         }).catch((response)=>{
-            console.log("eror occured")
             if(response && response.response && response.response.data)
             toast.error(response.response.data.message)
         else{

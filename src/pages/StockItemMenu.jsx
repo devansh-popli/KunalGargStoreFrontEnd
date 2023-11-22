@@ -246,7 +246,6 @@ const StockItemMenu = () => {
     e.preventDefault();
     await saveStockItemMenu(formData)
       .then(async (data) => {
-        console.log(data);
         toast.success("data saved successfully");
         await fetchLastAccountCode();
         setFormData((prevData) => ({

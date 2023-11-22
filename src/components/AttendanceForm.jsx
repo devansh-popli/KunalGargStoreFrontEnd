@@ -39,7 +39,6 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
 
   const handleTimeInButtonClick = async () => {
     // Handle the logic for marking time in
-    console.log("Time In: ", time);
     let oldattendance = null;
     if(selectedEmployee=="")
     {
@@ -67,7 +66,6 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
     //   toast.warn("Intime should be before Outtime")
     //   return
     // }
-    console.log(employee);
     await saveAttendanceDataToBackend({
       // id: oldattendance?.id,
       empCode: selectedEmployee,
@@ -91,7 +89,6 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
 
   const handleTimeOutButtonClick = async () => {
     // Handle the logic for marking time out
-    console.log("Time Out: ", time);
     if(selectedEmployee=="")
     {
       toast.error("employee is not selected")

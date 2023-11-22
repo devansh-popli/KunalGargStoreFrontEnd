@@ -1,7 +1,6 @@
 import { BASE_URL, privateAxios } from "./AxiosService";
 
 export const saveEmployeeDataToBackend = (formData) => {
-  console.log(formData, "printing formData");
   return privateAxios
     .post("/employee/save", formData)
     .then((data) => data.data);
@@ -29,7 +28,6 @@ export const getEmployeeCodeFromBackend = (
     .then((data) => data.data);
 };
 export const saveEmployeeDocumentToBackend = (formData, type, file) => {
-  console.log(formData, "printing formData");
   const employeeDocumentImage = new FormData();
   employeeDocumentImage.append("employeeDocumentImage", file);
   return privateAxios
@@ -38,7 +36,6 @@ export const saveEmployeeDocumentToBackend = (formData, type, file) => {
 };
 
 export const saveAttendanceDataToBackend = (formData) => {
-  console.log(formData, "printing formData");
   return privateAxios
     .post("/api/attendance", formData)
     .then((data) => data.data);

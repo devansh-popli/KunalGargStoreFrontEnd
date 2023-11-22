@@ -17,13 +17,11 @@ export const getJwtToken = () => {
 export const isUserLoggedIn = () => {
   const jwtToken = getJwtToken();
   if (jwtToken) {
-    // console.log(true+"true true")
     return true;
   }
 };
 export const getUserInfo = () => {
   const data = getLoginData();
-  // console.log(JSON.parse(data).user)
   if (data) return data.user;
 };
 export const doLogoutFromLocalStorage = () => {
