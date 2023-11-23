@@ -6,6 +6,15 @@ import {
   Button,
   Typography,
   Paper,
+  LinearProgress,
+  linearProgressClasses,
+  styled,
+  FormControlLabel,
+  Checkbox,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import Webcam from "react-webcam";
 import { Container, TextField } from "@mui/material";
@@ -16,7 +25,7 @@ import NomineeDetails from "../components/NomineeDetails";
 import BankDetails from "../components/BankDetails";
 import MedicalDetails from "../components/MedicalDetails";
 import EmployeementDetails from "../components/EmployeementDetails";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, json, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { Form, InputGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -131,6 +140,7 @@ function EmployeeEnrollmentForm({
     "placeholder",
   ];
   const handleSave = async () => {
+    console.log("form", JSON.stringify(formData));
     if (activeStep === steps.length - 1) {
       try {
         if (activeStep == 7) {
@@ -293,14 +303,28 @@ function EmployeeEnrollmentForm({
       newErrors.lastName = "Last name is required";
     }
 
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+    if (formData.email && !/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
     }
 
     if (!formData.phoneNumber) {
       newErrors.phoneNumber = "Phone number is required";
+    }
+    if (formData.phoneNumber && formData.phoneNumber.length != 10) {
+      newErrors.phoneNumber = "Phone number length should be 10 characters";
+    }
+    if (!formData.placeholderProfile) {
+      newErrors.profile = "Profile Image is required";
+    }
+    if (!formData.placeholderSignature) {
+      newErrors.signature = "Signature Image is required";
+    }
+    if (
+      formData.additionalPhoneNumber &&
+      formData.additionalPhoneNumber.length != 10
+    ) {
+      newErrors.additionalPhoneNumber =
+        "Phone number length should be 10 characters";
     }
 
     return newErrors;
@@ -308,25 +332,28 @@ function EmployeeEnrollmentForm({
   const validateForm2 = () => {
     const newErrors = {};
 
-    if (!formData.houseNo) {
-      newErrors.houseNo = "House No is required";
-    }
+    // if (!formData.houseNo) {
+    //   newErrors.houseNo = "House No is required";
+    // }
 
-    if (!formData.street) {
-      newErrors.street = "Street is required";
-    }
+    // if (!formData.street) {
+    //   newErrors.street = "Street is required";
+    // }
 
-    if (!formData.landmark) {
-      newErrors.landmark = "Landmark is required";
-    }
+    // if (!formData.landmark) {
+    //   newErrors.landmark = "Landmark is required";
+    // }
 
     if (!formData.cityTehsil) {
       newErrors.cityTehsil = "City/Tehsil is required";
     }
-
-    if (!formData.postcode) {
-      newErrors.postcode = "Postcode is required";
+    if (!formData.state) {
+      newErrors.state = "State is required";
     }
+
+    // if (!formData.postcode) {
+    //   newErrors.postcode = "Postcode is required";
+    // }
 
     return newErrors;
   };
@@ -340,7 +367,7 @@ function EmployeeEnrollmentForm({
       newErrors.jobExperience = "Job experience is required";
     }
 
-    if (!formData.jobExperienceLocation) {
+    if (formData.jobExperience == "Yes" && !formData.jobExperienceLocation) {
       newErrors.jobExperienceLocation = "Job experience location is required";
     }
     if (formData.jobExperience == "Yes" && !formData.jobExperienceInMonths) {
@@ -452,31 +479,38 @@ function EmployeeEnrollmentForm({
     const newErrors = {};
 
     if (!formData.disabilityStatus) {
-      newErrors.disabilityStatus = 'Disability status is required';
+      newErrors.disabilityStatus = "Disability status is required";
     }
 
     if (!formData.height) {
-      newErrors.height = 'Height is required';
+      newErrors.height = "Height is required";
     }
 
     if (!formData.weight) {
-      newErrors.weight = 'Weight is required';
+      newErrors.weight = "Weight is required";
     }
 
     if (!formData.bloodGroup) {
-      newErrors.bloodGroup = 'Blood group is required';
+      newErrors.bloodGroup = "Blood group is required";
     }
 
     if (!formData.covidVaccination) {
-      newErrors.covidVaccination = 'COVID-19 vaccination status is required';
+      newErrors.covidVaccination = "COVID-19 vaccination status is required";
     }
 
-    if (formData.covidVaccination === 'Double + Booster Vaccinated' && !formData.doctorName) {
-      newErrors.doctorName = 'Doctor name is required for booster vaccination';
+    if (
+      formData.covidVaccination === "Double + Booster Vaccinated" &&
+      !formData.doctorName
+    ) {
+      newErrors.doctorName = "Doctor name is required for booster vaccination";
     }
 
-    if (formData.covidVaccination === 'Double + Booster Vaccinated' && !formData.doctorPhone) {
-      newErrors.doctorPhone = 'Doctor phone is required for booster vaccination';
+    if (
+      formData.covidVaccination === "Double + Booster Vaccinated" &&
+      !formData.doctorPhone
+    ) {
+      newErrors.doctorPhone =
+        "Doctor phone is required for booster vaccination";
     }
 
     return newErrors;
@@ -510,39 +544,95 @@ function EmployeeEnrollmentForm({
 
     return newErrors;
   };
+  const [completionPercentage, setCompletionPercentage] = useState(0);
+
+  // ... rest of the component code
+  const fieldsToExclude = [
+    "empCode",
+    "placeholderBankDocument",
+    "placeholderProfile",
+    "placeholderSignature",
+    "placeholder",
+    "bankDocumentImage",
+    "profileImage",
+    "signatureImage",
+    "aadharDocumentFiles",
+    "panDocumentFiles",
+    "drivingDocumentFiles",
+    "profileImageId",
+    "signatureImageId",
+    "aadharImageId",
+    "panCardImageId",
+    "drivingImageId",
+    "passportImageId",
+    "bankDocumentImageId",
+    "id",
+    "nominees",
+  ];
+  const calculateCompletionPercentage = () => {
+    const totalFields = 38;
+    const filledFields = Object.values(formData)
+      .filter((value, index) => {
+        const key = Object.keys(formData)[index];
+        return !fieldsToExclude.includes(key);
+      })
+      .filter((value) => !!value).length; // Check if the value is truthy
+    console.log(filledFields);
+    const percentage = (filledFields / totalFields) * 100;
+    if (percentage <= 100) setCompletionPercentage(percentage.toFixed(2)); // Set the completion percentage with two decimal places
+  };
+
+  // Call the function to calculate the completion percentage whenever the form data changes
+  useEffect(() => {
+    calculateCompletionPercentage();
+  }, [formData]);
+
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold ">Employee Registration</h4>
       {/* {JSON.stringify(formData)} */}
+      <p>Form Completion: {completionPercentage}%</p>
       {paper && (
-        <Stepper className="hide-mobile" activeStep={activeStep}>
-          {steps.map((label) => (
-            <Step
-              key={label}
-              sx={{
-                "& .MuiStepLabel-root .Mui-completed": {
-                  color: "#78C2AD", // circle color (COMPLETED)
-                },
-                "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
-                  {
-                    color: "grey.500", // Just text label (COMPLETED)
+        <div>
+          <LinearProgress
+            sx={{
+              backgroundColor: "#9FDAC4",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: "#78C2AD;",
+              },
+            }}
+            variant="determinate"
+            value={completionPercentage}
+          />
+          <Stepper className="hide-mobile" activeStep={activeStep}>
+            {steps.map((label) => (
+              <Step
+                key={label}
+                sx={{
+                  "& .MuiStepLabel-root .Mui-completed": {
+                    color: "#78C2AD", // circle color (COMPLETED)
                   },
-                "& .MuiStepLabel-root .Mui-active": {
-                  color: "#78C2AD", // circle color (ACTIVE)
-                },
-                "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
-                  {
-                    color: "grey.500", // Just text label (ACTIVE)
+                  "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
+                    {
+                      color: "grey.500", // Just text label (COMPLETED)
+                    },
+                  "& .MuiStepLabel-root .Mui-active": {
+                    color: "#78C2AD", // circle color (ACTIVE)
                   },
-                "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
-                  fill: "white", // circle's number (ACTIVE)
-                },
-              }}
-            >
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+                  "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
+                    {
+                      color: "grey.500", // Just text label (ACTIVE)
+                    },
+                  "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                    fill: "white", // circle's number (ACTIVE)
+                  },
+                }}
+              >
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </div>
       )}
       <div className="d-flex justify-content-center">
         <Paper
@@ -780,6 +870,13 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
   const webcamRefSignature = useRef(null);
   const [showCamera, setShowCamera] = useState(false);
   const [showCameraSignature, setShowCameraSignature] = useState(false);
+  const addPhoneNumber = () => {
+    setFormData({
+      ...formData,
+      additionalPhoneNumber: formData.phoneNumber,
+      phoneNumber: "",
+    });
+  };
   const captureImage = () => {};
   return (
     <div>
@@ -793,7 +890,7 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
         onChange={handleInputChange}
         error={Boolean(errors.empCode)}
         helperText={errors.empCode}
-        className="mb-3"
+        className="mb-2"
         disabled
         InputLabelProps={{
           shrink: formData.empCode ? true : false, // Set shrink to true if value is present
@@ -809,7 +906,7 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
         onChange={handleInputChange}
         error={Boolean(errors.firstName)}
         helperText={errors.firstName}
-        className="mb-3"
+        className="mb-2"
       />
       <TextField
         disabled={readOnly}
@@ -820,7 +917,7 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
         onChange={handleInputChange}
         error={Boolean(errors.lastName)}
         helperText={errors.lastName}
-        className="mb-3"
+        className="mb-2"
       />
       <TextField
         disabled={readOnly}
@@ -829,22 +926,51 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
         fullWidth
         value={formData.email}
         onChange={handleInputChange}
-        error={Boolean(errors.email)}
-        helperText={errors.email}
-        className="mb-3"
+        className="mb-2"
       />
-      <TextField
-        disabled={readOnly}
-        label="Phone Number"
-        name="phoneNumber"
-        fullWidth
-        value={formData.phoneNumber}
-        onChange={handleInputChange}
-        error={Boolean(errors.phoneNumber)}
-        helperText={errors.phoneNumber}
-        className="mb-3"
-      />
-      <Form.Group className="mb-3">
+      <div>
+        <div className="d-flex align-items-center mb-2">
+          <TextField
+            disabled={readOnly}
+            label="Phone Number"
+            name="phoneNumber"
+            fullWidth
+            value={formData.phoneNumber}
+            onChange={handleInputChange}
+            error={Boolean(errors.phoneNumber)}
+            helperText={errors.phoneNumber}
+            className=""
+          />
+          <Button
+            onClick={addPhoneNumber}
+            size="small"
+            variant="contained"
+            color="primary"
+            style={{ fontSize: "10px", height: "30px" }}
+            className="w-60 ms-2"
+          >
+            Add Another Phone Number
+          </Button>
+        </div>
+
+        {/* Render additional phone number field */}
+        {formData.additionalPhoneNumber && (
+          <div>
+            <TextField
+              disabled={readOnly}
+              label="Additional Phone Number"
+              name="additionalPhoneNumber"
+              fullWidth
+              value={formData.additionalPhoneNumber}
+              onChange={handleInputChange}
+              error={Boolean(errors.additionalPhoneNumber)}
+              helperText={errors.additionalPhoneNumber}
+              className="mb-2"
+            />
+          </div>
+        )}
+      </div>
+      <Form.Group className="mb-2">
         <Container className="text-center py-3 border" fluid>
           <p className="text-muted">Profile Image Preview</p>
           <img
@@ -914,7 +1040,7 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
           </div>
         </div>
       </Form.Group>
-      <Form.Group className="mb-3">
+      <Form.Group className="mb-2">
         <Container className="text-center py-3 border">
           <p className="text-muted">Signature Image Preview</p>
           <img
@@ -996,9 +1122,19 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const handleCheckboxChange = (e) => {
+    setFormData({ ...formData, sameAsResidential: e.target.checked });
+  };
+  const states = [
+    'Select State', // You can replace this with the initial label you want
+    'State 1',
+    'State 2',
+    'State 3',
+    // Add more states as needed
+  ];
   return (
     <div>
-      <h5 className="fw-bold">Address</h5>
+      <h5 className="fw-bold">Residential Address</h5>
       <TextField
         disabled={readOnly}
         label="House No"
@@ -1008,7 +1144,7 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
         onChange={handleInputChange}
         error={Boolean(errors.houseNo)}
         helperText={errors.houseNo}
-        className="mb-3"
+        className="mb-2"
       />
       <TextField
         disabled={readOnly}
@@ -1019,7 +1155,7 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
         onChange={handleInputChange}
         error={Boolean(errors.street)}
         helperText={errors.street}
-        className="mb-3"
+        className="mb-2"
       />
       <TextField
         disabled={readOnly}
@@ -1030,7 +1166,7 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
         onChange={handleInputChange}
         error={Boolean(errors.landmark)}
         helperText={errors.landmark}
-        className="mb-3"
+        className="mb-2"
       />
       <TextField
         disabled={readOnly}
@@ -1041,19 +1177,119 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
         onChange={handleInputChange}
         error={Boolean(errors.cityTehsil)}
         helperText={errors.cityTehsil}
-        className="mb-3"
+        className="mb-2"
       />
+      <FormControl fullWidth className="mb-2">
+        <InputLabel htmlFor="state">State</InputLabel>
+        <Select
+          disabled={readOnly}
+          value={formData.state || "Select State"} // 'Select State' is the initial label
+          onChange={handleInputChange}
+          name="state"
+          label="State"
+        >
+          {states.map((state) => (
+            <MenuItem key={state} value={state}>
+              {state}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <TextField
         disabled={readOnly}
         label="Postcode"
         name="postcode"
+        type="number"
         fullWidth
         value={formData.postcode}
         onChange={handleInputChange}
         error={Boolean(errors.postcode)}
         helperText={errors.postcode}
-        className="mb-3"
+        className="mb-2"
       />
+
+      <h5 className="fw-bold mt-1">Current Address</h5>
+      {/* Checkbox for same as residential address */}
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={formData.sameAsResidential}
+            onChange={handleCheckboxChange}
+          />
+        }
+        label="Same as Residential Address"
+      />
+
+      {/* Current address fields */}
+      {!formData.sameAsResidential && (
+        <>
+          <TextField
+            disabled={readOnly}
+            label="House No"
+            name="currentHouseNo"
+            fullWidth
+            value={formData.currentHouseNo}
+            onChange={handleInputChange}
+            className="mb-2"
+          />
+
+          <TextField
+            disabled={readOnly}
+            label="Street"
+            name="currentStreet"
+            fullWidth
+            value={formData.currentStreet}
+            onChange={handleInputChange}
+            className="mb-2"
+          />
+
+          <TextField
+            disabled={readOnly}
+            label="Landmark"
+            name="currentLandmark"
+            fullWidth
+            value={formData.currentLandmark}
+            onChange={handleInputChange}
+            className="mb-2"
+          />
+
+          <TextField
+            disabled={readOnly}
+            label="City / Tehsil"
+            name="currentCityTehsil"
+            fullWidth
+            value={formData.currentCityTehsil}
+            onChange={handleInputChange}
+            className="mb-2"
+          />
+          <FormControl fullWidth className="mb-2">
+            <InputLabel htmlFor="state">State</InputLabel>
+            <Select
+              disabled={readOnly}
+              value={formData.currentState || "Select State"} // 'Select State' is the initial label
+              onChange={handleInputChange}
+              name="currentState"
+              label="State"
+            >
+              {states.map((state) => (
+                <MenuItem key={state} value={state}>
+                  {state}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            disabled={readOnly}
+            label="Postcode"
+            type="number"
+            name="currentPostcode"
+            fullWidth
+            value={formData.currentPostcode}
+            onChange={handleInputChange}
+            className="mb-2"
+          />
+        </>
+      )}
     </div>
   );
 }

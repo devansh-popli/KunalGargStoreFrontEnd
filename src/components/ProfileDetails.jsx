@@ -1,30 +1,91 @@
 import React, { useState } from "react";
 import {
-    Container,
-    Paper,
-    Typography,
-    TextField,
-    Button,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-  } from '@mui/material';
-const ProfileDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
-    const [errors, setErrors] = useState({});
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  FormLabel,
+} from "@mui/material";
+const ProfileDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
+  const [errors, setErrors] = useState({});
 
-    
-  
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
   return (
     <>
-    <h5 className="fw-bold">Profile Details</h5>
+      <h5 className="fw-bold">Profile Details</h5>
+      <FormControl fullWidth component="fieldset" className="mb-3">
+        <FormLabel>Department</FormLabel>
+        <RadioGroup
+          row
+          aria-label="department"
+          name="department"
+          value={formData.department}
+          onChange={handleInputChange}
+        >
+          {/* Adjust the department options as needed */}
+          <FormControlLabel
+            value="HR"
+            control={
+              <Radio
+                size="small"
+                sx={{
+                  color: "#78C2AD;",
+                  "&.Mui-checked": {
+                    color: "#78C2AD;",
+                  },
+                }}
+              />
+            }
+            label="HR"
+          />
+          <FormControlLabel
+            value="Finance"
+            control={
+              <Radio
+                size="small"
+                sx={{
+                  color: "#78C2AD;",
+                  "&.Mui-checked": {
+                    color: "#78C2AD;",
+                  },
+                }}
+              />
+            }
+            label="Finance"
+          />
+          <FormControlLabel
+            value="IT"
+            control={
+              <Radio
+                size="small"
+                sx={{
+                  color: "#78C2AD;",
+                  "&.Mui-checked": {
+                    color: "#78C2AD;",
+                  },
+                }}
+              />
+            }
+            label="IT"
+          />
+          {/* Add more options as needed */}
+        </RadioGroup>
+      </FormControl>
       <FormControl fullWidth>
         <InputLabel>Designation</InputLabel>
-        <Select disabled={readOnly}
+        <Select
+          disabled={readOnly}
           name="designation"
           value={formData.designation}
           onChange={handleInputChange}
@@ -38,20 +99,49 @@ const ProfileDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
           <MenuItem value="Helper">Helper</MenuItem>
         </Select>
       </FormControl>
-      <FormControl fullWidth className="mb-3">
-        <InputLabel>Job Experience</InputLabel>
-        <Select disabled={readOnly}
+      <FormControl fullWidth component="fieldset" className="mb-3">
+        <FormLabel component="legend">Job Experience</FormLabel>
+        <RadioGroup
+          aria-label="jobExperience"
           name="jobExperience"
           value={formData.jobExperience}
           onChange={handleInputChange}
-          error={Boolean(errors.jobExperience)}
+          className="d-flex flex-row"
         >
-          <MenuItem value="">Select Job Experience</MenuItem>
-          <MenuItem value="No">No</MenuItem>
-          <MenuItem value="Yes">Yes</MenuItem>
-        </Select>
+          <FormControlLabel
+            value="No"
+            control={
+              <Radio
+                size="small"
+                sx={{
+                  color: "#78C2AD;",
+                  "&.Mui-checked": {
+                    color: "#78C2AD;",
+                  },
+                }}
+              />
+            }
+            label="No"
+          />
+          <FormControlLabel
+            value="Yes"
+            control={
+              <Radio
+                size="small"
+                sx={{
+                  color: "#78C2AD;",
+                  "&.Mui-checked": {
+                    color: "#78C2AD;",
+                  },
+                }}
+              />
+            }
+            label="Yes"
+          />
+        </RadioGroup>
       </FormControl>
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Job Experience in Months/Years"
         name="jobExperienceInMonths"
         fullWidth
@@ -61,7 +151,8 @@ const ProfileDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
         helperText={errors.jobExperienceInMonths}
         className="mb-3"
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         label="Job Experience Location"
         name="jobExperienceLocation"
         fullWidth

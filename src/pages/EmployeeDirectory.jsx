@@ -121,7 +121,7 @@ const EmployeeDirectory = () => {
             <TableRow>
               <TableCell style={{ width: "15%" }}>Emp Code</TableCell>
               <TableCell style={{ width: "15%" }}>Emp Name</TableCell>
-              <TableCell style={{ width: "15%" }}>Email</TableCell>
+              <TableCell style={{ width: "15%" }}>Department</TableCell>
               <TableCell style={{ width: "15%" }}>Designation</TableCell>
               <TableCell style={{ width: "15%" }}>Mobile No</TableCell>
               <TableCell style={{ width: "15%" }}>Location</TableCell>
@@ -137,7 +137,7 @@ const EmployeeDirectory = () => {
                   <TableCell>
                     {employee.firstName + " " + employee.lastName}
                   </TableCell>
-                  <TableCell>{employee.email}</TableCell>
+                  <TableCell>{employee.department}</TableCell>
                   <TableCell>{employee.designation}</TableCell>
                   <TableCell>{employee.phoneNumber}</TableCell>
                   <TableCell>{employee.cityTehsil}</TableCell>

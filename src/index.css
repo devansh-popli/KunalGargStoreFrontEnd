@@ -139,7 +139,16 @@ h6 {
   background-color: #78C2AD; /* Adjust the background color of the active dot */
   color: #fff; /* Adjust the color of the active dot */
 }
-
+.progress-green {
+  color: #00ff00 !important; /* Green color */
+}
+.your-button-class {
+  position: relative !important;
+  right: -170px !important;
+}
+.progress-red {
+  color: #ff0000 !important; /* Red color */
+}
 
 
 

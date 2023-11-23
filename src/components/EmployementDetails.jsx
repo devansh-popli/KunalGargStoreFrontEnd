@@ -2,6 +2,9 @@ import React, { useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Carousel from "react-bootstrap/Carousel";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {
   Container,
   Paper,
@@ -18,6 +21,8 @@ import { toast } from "react-toastify";
 import { Form, InputGroup, Spinner } from "react-bootstrap";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Webcam from "react-webcam";
+import { Delete } from "@mui/icons-material";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -29,9 +34,13 @@ const VisuallyHiddenInput = styled("input")({
   whiteSpace: "nowrap",
   width: 1,
 });
-const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
+const EmployementDetails = ({
+  onFormChange,
+  formData,
+  setFormData,
+  readOnly,
+}) => {
   const [errors, setErrors] = useState({});
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,8 +50,72 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
     const files = e.target.files;
     setDocumentFiles(Array.from(files));
   };
-  const handleFileChangeDocument = (event, type) => {
+  const dataURLtoFile = (dataURL, filename) => {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  };
+  const webcamRef = useRef(null);
+  const webcamRefSignature = useRef(null);
+  const [showCamera, setShowCamera] = useState(false);
+
+  const handleFileChangeDocument = (event, type, imgType = "file") => {
     const localFiles = event.target.files;
+    if (imgType == "cam") {
+      if (showCamera) {
+        const imageSrc = webcamRef.current.getScreenshot();
+        // setFormData({
+        //   ...formData,
+        //   placeholderProfile: imageSrc,
+        //   profileImage: dataURLtoFile(imageSrc, "captured_image.jpg"),
+        // });
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          placeholder: [
+            ...(prevFormData?.placeholder || []), // Initialize as an empty array if not present
+            imageSrc,
+          ],
+          ...(type === "passport" && {
+            passportDocumentFiles: [
+              ...(formData?.passportDocumentFiles || []),
+              dataURLtoFile(imageSrc, `captured_imagep${formData?.passportDocumentFiles?.length+1 || 0}.jpg`),
+            ],
+          }),
+          ...(type === "pan" && {
+            panDocumentFiles: [
+              ...(formData?.panDocumentFiles || []),
+              dataURLtoFile(imageSrc, `captured_imagepan${formData?.panDocumentFiles?.length+1 || 0}.jpg`),
+            ],
+          }),
+          ...(type === "driving" && {
+            drivingDocumentFiles: [
+              ...(formData?.drivingDocumentFiles || []),
+              dataURLtoFile(imageSrc, `captured_imagedr${formData?.drivingDocumentFiles?.length+1 || 0}.jpg`),
+            ],
+          }),
+          ...(type === "adhar" && {
+            aadharDocumentFiles: [
+              ...(formData?.aadharDocumentFiles || []),
+              dataURLtoFile(imageSrc, `captured_imageadhar${formData?.aadharDocumentFiles?.length+1 || 0}.jpg`),
+            ],
+          }),
+        }));
+        webcamRef.current.video.srcObject
+          .getTracks()
+          .forEach((track) => track.stop());
+        setShowCamera(false);
+      } else {
+        setShowCamera(true);
+      }
+    }
     if (localFiles) {
       Array.from(localFiles)?.map((localFile) => {
         if (
@@ -163,30 +236,62 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
       {/* <label htmlFor="selectedDocument" className="mt-3"></label> */}
       <Container className="text-center py-3 border">
         <p className="text-muted">Image Preview</p>
-        {formData.placeholder && formData.placeholder.length > 0 && (
-          <Carousel  data-bs-theme="dark" indicators={false} controls={formData.placeholder.length>0}>
-            {formData.placeholder.map((file, index) =>file && (
-                <Carousel.Item key={index}>
-                <img
-                  className="img-fluid mx-2"
-                  style={{
-                    objectFit: "contain",
-                    maxHeight: "150px",
-                    width: "100%",
-                  }}
-                  src={file}
-                  alt=""
-                  onClick={() => openImageInNewTab(file)}
-                />
-              </Carousel.Item>
-                
-            ))}
+        {!showCamera && formData.placeholder && formData.placeholder.length > 0 && (
+         <div className="container">
+         <Carousel
+            data-bs-theme="dark"
+            indicators={false}
+            controls={formData.placeholder.length > 0}
+          >
+            {formData.placeholder.map(
+              (file, index) =>
+                file && (
+                  <Carousel.Item key={index}>
+                    <img
+                      className="img-fluid mx-2"
+                      style={{
+                        objectFit: "contain",
+                        maxHeight: "150px",
+                        width: "100%",
+                      }}
+                      src={file}
+                      alt=""
+                      onClick={() => openImageInNewTab(file)}
+                    />
+                  </Carousel.Item>
+                )
+            )}
+         
           </Carousel>
+           <Button onClick={()=>{
+            setFormData({
+              ...formData,
+              placeholder: undefined,
+              passportDocumentFiles: null,
+              aadharDocumentFiles: null,
+              panDocumentFiles: null,
+              drivingDocumentFiles: null,
+            });
+          }} variant="contained" size="small"  className="your-button-class"startIcon={<Delete />} color="error">Clear All</Button>
+          </div>
         )}
+         {showCamera && (
+        <div className="text-center">
+          <Webcam
+            width={300}
+            height={200}
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+          />
+        </div>
+      )}
       </Container>
+     
       <div className="d-flex my-2 align-items-center">
-        <TextField disabled={readOnly}
-          className={readOnly?"w-100":"w-80"}
+        <TextField
+          disabled={readOnly}
+          className={readOnly ? "w-100" : "w-80"}
           label="Aadhar Card"
           name="aadharCard"
           fullWidth
@@ -195,9 +300,29 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
           error={Boolean(errors.aadharCard)}
           helperText={errors.aadharCard}
         />
+        <div>
+          <Button
+            data-for="happyFace"
+            onClick={(event) => handleFileChangeDocument(event, "adhar", "cam")}
+            variant="outlined"
+            type="error"
+            className="ms-2"
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Take Photo"
+          >
+            <CameraAltIcon />
+          </Button>
+          <ReactTooltip
+            id="my-tooltip"
+            place="bottom"
+            type="info"
+            effect="solid"
+          />
+        </div>
+        <span className="mx-2">or</span>
         <Button
-          className={readOnly?"d-none":"mx-2"}
-         component="label"
+          className={readOnly ? "d-none" : "mx-2"}
+          component="label"
           onClick={triggerFileInputClick1}
           variant="contained"
           startIcon={<CloudUploadIcon />}
@@ -210,8 +335,9 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField disabled={readOnly}
-          className={readOnly?"w-100":"w-80"}
+        <TextField
+          disabled={readOnly}
+          className={readOnly ? "w-100" : "w-80"}
           label="PAN Card"
           name="panCard"
           fullWidth
@@ -220,8 +346,28 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
           error={Boolean(errors.panCard)}
           helperText={errors.panCard}
         />
+        <div>
+          <Button
+            data-for="happyFace"
+            onClick={(event) => handleFileChangeDocument(event, "pan", "cam")}
+            variant="outlined"
+            type="error"
+            className="ms-2"
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Take Photo"
+          >
+            <CameraAltIcon />
+          </Button>
+          <ReactTooltip
+            id="my-tooltip"
+            place="bottom"
+            type="info"
+            effect="solid"
+          />
+        </div>
+        <span className="mx-2">or</span>
         <Button
-          className={readOnly?"d-none":"mx-2"}
+          className={readOnly ? "d-none" : "mx-2"}
           component="label"
           onClick={triggerFileInputClick2}
           variant="contained"
@@ -235,8 +381,9 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField disabled={readOnly}
-          className={readOnly?"w-100":"w-80"}
+        <TextField
+          disabled={readOnly}
+          className={readOnly ? "w-100" : "w-80"}
           label="Driving License No"
           name="drivingLicenseNo"
           fullWidth
@@ -245,10 +392,32 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
           error={Boolean(errors.drivingLicenseNo)}
           helperText={errors.drivingLicenseNo}
         />
+        <div>
+          <Button
+            data-for="happyFace"
+            onClick={(event) =>
+              handleFileChangeDocument(event, "driving", "cam")
+            }
+            variant="outlined"
+            type="error"
+            className="ms-2"
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Take Photo"
+          >
+            <CameraAltIcon />
+          </Button>
+          <ReactTooltip
+            id="my-tooltip"
+            place="bottom"
+            type="info"
+            effect="solid"
+          />
+        </div>
+        <span className="mx-2">or</span>
         <Button
           component="label"
           variant="contained"
-          className={readOnly?"d-none":"mx-2"}
+          className={readOnly ? "d-none" : "mx-2"}
           onClick={triggerFileInputClick3}
           startIcon={<CloudUploadIcon />}
         ></Button>{" "}
@@ -260,8 +429,9 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField disabled={readOnly}
-          className={readOnly?"w-100":"w-80"}
+        <TextField
+          disabled={readOnly}
+          className={readOnly ? "w-100" : "w-80"}
           label="Passport No"
           name="passportNo"
           fullWidth
@@ -270,10 +440,32 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
           error={Boolean(errors.passportNo)}
           helperText={errors.passportNo}
         />
+        <div>
+          <Button
+            data-for="happyFace"
+            onClick={(event) =>
+              handleFileChangeDocument(event, "passport", "cam")
+            }
+            variant="outlined"
+            type="error"
+            className="ms-2"
+            data-tooltip-id="my-tooltip"
+            data-tooltip-content="Take Photo"
+          >
+            <CameraAltIcon />
+          </Button>
+          <ReactTooltip
+            id="my-tooltip"
+            place="bottom"
+            type="info"
+            effect="solid"
+          />
+        </div>
+        <span className="mx-2">or</span>
         <Button
           component="label"
           variant="contained"
-          className={readOnly?"d-none":"mx-2"}
+          className={readOnly ? "d-none" : "mx-2"}
           onClick={triggerFileInputClick4}
           startIcon={<CloudUploadIcon />}
         ></Button>{" "}
@@ -284,7 +476,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
           type="file"
         />
       </div>
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         className="mb-2"
         label="Police Verification Station"
         name="policeVerificationStation"
@@ -294,7 +487,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
         error={Boolean(errors.policeVerificationStation)}
         helperText={errors.policeVerificationStation}
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         className="mb-2"
         label="Certificate No"
         name="policeVerificationCertificateNo"
@@ -304,7 +498,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
         error={Boolean(errors.policeVerificationCertificateNo)}
         helperText={errors.policeVerificationCertificateNo}
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         className="mb-2"
         label="Date of Issue"
         name="dateOfIssue"
@@ -324,7 +519,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
         }}
         helperText={errors.dateOfIssue}
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         className="mb-2"
         label="Date of Expiry"
         name="dateOfExpiry"
@@ -344,7 +540,8 @@ const EmployementDetails = ({ onFormChange, formData, setFormData,readOnly }) =>
           },
         }}
       />
-      <TextField disabled={readOnly}
+      <TextField
+        disabled={readOnly}
         className="mb-2"
         label="Issued By"
         name="issuedBy"
