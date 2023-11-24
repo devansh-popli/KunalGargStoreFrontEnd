@@ -28,12 +28,42 @@ import { Tooltip } from "react-tooltip";
 import EmployeeEnrollmentForm from "./EmployeeEnrollmentForm";
 import { UserContext } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import SortIcon from '@mui/icons-material/Sort';
 const EmployeeDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [employees, setEmployees] = useState([]);
   const [oldemployees, setOldEmployees] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [open, setOpen] = React.useState(false);
+  const [selectedEmployee, setSelectedEmployee] = React.useState(null);
+  const [readOnly, setReadOnly] = React.useState(false);
+
+  const handleOpen = (employee, readOnly = false) => {
+    if (readOnly) {
+      setReadOnly(true);
+    } else {
+      setReadOnly(false);
+    }
+    setSelectedEmployee(employee);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    getEmployeeDataFromBackend(page, rowsPerPage)
+      .then((data) => {
+        setEmployees(data.content);
+        setOldEmployees(data.content);
+      })
+      .catch((error) => {
+        toast.error("Internal Server Error");
+      });
+  };
   useEffect(() => {
     getEmployeeDataFromBackend(page, rowsPerPage)
       .then((data) => {
@@ -48,39 +78,48 @@ const EmployeeDirectory = () => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  const getSortIcon = (column) => {
+    if (sortColumn === column) {
+      return sortOrder === "asc" ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />;
+    }
+    return <SortIcon/>;
+  };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const [open, setOpen] = React.useState(false);
-  const [selectedEmployee, setSelectedEmployee] = React.useState(null);
-  const [readOnly, setReadOnly] = React.useState(false);
-  const handleOpen = (employee, readOnly = false) => {
-    if (readOnly) {
-      setReadOnly(true);
+
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortOrder("asc");
     }
-    else{
-      setReadOnly(false)
-    }
-    setSelectedEmployee(employee);
-    setOpen(true);
   };
-  const userContext = useContext(UserContext);
-  const handleClose = () => {
-    setOpen(false);
-    getEmployeeDataFromBackend(page, rowsPerPage)
-      .then((data) => {
-        setEmployees(data.content);
-        setOldEmployees(data.content);
-      })
-      .catch((error) => {
-        toast.error("Internal Server Error");
-      });
+
+  const sortedEmployees = () => {
+    if (!sortColumn) return employees;
+
+    return [...employees].sort((a, b) => {
+      const aValue = a[sortColumn];
+      const bValue = b[sortColumn];
+
+      if (sortOrder === "asc") {
+        return aValue
+          ? aValue.localeCompare(bValue || "")
+          : "".localeCompare(bValue || "");
+      } else {
+        return bValue
+          ? bValue.localeCompare(aValue || "")
+          : "".localeCompare(aValue || "");
+      }
+    });
   };
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    if (event.target.value != "") {
+    if (event.target.value !== "") {
       const filteredEmployees = oldemployees.filter((employee) =>
         Object.values(employee).some(
           (value) =>
@@ -89,11 +128,12 @@ const EmployeeDirectory = () => {
         )
       );
       setEmployees(filteredEmployees);
-      // setPage(0); // Reset page when searching
     } else {
       setEmployees(oldemployees);
     }
   };
+
+  const userContext = useContext(UserContext);
 
   return userContext.isLogin ? (
     <Container className="mt-3">
@@ -119,17 +159,47 @@ const EmployeeDirectory = () => {
               }}
             />
             <TableRow>
-              <TableCell style={{ width: "15%" }}>Emp Code</TableCell>
-              <TableCell style={{ width: "15%" }}>Emp Name</TableCell>
-              <TableCell style={{ width: "15%" }}>Department</TableCell>
-              <TableCell style={{ width: "15%" }}>Designation</TableCell>
-              <TableCell style={{ width: "15%" }}>Mobile No</TableCell>
-              <TableCell style={{ width: "15%" }}>Location</TableCell>
+              <TableCell
+                onClick={() => handleSort("empCode")}
+                style={{ width: "15%", cursor: "pointer" }}
+              >
+                Emp Code {getSortIcon("empCode")}
+              </TableCell>
+              <TableCell
+                onClick={() => handleSort("firstName")}
+                style={{ width: "15%", cursor: "pointer" }}
+              >
+                Emp Name {getSortIcon("firstName")}
+              </TableCell>
+              <TableCell
+                onClick={() => handleSort("department")}
+                style={{ width: "15%", cursor: "pointer" }}
+              >
+                Department {getSortIcon("department")}
+              </TableCell>
+              <TableCell
+                onClick={() => handleSort("designation")}
+                style={{ width: "15%", cursor: "pointer" }}
+              >
+                Designation {getSortIcon("designation")}
+              </TableCell>
+              <TableCell
+                onClick={() => handleSort("phoneNumber")}
+                style={{ width: "15%", cursor: "pointer" }}
+              >
+                Mobile No {getSortIcon("phoneNumber")}
+              </TableCell>
+              <TableCell
+                onClick={() => handleSort("cityTehsil")}
+                style={{ width: "15%", cursor: "pointer" }}
+              >
+                Location {getSortIcon("cityTehsil")}
+              </TableCell>
               <TableCell style={{ width: "15%" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees
+            {sortedEmployees()
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((employee, index) => (
                 <TableRow key={employee.id}>
@@ -205,9 +275,7 @@ const EmployeeDirectory = () => {
             height: "70%",
             bgcolor: "background.paper",
             overflowY: "auto",
-            // border: '2px solid',
             borderRadius: "5px",
-            // boxShadow: 24,
             padding: 0,
           }}
         >
