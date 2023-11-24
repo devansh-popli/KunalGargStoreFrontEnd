@@ -158,6 +158,14 @@ h6 {
 .w-60{
   width: 61.95% !important;
 }
+.w-30{
+  width: 30% !important;
+}
+.jsc{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
 .myGridItem{
   /* margin: 0px !important; */
   padding-bottom: 0px !important;
