@@ -38,6 +38,7 @@ import {
   saveEmployeeDataToBackend,
   saveEmployeeDocumentToBackend,
 } from "../services/EmployeeDataService";
+import { states } from "../auth/HelperAuth";
 // Mock API function (replace with actual API calls)
 const saveEmployeeDataToAPI = (data) => {
   return new Promise((resolve) => {
@@ -400,27 +401,27 @@ function EmployeeEnrollmentForm({
       newErrors.general = "At least three documents are required";
     }
 
-    if (!formData.policeVerificationStation) {
-      newErrors.policeVerificationStation =
-        "Police verification station is required";
-    }
+    // if (!formData.policeVerificationStation) {
+    //   newErrors.policeVerificationStation =
+    //     "Police verification station is required";
+    // }
 
-    if (!formData.policeVerificationCertificateNo) {
-      newErrors.policeVerificationCertificateNo =
-        "Certificate number is required";
-    }
+    // if (!formData.policeVerificationCertificateNo) {
+    //   newErrors.policeVerificationCertificateNo =
+    //     "Certificate number is required";
+    // }
 
-    if (!formData.dateOfIssue) {
-      newErrors.dateOfIssue = "Date of issue is required";
-    }
+    // if (!formData.dateOfIssue) {
+    //   newErrors.dateOfIssue = "Date of issue is required";
+    // }
 
-    if (!formData.dateOfExpiry) {
-      newErrors.dateOfExpiry = "Date of expiry is required";
-    }
+    // if (!formData.dateOfExpiry) {
+    //   newErrors.dateOfExpiry = "Date of expiry is required";
+    // }
 
-    if (!formData.issuedBy) {
-      newErrors.issuedBy = "Issued by is required";
-    }
+    // if (!formData.issuedBy) {
+    //   newErrors.issuedBy = "Issued by is required";
+    // }
 
     if (!formData.placeholder || formData.placeholder?.length < 3) {
       newErrors.documents = "Please upload at least 3 document";
@@ -1125,13 +1126,7 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
   const handleCheckboxChange = (e) => {
     setFormData({ ...formData, sameAsResidential: e.target.checked });
   };
-  const states = [
-    'Select State', // You can replace this with the initial label you want
-    'State 1',
-    'State 2',
-    'State 3',
-    // Add more states as needed
-  ];
+  const statesList = states;
   return (
     <div>
       <h5 className="fw-bold">Residential Address</h5>
@@ -1188,9 +1183,9 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
           name="state"
           label="State"
         >
-          {states.map((state) => (
-            <MenuItem key={state} value={state}>
-              {state}
+          {statesList.map((state) => (
+            <MenuItem key={state.state} value={state.state}>
+              {state.state}
             </MenuItem>
           ))}
         </Select>
@@ -1271,10 +1266,10 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
               name="currentState"
               label="State"
             >
-              {states.map((state) => (
-                <MenuItem key={state} value={state}>
-                  {state}
-                </MenuItem>
+              {statesList.map((state) => (
+                <MenuItem key={state.state} value={state.state}>
+                {state.state}
+              </MenuItem>
               ))}
             </Select>
           </FormControl>
