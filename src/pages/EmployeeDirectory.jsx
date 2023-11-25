@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -20,7 +20,10 @@ import Modal from "@mui/material/Modal";
 import EditIcon from "@mui/icons-material/Edit";
 import PreviewIcon from "@mui/icons-material/Preview";
 import SearchIcon from "@mui/icons-material/Search";
-import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
+import {
+  getEmployeeDataFromBackend,
+  getEmployeeImageByTypeURl,
+} from "../services/EmployeeDataService";
 import { toast } from "react-toastify";
 import { Preview } from "@mui/icons-material";
 import { Button } from "react-bootstrap";
@@ -30,7 +33,7 @@ import { UserContext } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import SortIcon from '@mui/icons-material/Sort';
+import SortIcon from "@mui/icons-material/Sort";
 const EmployeeDirectory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [employees, setEmployees] = useState([]);
@@ -82,7 +85,7 @@ const EmployeeDirectory = () => {
     if (sortColumn === column) {
       return sortOrder === "asc" ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />;
     }
-    return <SortIcon/>;
+    return <SortIcon />;
   };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -132,9 +135,19 @@ const EmployeeDirectory = () => {
       setEmployees(oldemployees);
     }
   };
+  const handleImageError = (id) => {
+    console.error(
+      "Error loading image for employee with ID:"+id
+    );
 
+    // Set a default/static image when there's an error
+    if (imageRef.current) {
+      imageRef.current.src = "../../user.jpg";
+    }
+  };
+  const [imageSrc, setImageSrc] = useState(null);
   const userContext = useContext(UserContext);
-
+  const imageRef = useRef(null);
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Employee Directory</h4>
@@ -159,6 +172,7 @@ const EmployeeDirectory = () => {
               }}
             />
             <TableRow>
+              <TableCell style={{ width: "8%" }} className="text-center">Profile Image</TableCell>
               <TableCell
                 onClick={() => handleSort("empCode")}
                 style={{ width: "15%", cursor: "pointer" }}
@@ -203,6 +217,25 @@ const EmployeeDirectory = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((employee, index) => (
                 <TableRow key={employee.id}>
+                  <TableCell className="text-center">
+                    <img
+                      height={60}
+                      width={60}
+                      className="rounded-circle"
+                      style={{ backgroundPosition: "contain" }}
+                      src={imageSrc && imageSrc[employee.id]? imageSrc[employee.id] : getEmployeeImageByTypeURl(
+                        employee?.id,
+                        "profileImage"
+                      )}
+                      onError={() => {
+                        setImageSrc((prevMap) => ({
+                          ...prevMap,
+                          [employee.id]: '../../user.jpg',
+                        }));
+                      }}
+                      alt=""
+                    />
+                  </TableCell>
                   <TableCell>{employee.empCode}</TableCell>
                   <TableCell>
                     {employee.firstName + " " + employee.lastName}
