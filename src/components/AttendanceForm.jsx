@@ -7,6 +7,9 @@ import {
   MenuItem,
   TextField,
   Button,
+  ListItem,
+  ListItemText,
+  List,
 } from "@mui/material";
 import {
   getAttendanceDataByDateFromBackend,
@@ -14,6 +17,7 @@ import {
 } from "../services/EmployeeDataService";
 import { UserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
+import EmployeeSearchBar from "./EmployeeSearchBar";
 
 const AttendanceForm = ({ employees }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
@@ -21,13 +25,25 @@ const AttendanceForm = ({ employees }) => {
 const indianTimeZone = 'Asia/Kolkata';
 const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: indianTimeZone }).split('/').reverse().join('-');
 
-
+const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
   const [time, setTime] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [timeOut, setTimeOut] = useState("");
   const userContext = useContext(UserContext);
-  const handleEmployeeChange = (event) => {
-    setSelectedEmployee(event.target.value);
+  const handleEmployeeChange = (searchTermN) => {
+    // Perform your employee search logic here and update the searchResults state
+    // For example, you can filter employees based on the search term
+    // Replace this with your actual employee data and search logic
+    if (searchTermN != "") {
+      const filteredEmployees = employees.filter((employee) =>
+        employee.firstName.toLowerCase().includes(searchTermN.toLowerCase())
+      );
+      setSearchResults(filteredEmployees);
+    } else {
+      setSearchResults([]);
+    }
   };
+const [searchTerm,setSearchTerm]=useState("")
 
   const handleTimeInChange = (event) => {
     setTime(event.target.value);
@@ -138,14 +154,29 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
 
   // Dummy employee list, replace it with your actual list
   // const employeeList = ['Employee 1', 'Employee 2', 'Employee 3'];
-
+  useEffect(() => {
+    console.log("search ress")
+    setSearchResults([]);
+  }, [selectedEmployeeName]);
+  const selectEmployee = (e,employee) => {
+    try{
+      e.preventDefault();
+      console.log(employee)
+      setSelectedEmployeeName(employee.firstName + " " + employee.lastName);
+      setSelectedEmployee(employee.empCode);
+    }
+    catch(e)
+    {
+      console.log(e)
+    }
+  }
   return (
     <Paper
       elevation={3}
       style={{ padding: "20px", maxWidth: "400px", margin: "auto" }} className="mt-1"
     >
       <h5 className="fw-bold">Attendance</h5>
-      <FormControl fullWidth style={{ marginBottom: "20px" }}>
+      {/* <FormControl fullWidth style={{ marginBottom: "20px" }}>
         <InputLabel id="employee-label">Select Employee</InputLabel>
         <Select
           labelId="employee-label"
@@ -160,8 +191,41 @@ const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: ind
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
+  <div className="d-flex flex-column me-2" style={{marginBottom:"20px"}}>
+          <EmployeeSearchBar
+            onSearch={handleEmployeeChange}
+            selectedEmployeeName={selectedEmployeeName}
+            setSelectedEmployeeName={setSelectedEmployeeName}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+          {/* Render your search results or other components based on the search */}
 
+          <List
+            class={"bg-white border-1 shadow p-0"}
+            
+            style={{
+              width: "216px",
+              position: "absolute",
+              borderRadius: "5px",
+              top: "160px",
+              zIndex: 100
+            }}
+          >
+            {searchResults.map((employee) => (
+              <ListItem
+                key={employee.id}
+                style={{ cursor: "pointer", borderBottom: "1px solid #dcdcdc" }}
+                onClick={(e) => selectEmployee(e,employee)}
+              >
+                <ListItemText
+                  primary={employee.firstName + " " + employee.lastName}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
       <TextField
         id="date"
         label="Date"

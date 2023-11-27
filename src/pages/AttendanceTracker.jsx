@@ -13,6 +13,7 @@ import { UserContext } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
 import AttendanceChart from "../components/AttendanceChart";
 import WorkHoursPieChart from "../components/WorkHoursPieChart";
+import AttendanceTableOfToday from "../components/AttendanceTableOfToday";
 function AttendanceTracker() {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -53,7 +54,7 @@ function AttendanceTracker() {
         <WorkHoursPieChart data={userContext.dailyData}/>
         </Col>
         <Col md={8}>
-        <AttendanceTable attendanceRecords={attendanceRecords} employeeList={employees} />
+        <AttendanceTableOfToday attendanceRecords={attendanceRecords} employeeList={employees} />
         </Col>
       </Row>
     </Container>

@@ -37,6 +37,7 @@ import Sidebar from "./components/Sidebar";
 import EmployeeEnrollmentForm from "./pages/EmployeeEnrollmentForm";
 import EmployeeDirectory from "./pages/EmployeeDirectory";
 import AttendanceTracker from "./pages/AttendanceTracker";
+import AttendanceRecords from "./pages/AttendanceRecords";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -102,6 +103,10 @@ function App() {
                 <Route
                   path="/attendance-tracker"
                   element={<AttendanceTracker />}
+                />
+                <Route
+                  path="/attendance-records"
+                  element={<AttendanceRecords />}
                 />
             
               </Routes>

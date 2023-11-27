@@ -33,7 +33,7 @@ import { toast } from "react-toastify";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { Delete, TrySharp } from "@mui/icons-material";
 import EmployeeSearchBar from "./EmployeeSearchBar";
-const AttendanceTable = ({ employeeList }) => {
+const AttendanceTableOfToday = ({ employeeList }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,29 +51,29 @@ const AttendanceTable = ({ employeeList }) => {
   const userContext = useContext(UserContext);
   useEffect(() => {
     if (selectedEmployee == "" && selectedMonth == "") {
-      // getAttendanceDataOfTodayFromBackend(currentIndianDate)
-      //   .then((data) => {
-      //     setShowTotalHrs(false);
-      //     setAttendanceData(data.content);
-      //     userContext.setDailyData(data);
-      //     userContext.setMonthlyAttendance(null);
-      //   })
-      //   .catch((error) => {
-      //     toast.error("Internal Server Error While fetching todays record");
-      //   });
+      getAttendanceDataOfTodayFromBackend(currentIndianDate)
+        .then((data) => {
+          setShowTotalHrs(false);
+          setAttendanceData(data.content);
+          userContext.setDailyData(data);
+          userContext.setMonthlyAttendance(null);
+        })
+        .catch((error) => {
+          toast.error("Internal Server Error While fetching todays record");
+        });
     } else {
       setSelectedEmployee("");
       setSelectedMonth("");
-      // getAttendanceDataOfTodayFromBackend(currentIndianDate)
-      //   .then((data) => {
-      //     setShowTotalHrs(false);
-      //     setAttendanceData(data.content);
-      //     userContext.setDailyData(data);
-      //     userContext.setMonthlyAttendance(null);
-      //   })
-      //   .catch((error) => {
-      //     toast.error("Internal Server Error While fetching todays record");
-      //   });
+      getAttendanceDataOfTodayFromBackend(currentIndianDate)
+        .then((data) => {
+          setShowTotalHrs(false);
+          setAttendanceData(data.content);
+          userContext.setDailyData(data);
+          userContext.setMonthlyAttendance(null);
+        })
+        .catch((error) => {
+          toast.error("Internal Server Error While fetching todays record");
+        });
     }
   }, [userContext.updatedAttendance]);
   const [searchResults, setSearchResults] = useState([]);
@@ -82,12 +82,22 @@ const AttendanceTable = ({ employeeList }) => {
     // For example, you can filter employees based on the search term
     // Replace this with your actual employee data and search logic
     if (searchTermN != "") {
-      const filteredEmployees = employeeList.filter((employee) =>
-        employee.firstName.toLowerCase().includes(searchTermN.toLowerCase())
+      const filteredEmployees = attendanceData.filter((data) =>
+      data.employeeName.toLowerCase().includes(searchTermN.toLowerCase())
       );
-      setSearchResults(filteredEmployees);
+      setAttendanceData(filteredEmployees);
     } else {
       setSearchResults([]);
+      getAttendanceDataOfTodayFromBackend(currentIndianDate)
+      .then((data) => {
+        setShowTotalHrs(false);
+        setAttendanceData(data.content);
+        userContext.setDailyData(data);
+        userContext.setMonthlyAttendance(null);
+      })
+      .catch((error) => {
+        toast.error("Internal Server Error While fetching todays record");
+      });
     }
   };
 
@@ -157,18 +167,13 @@ const AttendanceTable = ({ employeeList }) => {
     setPage(0);
   };
   const searchAttendanceData = () => {
-    if (selectedMonth != "" && selectedEmployee != "") {
-      let year=new Date().getFullYear();
-      getAttendanceDataFromBackend(selectedMonth, year,selectedEmployee).then(
-        (data) => {
-          userContext.setMonthlyAttendance(data);
-          userContext.setDailyData(null);
-          setShowTotalHrs(true);
-          setAttendanceData(data.content);
-        }
-      );
+    if (selectedEmployee != "") {
+     let aData= attendanceData.filter((data) => {
+        return data.empCode === selectedEmployee;
+      });
+      setAttendanceData(aData);
     } else {
-      toast.warn("Please select month and employee name!");
+      toast.warn("Please select employee name!");
     }
   };
   function convertDecimalToHoursAndMinutes(decimalHours) {
@@ -182,19 +187,17 @@ const AttendanceTable = ({ employeeList }) => {
   }
   const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
   useEffect(() => {
-    console.log("search ress")
+    console.log("search ress");
     setSearchResults([]);
   }, [selectedEmployeeName]);
-  const selectEmployee = (e,employee) => {
-    try{
+  const selectEmployee = (e, employee) => {
+    try {
       e.preventDefault();
-      console.log(employee)
+      console.log(employee);
       setSelectedEmployeeName(employee.firstName + " " + employee.lastName);
       setSelectedEmployee(employee.empCode);
-    }
-    catch(e)
-    {
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
   };
   return (
@@ -246,7 +249,7 @@ const AttendanceTable = ({ employeeList }) => {
               <ListItem
                 key={employee.id}
                 style={{ cursor: "pointer", border: "0.5px solid grey" }}
-                onClick={(e) => selectEmployee(e,employee)}
+                onClick={(e) => selectEmployee(e, employee)}
               >
                 <ListItemText
                   primary={employee.firstName + " " + employee.lastName}
@@ -255,7 +258,7 @@ const AttendanceTable = ({ employeeList }) => {
             ))}
           </List>
         </div>
-        <FormControl style={{ marginRight: "20px" }} className="w-25">
+        {/* <FormControl style={{ marginRight: "20px" }} className="w-25">
           <InputLabel id="month-filter-label">Filter by Month</InputLabel>
           <Select
             labelId="month-filter-label"
@@ -270,8 +273,8 @@ const AttendanceTable = ({ employeeList }) => {
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
-
+        </FormControl> */}
+{/* 
         <Button
           className="mx-2"
           variant="outlined"
@@ -279,33 +282,30 @@ const AttendanceTable = ({ employeeList }) => {
         >
           {" "}
           <SearchIcon /> Search
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
           onClick={() => {
             setSelectedEmployee("");
             setSelectedMonth("");
-            setShowTotalHrs(false);
+            getAttendanceDataOfTodayFromBackend(currentIndianDate)
+              .then((data) => {
+                setShowTotalHrs(false);
+                setAttendanceData(data.content);
                 setSearchTerm("")
+                userContext.setDailyData(data);
                 userContext.setMonthlyAttendance(null);
-            // getAttendanceDataOfTodayFromBackend(currentIndianDate)
-            //   .then((data) => {
-            //     setShowTotalHrs(false);
-            //     setAttendanceData(data.content);
-            //     setSearchTerm("")
-            //     userContext.setDailyData(data);
-            //     userContext.setMonthlyAttendance(null);
-            //   })
-            //   .catch((error) => {
-            //     toast.error(
-            //       "Internal Server Error While fetching todays record"
-            //     );
-            //   });
+              })
+              .catch((error) => {
+                toast.error(
+                  "Internal Server Error While fetching todays record"
+                );
+              });
           }}
           startIcon={<RestartAltIcon />}
           variant="outlined"
         >
           Reset
-        </Button>
+        </Button> */}
         {showTotalHrs && (
           <h6 className="ms-2" style={{ width: "30%" }}>
             <small>
@@ -389,4 +389,4 @@ const AttendanceTable = ({ employeeList }) => {
   );
 };
 
-export default AttendanceTable;
+export default AttendanceTableOfToday;

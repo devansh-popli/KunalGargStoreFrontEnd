@@ -35,6 +35,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import TableViewIcon from "@mui/icons-material/TableView";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { AccessTime, AccountBalance, AccountBalanceWallet, AddBox, AddBoxOutlined, Event, Group, ListAlt, PersonAdd, ShoppingBag, ShoppingBasket } from "@mui/icons-material";
 const Sidebar = ({ toggle, setToggle }) => {
   const userContext = useContext(UserContext);
   return (
@@ -59,7 +60,7 @@ const Sidebar = ({ toggle, setToggle }) => {
           <ListItem disablePadding as={NavLink} to={"/new-ledger-account-form"}>
             <ListItemButton>
               <ListItemIcon>
-                {<AccountBoxIcon className="text-white" />}
+                {<AccountBalanceWallet className="text-white" />}
               </ListItemIcon>
               <ListItemText
                 primary={"New Ledger Account Form"}
@@ -76,7 +77,7 @@ const Sidebar = ({ toggle, setToggle }) => {
           <ListItem disablePadding as={NavLink} to={"/stock-item-menu"}>
             <ListItemButton>
               <ListItemIcon>
-                {<InventoryIcon className="text-white" />}
+                {<ShoppingBag className="text-white" />}
               </ListItemIcon>
               <ListItemText
                 primary={"Stock Item Menu"}
@@ -93,7 +94,7 @@ const Sidebar = ({ toggle, setToggle }) => {
           <ListItem disablePadding as={Link} to={"/view-stock-item-menu"}>
             <ListItemButton>
               <ListItemIcon>
-                {<TableViewIcon className="text-white" />}
+                {<ListAlt className="text-white" />}
               </ListItemIcon>
               <ListItemText
                 primary={"View Stock Item Menu"}
@@ -109,7 +110,7 @@ const Sidebar = ({ toggle, setToggle }) => {
           <ListItem disablePadding as={Link} to={"/employee-form"}>
             <ListItemButton>
               <ListItemIcon>
-                {<ContactsIcon className="text-white" />}
+                {<PersonAdd className="text-white" />}
               </ListItemIcon>
               <ListItemText
                 primary={"Employee Form"}
@@ -125,7 +126,7 @@ const Sidebar = ({ toggle, setToggle }) => {
           <ListItem disablePadding as={Link} to={"/employee-directory"}>
             <ListItemButton>
               <ListItemIcon>
-                {<ImportContactsIcon className="text-white" />}
+                {<Group className="text-white" />}
               </ListItemIcon>
               <ListItemText
                 primary={"Employee Directory"}
@@ -141,10 +142,26 @@ const Sidebar = ({ toggle, setToggle }) => {
           <ListItem disablePadding as={Link} to={"/attendance-tracker"}>
             <ListItemButton>
               <ListItemIcon>
-                {<CalendarMonthIcon className="text-white" />}
+                {<AccessTime className="text-white" />}
               </ListItemIcon>
               <ListItemText
                 primary={"Attendance Tracker"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding as={Link} to={"/attendance-records"}>
+            <ListItemButton>
+              <ListItemIcon>
+                {<Event className="text-white" />}
+              </ListItemIcon>
+              <ListItemText
+                primary={"Attendance Records"}
                 primaryTypographyProps={{
                   color: "white",
                   fontWeight: "medium",

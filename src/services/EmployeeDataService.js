@@ -42,6 +42,7 @@ export const saveAttendanceDataToBackend = (formData) => {
 };
 export const getAttendanceDataFromBackend = (
   month,
+  year=2023,
   empCode,
   pageNum = 0,
   pageSize = 31,
@@ -50,7 +51,22 @@ export const getAttendanceDataFromBackend = (
 ) => {
   return privateAxios
     .get(
-      `/api/attendance?month=${month}&empCode=${empCode}&pageNumber=${pageNum}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`
+      `/api/attendance?month=${month}&year=${year}&empCode=${empCode}&pageNumber=${pageNum}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`
+    )
+    .then((data) => data.data);
+};
+
+export const getAttendanceDataFromBackendByMonth = (
+  month,
+  year=2023,
+  pageNum = 0,
+  pageSize = 10000,
+  sortBy = "attendanceDate",
+  sortDir = "desc"
+) => {
+  return privateAxios
+    .get(
+      `/api/attendance/findByMonth?month=${month}&year=${year}&pageNumber=${pageNum}&pageSize=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}`
     )
     .then((data) => data.data);
 };
