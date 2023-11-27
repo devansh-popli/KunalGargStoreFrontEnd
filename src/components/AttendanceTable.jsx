@@ -182,7 +182,6 @@ const AttendanceTable = ({ employeeList }) => {
   }
   const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
   useEffect(() => {
-    console.log("search ress")
     setSearchResults([]);
   }, [selectedEmployeeName]);
   const selectEmployee = (e,employee) => {
@@ -240,12 +239,13 @@ const AttendanceTable = ({ employeeList }) => {
               position: "absolute",
               borderRadius: "5px",
               top: "160px",
+              zIndex:"100"
             }}
           >
             {searchResults.map((employee) => (
               <ListItem
                 key={employee.id}
-                style={{ cursor: "pointer", border: "0.5px solid grey" }}
+                style={{ cursor: "pointer", borderBottom: "1px solid #dcdcdc" }}
                 onClick={(e) => selectEmployee(e,employee)}
               >
                 <ListItemText
