@@ -424,7 +424,7 @@ const StockItemMenu = () => {
               </Grid>
             </Grid>
             <FormControl component="fieldset">
-              <FormLabel component="legend">Group Name</FormLabel>
+              <FormLabel component="legend" className="m-0 p-0 mt-3">Item Category</FormLabel>
               <RadioGroup
                 aria-label="groupName"
                 name="groupName"

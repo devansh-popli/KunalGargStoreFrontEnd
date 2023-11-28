@@ -49,12 +49,14 @@ const AttendanceTableOfToday = ({ employeeList }) => {
     .reverse()
     .join("-");
   const userContext = useContext(UserContext);
+  const [oldAttendance,setOldAttendance]=useState()
   useEffect(() => {
     if (selectedEmployee == "" && selectedMonth == "") {
       getAttendanceDataOfTodayFromBackend(currentIndianDate)
         .then((data) => {
           setShowTotalHrs(false);
           setAttendanceData(data.content);
+          setOldAttendance(data.content);
           userContext.setDailyData(data);
           userContext.setMonthlyAttendance(null);
         })
@@ -68,6 +70,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
         .then((data) => {
           setShowTotalHrs(false);
           setAttendanceData(data.content);
+          setOldAttendance(data.content);
           userContext.setDailyData(data);
           userContext.setMonthlyAttendance(null);
         })
@@ -82,22 +85,46 @@ const AttendanceTableOfToday = ({ employeeList }) => {
     // For example, you can filter employees based on the search term
     // Replace this with your actual employee data and search logic
     if (searchTermN != "") {
-      const filteredEmployees = attendanceData.filter((data) =>
-      data.employeeName.toLowerCase().includes(searchTermN.toLowerCase())
-      );
-      setAttendanceData(filteredEmployees);
+      let filteredEmployees = [];
+      let filteredAttendanceData = [];
+
+      if (searchTermN.toLowerCase().includes("emp")) {
+        // If the searchTerm starts with "EMP"
+        filteredEmployees = employeeList.filter((employee) =>
+          employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
+        );
+        console.log(filteredEmployees);
+        // Filter attendanceData based on empCode from filteredEmployees
+        filteredAttendanceData = oldAttendance.filter((data) =>
+          filteredEmployees.some((employee) =>
+            data.employeeName
+              .toLowerCase()
+              .includes(
+                employee.firstName.toLowerCase() + " " + employee.lastName.toLowerCase()
+              )
+          )
+        );
+      } else {
+        // If the searchTerm doesn't start with "EMP"
+        console.log(searchTermN);
+        filteredAttendanceData = oldAttendance.filter((data) =>
+          data.employeeName.toLowerCase().includes(searchTermN.toLowerCase())
+        );
+      }
+      setAttendanceData(filteredAttendanceData);
     } else {
       setSearchResults([]);
       getAttendanceDataOfTodayFromBackend(currentIndianDate)
-      .then((data) => {
-        setShowTotalHrs(false);
-        setAttendanceData(data.content);
-        userContext.setDailyData(data);
-        userContext.setMonthlyAttendance(null);
-      })
-      .catch((error) => {
-        toast.error("Internal Server Error While fetching todays record");
-      });
+        .then((data) => {
+          setShowTotalHrs(false);
+          setAttendanceData(data.content);
+          setOldAttendance(data.content);
+          userContext.setDailyData(data);
+          userContext.setMonthlyAttendance(null);
+        })
+        .catch((error) => {
+          toast.error("Internal Server Error While fetching todays record");
+        });
     }
   };
 
@@ -168,7 +195,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
   };
   const searchAttendanceData = () => {
     if (selectedEmployee != "") {
-     let aData= attendanceData.filter((data) => {
+      let aData = attendanceData.filter((data) => {
         return data.empCode === selectedEmployee;
       });
       setAttendanceData(aData);
@@ -274,7 +301,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
             ))}
           </Select>
         </FormControl> */}
-{/* 
+        {/* 
         <Button
           className="mx-2"
           variant="outlined"
@@ -362,6 +389,9 @@ const AttendanceTableOfToday = ({ employeeList }) => {
                         onClick={() => {
                           deleteAttendanceDataByDateFromBackend(entry.id);
                           setAttendanceData(
+                            attendanceData.filter((data) => data.id != entry.id)
+                          );
+                          setOldAttendance(
                             attendanceData.filter((data) => data.id != entry.id)
                           );
                         }}

@@ -236,6 +236,9 @@ function NewLedgerAccountForm() {
   const validateAccountCode = (value) => {
     return value.trim() !== "" ? null : "A/c Code is required";
   };
+  const validateApprovedSupplier = (value) => {
+    return value.trim() !== "" ? null : "Supplier or Customer is required";
+  };
 
   const validateCity = (value) => {
     return value.trim() !== "" ? null : "City is required";
@@ -259,6 +262,9 @@ function NewLedgerAccountForm() {
         break;
       case "accountCode":
         error = validateAccountCode(value);
+        break;
+      case "approved":
+        error = validateApprovedSupplier(value);
         break;
       case "city":
         error = validateCity(value);
@@ -289,11 +295,13 @@ function NewLedgerAccountForm() {
     const cityError = validateCity(formData?.city || "");
     const stateError = validateState(formData?.state || "");
     const contactNoError = validateContactNo(formData?.contactNo || "");
+    const approvedError = validateApprovedSupplier(formData?.approved || "");
 
     // Check if there are any validation errors
     if (
       accountNameError ||
       accountCodeError ||
+      approvedError ||
       cityError ||
       stateError ||
       contactNoError
@@ -303,6 +311,7 @@ function NewLedgerAccountForm() {
         ...formData,
         accountNameError: accountNameError,
         accountCodeError: accountCodeError,
+        approvedError: approvedError,
         cityError: cityError,
         stateError: stateError,
         contactNoError: contactNoError,
@@ -388,6 +397,7 @@ function NewLedgerAccountForm() {
                   value={formData.approved}
                   onChange={handleOptionChange}
                   style={{ display: "flex", flexDirection: "row" }}
+                error={Boolean(formData.approvedError)}
                 >
                   <FormControlLabel
                     value="supplier"
@@ -400,6 +410,14 @@ function NewLedgerAccountForm() {
                     label="Customer"
                   />
                 </RadioGroup>
+                {formData.approvedError && (
+                  <div
+                    className="error-message"
+                    style={{ position: "absolute" }}
+                  >
+                    {formData.approvedError}
+                  </div>
+                )}
               </Grid>
               <Grid className="myGridItem mx-1" item xs={8} sm={4}>
                 <TextField

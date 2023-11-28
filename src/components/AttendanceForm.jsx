@@ -35,10 +35,19 @@ const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
     // For example, you can filter employees based on the search term
     // Replace this with your actual employee data and search logic
     if (searchTermN != "") {
-      const filteredEmployees = employees.filter((employee) =>
-        employee.firstName.toLowerCase().includes(searchTermN.toLowerCase())
+      let filteredEmployees=""
+      if(searchTermN.includes("EMP"))
+      {
+         filteredEmployees = employees.filter((employee) =>
+        employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
       );
-      setSearchResults(filteredEmployees);
+      }
+      else{
+         filteredEmployees = employees.filter((employee) =>
+        employee.firstName.toLowerCase().includes(searchTermN.toLowerCase())
+        );
+      }
+      setSearchResults(filteredEmployees.length>=5?filteredEmployees.slice(0,5):filteredEmployees);
     } else {
       setSearchResults([]);
     }
