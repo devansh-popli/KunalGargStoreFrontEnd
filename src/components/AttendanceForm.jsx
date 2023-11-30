@@ -21,10 +21,11 @@ import EmployeeSearchBar from "./EmployeeSearchBar";
 
 const AttendanceForm = React.memo(({ employees }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
-  
-const indianTimeZone = 'Asia/Kolkata';
-const currentIndianDate = new Date().toLocaleDateString('en-IN', { timeZone: indianTimeZone }).split('/').reverse().join('-');
+  const indianTimeZone = 'Asia/Kolkata';
+const currentDate = new Date().toLocaleDateString('en-IN', { timeZone: indianTimeZone });
+const [day, month, year] = currentDate.split('/').map(Number);
 
+const currentIndianDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
   const [time, setTime] = useState("");
   const [searchResults, setSearchResults] = useState([]);
