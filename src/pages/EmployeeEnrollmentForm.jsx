@@ -60,13 +60,14 @@ const steps = [
   "Employment",
 ];
 
-function EmployeeEnrollmentForm({
+const EmployeeEnrollmentForm=React.memo(({
   paper = true,
   selectedEmployee,
   handleClose,
   setSelectedEmployee,
   readOnly,
-}) {
+})=>
+ {
   const userContext = useContext(UserContext);
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
@@ -753,9 +754,9 @@ function EmployeeEnrollmentForm({
   ) : (
     <Navigate to="/" />
   );
-}
+})
 
-function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
+const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnly })=> {
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -1111,9 +1112,9 @@ function PersonalDetails({ onFormChange, formData, setFormData, readOnly }) {
       </Form.Group>
     </div>
   );
-}
+})
 
-function Address({ onFormChange, formData, setFormData, readOnly }) {
+const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
   const handleChange = (event) => {
     onFormChange(event.target.name, event.target.value);
   };
@@ -1287,6 +1288,6 @@ function Address({ onFormChange, formData, setFormData, readOnly }) {
       )}
     </div>
   );
-}
+})
 
 export default EmployeeEnrollmentForm;

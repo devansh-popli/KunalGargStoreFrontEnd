@@ -33,7 +33,7 @@ import { toast } from "react-toastify";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { Delete, TrySharp } from "@mui/icons-material";
 import EmployeeSearchBar from "./EmployeeSearchBar";
-const AttendanceTable = ({ employeeList }) => {
+const AttendanceTable = React.memo(({ employeeList }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -82,19 +82,21 @@ const AttendanceTable = ({ employeeList }) => {
     // For example, you can filter employees based on the search term
     // Replace this with your actual employee data and search logic
     if (searchTermN != "") {
-      let filteredEmployees=""
-      if(searchTermN.includes("EMP"))
-      {
-         filteredEmployees = employeeList.filter((employee) =>
-        employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
-      );
-      }
-      else{
-         filteredEmployees = employeeList.filter((employee) =>
-        employee.firstName.toLowerCase().includes(searchTermN.toLowerCase())
+      let filteredEmployees = "";
+      if (searchTermN.includes("EMP")) {
+        filteredEmployees = employeeList.filter((employee) =>
+          employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
+        );
+      } else {
+        filteredEmployees = employeeList.filter((employee) =>
+          employee.firstName.toLowerCase().includes(searchTermN.toLowerCase())
         );
       }
-      setSearchResults(filteredEmployees.length>=5?filteredEmployees.slice(0,5):filteredEmployees);
+      setSearchResults(
+        filteredEmployees.length >= 5
+          ? filteredEmployees.slice(0, 5)
+          : filteredEmployees
+      );
     } else {
       setSearchResults([]);
     }
@@ -167,8 +169,8 @@ const AttendanceTable = ({ employeeList }) => {
   };
   const searchAttendanceData = () => {
     if (selectedMonth != "" && selectedEmployee != "") {
-      let year=new Date().getFullYear();
-      getAttendanceDataFromBackend(selectedMonth, year,selectedEmployee).then(
+      let year = new Date().getFullYear();
+      getAttendanceDataFromBackend(selectedMonth, year, selectedEmployee).then(
         (data) => {
           userContext.setMonthlyAttendance(data);
           userContext.setDailyData(null);
@@ -193,16 +195,14 @@ const AttendanceTable = ({ employeeList }) => {
   useEffect(() => {
     setSearchResults([]);
   }, [selectedEmployeeName]);
-  const selectEmployee = (e,employee) => {
-    try{
+  const selectEmployee = (e, employee) => {
+    try {
       e.preventDefault();
-      console.log(employee)
+      console.log(employee);
       setSelectedEmployeeName(employee.firstName + " " + employee.lastName);
       setSelectedEmployee(employee.empCode);
-    }
-    catch(e)
-    {
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
   };
   return (
@@ -248,14 +248,14 @@ const AttendanceTable = ({ employeeList }) => {
               position: "absolute",
               borderRadius: "5px",
               top: "160px",
-              zIndex:"100"
+              zIndex: "100",
             }}
           >
             {searchResults.map((employee) => (
               <ListItem
                 key={employee.id}
                 style={{ cursor: "pointer", borderBottom: "1px solid #dcdcdc" }}
-                onClick={(e) => selectEmployee(e,employee)}
+                onClick={(e) => selectEmployee(e, employee)}
               >
                 <ListItemText
                   primary={employee.firstName + " " + employee.lastName}
@@ -294,8 +294,8 @@ const AttendanceTable = ({ employeeList }) => {
             setSelectedEmployee("");
             setSelectedMonth("");
             setShowTotalHrs(false);
-                setSearchTerm("")
-                userContext.setMonthlyAttendance(null);
+            setSearchTerm("");
+            userContext.setMonthlyAttendance(null);
             // getAttendanceDataOfTodayFromBackend(currentIndianDate)
             //   .then((data) => {
             //     setShowTotalHrs(false);
@@ -396,6 +396,6 @@ const AttendanceTable = ({ employeeList }) => {
       />
     </Paper>
   );
-};
+});
 
 export default AttendanceTable;

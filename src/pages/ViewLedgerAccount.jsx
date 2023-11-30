@@ -12,206 +12,150 @@ import { privateAxios } from "../services/AxiosService";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 // import { Container } from "react-bootstrap";
-import { Button, Container, IconButton, TextField, Tooltip } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
 import { toast } from "react-toastify";
 import { Delete } from "@mui/icons-material";
+import { deleteLedgerAccountById } from "../services/LedgerAccountService";
 const columns = [
   {
     id: "accountCode",
     label: "Account Code",
-    minWidth: 100,
-    align: "right",
+    minWidth: 130,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
-    id: "name",
-    label: "Name",
+    id: "gstNo",
+    label: "GST No",
     minWidth: 100,
-    align: "right",
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
-    id: "openingStockQty",
-    label: "Op. Stock in Qty",
-    minWidth: 100,
-    align: "right",
+    id: "accountName",
+    label: "Account Name",
+    minWidth: 200,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
-    id: "openingStockRs",
-    label: "Op. Stock in Rs",
-    minWidth: 100,
-    align: "right",
+    id: "address",
+    label: "Address",
+    minWidth: 340,
+    align: "left",
+    format: (value) => value.toFixed(2),
+  },
+  // {
+  //   id: "city",
+  //   label: "City",
+  //   minWidth: 100,
+  //   align: "right",
+  //   format: (value) => value.toFixed(2),
+  // },
+  // {
+  //   id: "pincode",
+  //   label: "Pincode",
+  //   minWidth: 100,
+  //   align: "right",
+  //   format: (value) => value.toFixed(2),
+  // },
+  // {
+  //   id: "state",
+  //   label: "State",
+  //   minWidth: 100,
+  //   align: "right",
+  //   format: (value) => value.toFixed(2),
+  // },
+  {
+    id: "openingBalance",
+    label: "Opening Balance",
+    minWidth: 150,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
-    id: "groupName",
-    label: "Group Name",
-    minWidth: 100,
-    align: "right",
+    id: "msmedStatus",
+    label: "MSMED Status",
+    minWidth: 160,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
-    id: "purchaseRate",
-    label: "Purchase Rate",
+    id: "contactNo",
+    label: "Contact No",
     minWidth: 100,
-    align: "right",
+    align: "left",
+    format: (value) => value.toFixed(2),
+  },
+  // {
+  //   id: "email",
+  //   label: "Email",
+  //   minWidth: 100,
+  //   align: "right",
+  //   format: (value) => value.toFixed(2),
+  // },
+  {
+    id: "pan",
+    label: "PAN",
+    minWidth: 100,
+    align: "left",
+    format: (value) => value.toFixed(2),
+  },
+  // {
+  //   id: "turnoverBelow10Cr",
+  //   label: "Turnover Below 10Cr",
+  //   minWidth: 100,
+  //   align: "left",
+  //   format: (value) => value.toFixed(2),
+  // },
+  {
+    id: "approved",
+    label: "Approved",
+    minWidth: 100,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
-    id: "mrp",
-    label: "MRP",
-    minWidth: 100,
-    align: "right",
+    id: "accountNum",
+    label: "Account Number",
+    minWidth: 140,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
-  {
-    id: "saleRate",
-    label: "Sale Rate",
-    minWidth: 100,
-    align: "right",
-    format: (value) => value.toFixed(2),
-  },
-  {
-    id: "totalGST",
-    label: "Total GST @",
-    minWidth: 100,
-    align: "right",
-    format: (value) => value.toFixed(2),
-  },
+//   {
+//     id: "accountNameBank",
+//     label: "Account Name Bank",
+//     minWidth: 100,
+//     align: "left",
+//     format: (value) => value.toFixed(2),
+//   },
   {
     id: "actions",
     label: "Actions",
     minWidth: 100,
-    align: "right",
+    align: "left",
     // format: (value) => value.toFixed(2),
   },
   // {
-  //   id: 'cgst',
-  //   label: 'CGST @',
+  //   id: "ifsc",
+  //   label: "IFSC",
   //   minWidth: 100,
-  //   align: 'right',
+  //   align: "right",
   //   format: (value) => value.toFixed(2),
   // },
   // {
-  //   id: 'sgst',
-  //   label: 'S.GST @',
+  //   id: "branch",
+  //   label: "Branch",
   //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'purchaseAccount',
-  //   label: 'Purchase A/C',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'saleAccount',
-  //   label: 'Sale A/C',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'size',
-  //   label: 'Size',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'hsnCode',
-  //   label: 'HSN Code',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'scheme',
-  //   label: 'Scheme',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'rateCalculate',
-  //   label: 'Rate Calculate',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'clsStockIn',
-  //   label: 'CLS Stock In',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'qtyInUnits',
-  //   label: 'Qty. in UNITS',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'portalUOM',
-  //   label: 'Portal UOM',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'stockCalculate',
-  //   label: 'Stock Calculate',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'typeOfGoods',
-  //   label: 'Type of Goods',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'stockValuation',
-  //   label: 'Stock Valuation',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'qtyPerPcCase',
-  //   label: 'Qty Per PC/Case',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'minStockLevel',
-  //   label: 'Min Stock Level',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'taxType',
-  //   label: '206C(1H)/194Q',
-  //   minWidth: 100,
-  //   align: 'right',
-  //   format: (value) => value.toFixed(2),
-  // },
-  // {
-  //   id: 'gstType',
-  //   label: 'GST Type',
-  //   minWidth: 100,
-  //   align: 'right',
+  //   align: "right",
   //   format: (value) => value.toFixed(2),
   // },
 ];
@@ -239,8 +183,7 @@ const rows = [
   createData("Brazil", "BR", 210147125, 8515767),
 ];
 
-const ViewStockItemMenu=React.memo(()=> 
-{
+const ViewLedgerAccount=React.memo(()=> {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -260,7 +203,7 @@ const ViewStockItemMenu=React.memo(()=>
     // Fetch data from your backend API
     privateAxios
       .get(
-        `/api/v1/stock-item-menu/all?pageNumber=${page}&pageSize=${rowsPerPage}`
+        `/api/ledger-accounts/stock-item-menu/all?pageNumber=${page}&pageSize=${rowsPerPage}&sortBy=${"accountName"}`
       )
       .then((response) => {
         setStockItems(response.data);
@@ -272,7 +215,7 @@ const ViewStockItemMenu=React.memo(()=>
   }, [page]);
   const navigate = useNavigate();
   const navigateToEdit = (accountId) => {
-    navigate(`/stock-item-menu/${accountId}`);
+    navigate(`/new-ledger-account-form/${accountId}`);
   };
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -292,23 +235,29 @@ const ViewStockItemMenu=React.memo(()=>
   const userContext = React.useContext(UserContext);
   return userContext.isLogin ? (
     <Container className="mt-3">
-      <h4 className="fw-bold">View Stock Item Menu Details</h4>
-      <Paper className="w-90">
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <TextField
-            className="w-50 m-4"
-            label={
-              <>
-                <SearchIcon />
-                <span className="ms-4">Search</span>
-              </>
-            }
-            variant="outlined"
-            // value={searchTerm}
-            // onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      <h4 className="fw-bold">Ledger Directory</h4>
+      <Paper className="w-100">
+        <TableContainer sx={{ maxHeight: 540 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
+            
+              <TableRow>
+                <TableCell align="left" colSpan={12}>
+                   <TextField
+                    style={{ width: "300px" }}
+                    className=""
+                    label={
+                      <>
+                        <SearchIcon />
+                        <span className="ms-4">Search</span>
+                      </>
+                    }
+                    variant="outlined"
+                    // value={searchTerm}
+                    // onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </TableCell>
+              </TableRow>
               {/* <TableRow>
               <TableCell align="center" colSpan={3}>
                 
@@ -325,7 +274,7 @@ const ViewStockItemMenu=React.memo(()=>
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ top: 57, minWidth: column.minWidth }}
+                    style={{ top: 77, minWidth: column.minWidth }}
                   >
                     {column.label}
                   </TableCell>
@@ -349,28 +298,33 @@ const ViewStockItemMenu=React.memo(()=>
                           <>
                             <TableCell key={column.id} align={column.align}>
                               <Tooltip title="Delete" color="dark">
-                                <IconButton onClick={() => {
-                                  deleteStockItemMenuById(row.stockItemId)
-                                    .then((data) => {
-                                      toast.success(
-                                        "Record Deleted Successfully!!"
-                                      );
-                                      let newStockItems =
-                                        stockItems.content.filter(
-                                          (item) =>
-                                            item.stockItemId != row.stockItemId
+                                <IconButton
+                                  onClick={() => {
+                                    deleteLedgerAccountById(row.id)
+                                      .then((data) => {
+                                        toast.success(
+                                          "Record Deleted Successfully!!"
                                         );
-                                      setStockItems({
-                                        ...stockItems,
-                                        content: newStockItems,
-                                        totalElements:
-                                          stockItems.totalElements - 1,
+                                        let newStockItems =
+                                          stockItems.content.filter(
+                                            (item) =>
+                                              item.id !=
+                                              row.id
+                                          );
+                                        setStockItems({
+                                          ...stockItems,
+                                          content: newStockItems,
+                                          totalElements:
+                                            stockItems.totalElements - 1,
+                                        });
+                                      })
+                                      .catch((error) => {
+                                        toast.error(
+                                          "Error while deleted Record"
+                                        );
                                       });
-                                    })
-                                    .catch((error) => {
-                                      toast.error("Error while deleted Record");
-                                    });
-                                }}>
+                                  }}
+                                >
                                   <Delete color="error" />
                                 </IconButton>
                               </Tooltip>
@@ -554,4 +508,4 @@ const ViewStockItemMenu=React.memo(()=>
 //     ):<Navigate to="/"/>
 // };
 
-export default ViewStockItemMenu
+export default ViewLedgerAccount

@@ -46,7 +46,7 @@ import { styled } from "@mui/material";
 //   },
 // }));
 
-const StockItemMenu = () => {
+const StockItemMenu = React.memo(() => {
   // const useStyles = makeStyles(() => ({
   //   root: {
   //     "& .MuiStepIcon-active": { color: "red" },
@@ -1061,6 +1061,6 @@ const StockItemMenu = () => {
   ) : (
     <Navigate to="/" />
   );
-};
+});
 
 export default StockItemMenu;

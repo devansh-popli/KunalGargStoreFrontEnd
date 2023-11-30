@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import cns from "classnames";
 
 // Components
@@ -36,7 +36,7 @@ import TableViewIcon from "@mui/icons-material/TableView";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { AccessTime, AccountBalance, AccountBalanceWallet, AddBox, AddBoxOutlined, Event, Group, ListAlt, PersonAdd, ShoppingBag, ShoppingBasket } from "@mui/icons-material";
-const Sidebar = ({ toggle, setToggle }) => {
+const Sidebar = React.memo(({ toggle, setToggle }) => {
   const userContext = useContext(UserContext);
   return (
     <div
@@ -64,6 +64,23 @@ const Sidebar = ({ toggle, setToggle }) => {
               </ListItemIcon>
               <ListItemText
                 primary={"New Ledger Account Form"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontStyle:"italic"
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding as={NavLink} to={"/view-ledger-details"}>
+            <ListItemButton>
+              <ListItemIcon>
+                {<AccountBalanceWallet className="text-white" />}
+              </ListItemIcon>
+              <ListItemText
+                primary={"Ledger Directory"}
                 primaryTypographyProps={{
                   color: "white",
                   fontWeight: "medium",
@@ -175,6 +192,6 @@ const Sidebar = ({ toggle, setToggle }) => {
       )}
     </div>
   );
-};
+});
 
 export default Sidebar;

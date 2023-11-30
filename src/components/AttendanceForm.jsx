@@ -19,7 +19,7 @@ import { UserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 import EmployeeSearchBar from "./EmployeeSearchBar";
 
-const AttendanceForm = ({ employees }) => {
+const AttendanceForm = React.memo(({ employees }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   
 const indianTimeZone = 'Asia/Kolkata';
@@ -298,6 +298,6 @@ const [searchTerm,setSearchTerm]=useState("")
       </Button>
     </Paper>
   );
-};
+});
 
 export default AttendanceForm;

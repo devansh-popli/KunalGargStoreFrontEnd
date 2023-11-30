@@ -34,7 +34,7 @@ import { Navigate } from "react-router-dom";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import SortIcon from "@mui/icons-material/Sort";
-const EmployeeDirectory = () => {
+const EmployeeDirectory = React.memo(() => {
   const [searchTerm, setSearchTerm] = useState("");
   const [employees, setEmployees] = useState([]);
   const [oldemployees, setOldEmployees] = useState([]);
@@ -325,6 +325,6 @@ const EmployeeDirectory = () => {
   ) : (
     <Navigate to={"/"} />
   );
-};
+});
 
 export default EmployeeDirectory;

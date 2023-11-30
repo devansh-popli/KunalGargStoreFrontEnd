@@ -38,6 +38,7 @@ import EmployeeEnrollmentForm from "./pages/EmployeeEnrollmentForm";
 import EmployeeDirectory from "./pages/EmployeeDirectory";
 import AttendanceTracker from "./pages/AttendanceTracker";
 import AttendanceRecords from "./pages/AttendanceRecords";
+import ViewLedgerAccount from "./pages/ViewLedgerAccount";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -89,8 +90,16 @@ function App() {
                   element={<StockItemMenu />}
                 />
                 <Route
+                  path="/new-ledger-account-form/:id"
+                  element={<NewLedgerAccountForm />}
+                />
+                <Route
                   path="/view-stock-item-menu"
                   element={<ViewStockItemMenu />}
+                />
+                <Route
+                  path="/view-ledger-details"
+                  element={<ViewLedgerAccount />}
                 />
                 <Route
                   path="/employee-form"

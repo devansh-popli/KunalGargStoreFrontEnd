@@ -10,7 +10,7 @@ import { UserContext } from "../context/UserContext";
 import AttendanceChartMonthly from "../components/AttendanceChartMonthly";
 import AttendanceChart1 from "../components/AttendanceChart1";
 
-const AttendanceRecords = () => {
+const AttendanceRecords = React.memo(() => {
   const [employees, setEmployees] = useState([]);
   useEffect(() => {
     getEmployeeDataFromBackend()
@@ -39,6 +39,6 @@ const AttendanceRecords = () => {
       </Row>
     </Container>
   );
-};
+});
 
 export default AttendanceRecords;

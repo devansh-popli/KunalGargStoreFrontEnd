@@ -14,7 +14,7 @@ import { Navigate } from "react-router-dom";
 import AttendanceChart from "../components/AttendanceChart";
 import WorkHoursPieChart from "../components/WorkHoursPieChart";
 import AttendanceTableOfToday from "../components/AttendanceTableOfToday";
-function AttendanceTracker() {
+const AttendanceTracker=React.memo(()=> {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [employees, setEmployees] = useState([]);
   const userContext=useContext(UserContext)
@@ -59,6 +59,6 @@ function AttendanceTracker() {
       </Row>
     </Container>
   ):<Navigate to={"/"}/>;
-}
+})
 
 export default AttendanceTracker;

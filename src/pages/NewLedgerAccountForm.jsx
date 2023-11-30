@@ -44,7 +44,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Delete } from "@mui/icons-material";
-function NewLedgerAccountForm() {
+const NewLedgerAccountForm=React.memo(()=> {
   const [nextAccountCode, setNextAccountCode] = useState("");
 
   const { id } = useParams();
@@ -868,6 +868,6 @@ function NewLedgerAccountForm() {
   ) : (
     <Navigate to={"/"} />
   );
-}
+})
 
 export default NewLedgerAccountForm;
