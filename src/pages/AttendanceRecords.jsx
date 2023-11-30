@@ -9,6 +9,7 @@ import WorkHoursPieChart from "../components/WorkHoursPieChart";
 import { UserContext } from "../context/UserContext";
 import AttendanceChartMonthly from "../components/AttendanceChartMonthly";
 import AttendanceChart1 from "../components/AttendanceChart1";
+import { Navigate } from "react-router-dom";
 
 const AttendanceRecords = React.memo(() => {
   const [employees, setEmployees] = useState([]);
@@ -22,7 +23,7 @@ const AttendanceRecords = React.memo(() => {
       });
   }, []);
   const userContext = useContext(UserContext);
-  return (
+  return userContext.isLogin?(
     <Container>
       <Row>
         <Col sm={4}>
@@ -38,7 +39,7 @@ const AttendanceRecords = React.memo(() => {
         </Col>
       </Row>
     </Container>
-  );
+  ):<Navigate to="/"/>;
 });
 
 export default AttendanceRecords;
