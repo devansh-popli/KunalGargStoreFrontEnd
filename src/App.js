@@ -9,7 +9,7 @@ import NewLedgerAccountForm from "./pages/NewLedgerAccountForm";
 import StockItemMenu from "./pages/StockItemMenu";
 import Footer from "./components/Footer";
 import ViewStockItemMenu from "./pages/ViewStockItemMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
 import SpinnerComponent from "./components/SpinnerComponents";
@@ -61,6 +61,15 @@ function App() {
       return Promise.reject(error);
     }
   );
+  useEffect(()=>{
+    if (window.location.pathname === "/") {
+      console.log(window.location.pathname+"inside if")
+      document.getElementById('theme-color-meta').setAttribute('content', 'RGB(250, 249, 248)');
+    } else {
+      console.log(window.location.pathname+"inside else")
+      document.getElementById('theme-color-meta').setAttribute('content', 'white');
+    }
+  }, [window.location.pathname]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const toggleDrawer = () => {
@@ -69,8 +78,8 @@ function App() {
   const [toggle, setToggle] = useState(true);
   return (
     <>
-      <UserContextProvider>
         <BrowserRouter>
+      <UserContextProvider>
           <div className={toggle?"dashboard":"dashboard-active"}>
             <ToastContainer draggable transition={Zoom} position="top-right" theme="colored" />
             <Sidebar toggle={toggle} setToggle={setToggle} />
@@ -78,7 +87,7 @@ function App() {
               <NavbarComponent setToggle={setToggle} />
               {loading && <SpinnerComponent />}
               <Routes>
-                <Route path="" element={<Login />} />
+                <Route path="/*" element={<Login />} />
                 <Route path="/home" element={<Home />} />
                 <Route
                   path="/new-ledger-account-form"
@@ -124,8 +133,8 @@ function App() {
 
           {/* </PersistentDrawerLeft> */}
           {/* <Footer /> */}
-        </BrowserRouter>
       </UserContextProvider>
+        </BrowserRouter>
     </>
   );
 }

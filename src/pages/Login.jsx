@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container, Form, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -51,8 +51,8 @@ function Login() {
           <h3 className="my-5 fw-bold">SHOPEASE</h3>
         </Container>
         <Card
-          className="shadow  w-25 mb-5 jsc"
-          style={{ border: "0px", borderRadius: "5px" }}
+          className="shadow w-30 mb-5 jsc"
+          style={{ border: "0px", borderRadius: "10px" }}
         >
           <Container>
             <Container className="text-center mt-4 mb-2">

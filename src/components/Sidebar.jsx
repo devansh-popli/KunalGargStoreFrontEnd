@@ -51,8 +51,8 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
           onClick={() => setToggle(false)}
         />
       )}
-      <div className="d-flex justify-content-center align-items-center ">
-        <img src="../../download.png" width={56} alt="" />
+      <div className="d-flex alignment justify-content-center align-items-center ">
+        <img className="" src="../../download.png" width={56} alt="" />
         <h5 className="mx-2">SHOPEASE</h5>
       </div>
       {userContext.isLogin && (
