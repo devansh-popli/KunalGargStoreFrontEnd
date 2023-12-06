@@ -364,7 +364,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
       </div>
 
       <TableContainer>
-        <Table>
+        <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Date</TableCell>

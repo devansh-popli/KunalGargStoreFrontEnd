@@ -238,7 +238,7 @@ const ViewLedgerAccount=React.memo(()=> {
       <h4 className="fw-bold">Ledger Directory</h4>
       <Paper className="w-100">
         <TableContainer sx={{ maxHeight: 540 }}>
-          <Table stickyHeader aria-label="sticky table">
+          <Table stickyHeader  size="small" aria-label="a dense table">
             <TableHead>
             
               <TableRow>
@@ -274,7 +274,7 @@ const ViewLedgerAccount=React.memo(()=> {
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ top: 77, minWidth: column.minWidth }}
+                    style={{ top: 50, minWidth: column.minWidth }}
                   >
                     {column.label}
                   </TableCell>

@@ -152,7 +152,7 @@ const EmployeeDirectory = React.memo(() => {
     <Container className="mt-3">
       <h4 className="fw-bold">Employee Directory</h4>
       <TableContainer component={Paper}>
-        <Table>
+        <Table  size="small" aria-label="a dense table">
           <TableHead>
             <TextField
               label="Search"
@@ -219,8 +219,8 @@ const EmployeeDirectory = React.memo(() => {
                 <TableRow key={employee.id}>
                   <TableCell className="text-center">
                     <img
-                      height={60}
-                      width={60}
+                      height={30}
+                      width={30}
                       className="rounded-circle"
                       style={{ backgroundPosition: "contain" }}
                       src={imageSrc && imageSrc[employee.id]? imageSrc[employee.id] : getEmployeeImageByTypeURl(

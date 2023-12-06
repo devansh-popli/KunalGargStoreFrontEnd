@@ -21,71 +21,71 @@ const columns = [
   {
     id: "accountCode",
     label: "Account Code",
-    minWidth: 100,
-    align: "right",
+    minWidth: 130,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "name",
     label: "Name",
     minWidth: 100,
-    align: "right",
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "openingStockQty",
     label: "Op. Stock in Qty",
-    minWidth: 100,
-    align: "right",
+    minWidth: 140,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "openingStockRs",
     label: "Op. Stock in Rs",
-    minWidth: 100,
-    align: "right",
+    minWidth: 140,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "groupName",
     label: "Group Name",
-    minWidth: 100,
-    align: "right",
+    minWidth: 130,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "purchaseRate",
     label: "Purchase Rate",
-    minWidth: 100,
-    align: "right",
+    minWidth: 130,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "mrp",
     label: "MRP",
-    minWidth: 100,
-    align: "right",
+    minWidth: 70,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "saleRate",
     label: "Sale Rate",
     minWidth: 100,
-    align: "right",
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "totalGST",
     label: "Total GST @",
-    minWidth: 100,
-    align: "right",
+    minWidth: 120,
+    align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "actions",
     label: "Actions",
-    minWidth: 100,
-    align: "right",
+    minWidth: 70,
+    align: "left",
     // format: (value) => value.toFixed(2),
   },
   // {
@@ -293,7 +293,7 @@ const ViewStockItemMenu=React.memo(()=>
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
-      <Paper className="w-90">
+      <Paper className="w-100">
         <TableContainer sx={{ maxHeight: 440 }}>
           <TextField
             className="w-50 m-4"
@@ -307,7 +307,7 @@ const ViewStockItemMenu=React.memo(()=>
             // value={searchTerm}
             // onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Table stickyHeader aria-label="sticky table">
+          <Table stickyHeader  size="small" aria-label="a dense table">
             <TableHead>
               {/* <TableRow>
               <TableCell align="center" colSpan={3}>
