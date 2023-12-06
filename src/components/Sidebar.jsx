@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import cns from "classnames";
 
 // Components
@@ -11,8 +11,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import ImportContactsIcon from '@mui/icons-material/ImportContacts';
-import ContactsIcon from '@mui/icons-material/Contacts';
+import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+import ContactsIcon from "@mui/icons-material/Contacts";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -33,10 +33,39 @@ import { Link, NavLink } from "react-router-dom";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import TableViewIcon from "@mui/icons-material/TableView";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { AccessTime, AccountBalance, AccountBalanceWallet, AddBox, AddBoxOutlined, Event, Group, ListAlt, PersonAdd, ShoppingBag, ShoppingBasket } from "@mui/icons-material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import {
+  AccessTime,
+  AccountBalance,
+  AccountBalanceWallet,
+  AddBox,
+  AddBoxOutlined,
+  Event,
+  Group,
+  ListAlt,
+  PersonAdd,
+  ShoppingBag,
+  ShoppingBasket,
+} from "@mui/icons-material";
 const Sidebar = React.memo(({ toggle, setToggle }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  const handleResize = () => {
+    // Update isMobile state based on the width of the viewport
+    setIsMobile(window.innerWidth <= 768); // Adjust the threshold as needed
+  };
+  useEffect(() => {
+   
+
+    // Initial check and set up event listener
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const userContext = useContext(UserContext);
   return (
     <div
@@ -44,7 +73,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
     >
       {/* <Logo bookColor={'#fff'} /> */}
       {/* <Menu /> */}
-      { toggle && (
+      {toggle && (
         <ArrowBackIosIcon
           fontSize="large"
           className={s.sidebarCloseBtn}
@@ -57,7 +86,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
       </div>
       {userContext.isLogin && (
         <List className="mt-3">
-          <ListItem disablePadding as={NavLink} to={"/new-ledger-account-form"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={NavLink} to={"/new-ledger-account-form"}>
             <ListItemButton>
               <ListItemIcon>
                 {<AccountBalanceWallet className="text-white" />}
@@ -74,7 +103,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding as={NavLink} to={"/view-ledger-details"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={NavLink} to={"/view-ledger-details"}>
             <ListItemButton>
               <ListItemIcon>
                 {<AccountBalanceWallet className="text-white" />}
@@ -91,7 +120,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding as={NavLink} to={"/stock-item-menu"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={NavLink} to={"/stock-item-menu"}>
             <ListItemButton>
               <ListItemIcon>
                 {<ShoppingBag className="text-white" />}
@@ -108,11 +137,9 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               {/* <h6 className='fw-medium--dark' style={{color:"white"}}>Stock Item Menu</h6> */}
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding as={Link} to={"/view-stock-item-menu"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/view-stock-item-menu"}>
             <ListItemButton>
-              <ListItemIcon>
-                {<ListAlt className="text-white" />}
-              </ListItemIcon>
+              <ListItemIcon>{<ListAlt className="text-white" />}</ListItemIcon>
               <ListItemText
                 primary={"View Stock Item Menu"}
                 primaryTypographyProps={{
@@ -124,7 +151,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding as={Link} to={"/employee-form"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/employee-form"}>
             <ListItemButton>
               <ListItemIcon>
                 {<PersonAdd className="text-white" />}
@@ -140,11 +167,9 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding as={Link} to={"/employee-directory"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/employee-directory"}>
             <ListItemButton>
-              <ListItemIcon>
-                {<Group className="text-white" />}
-              </ListItemIcon>
+              <ListItemIcon>{<Group className="text-white" />}</ListItemIcon>
               <ListItemText
                 primary={"Employee Directory"}
                 primaryTypographyProps={{
@@ -156,7 +181,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding as={Link} to={"/attendance-tracker"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/attendance-tracker"}>
             <ListItemButton>
               <ListItemIcon>
                 {<AccessTime className="text-white" />}
@@ -172,11 +197,9 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding as={Link} to={"/attendance-records"}>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/attendance-records"}>
             <ListItemButton>
-              <ListItemIcon>
-                {<Event className="text-white" />}
-              </ListItemIcon>
+              <ListItemIcon>{<Event className="text-white" />}</ListItemIcon>
               <ListItemText
                 primary={"Attendance Records"}
                 primaryTypographyProps={{
