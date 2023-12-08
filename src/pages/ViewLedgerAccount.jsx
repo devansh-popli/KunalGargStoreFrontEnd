@@ -2,7 +2,7 @@
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
@@ -18,6 +18,7 @@ import {
   IconButton,
   TextField,
   Tooltip,
+  styled,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
@@ -190,7 +191,24 @@ const ViewLedgerAccount=React.memo(()=> {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#205072",
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -236,8 +254,8 @@ const ViewLedgerAccount=React.memo(()=> {
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Ledger Directory</h4>
-      <Paper className="w-100">
-        <TableContainer sx={{ maxHeight: 540 }}>
+      <Paper className="w-100" style={{borderRadius: '10px' }}>
+        <TableContainer sx={{ maxHeight: 540,borderRadius: '10px' }}>
           <Table stickyHeader  size="small" aria-label="a dense table">
             <TableHead>
             
@@ -269,15 +287,15 @@ const ViewLedgerAccount=React.memo(()=> {
                 
               </TableCell>
             </TableRow> */}
-              <TableRow>
+              <TableRow >
                 {columns.map((column) => (
-                  <TableCell
+                  <StyledTableCell
                     key={column.id}
                     align={column.align}
                     style={{ top: 50, minWidth: column.minWidth }}
                   >
                     {column.label}
-                  </TableCell>
+                  </StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -331,7 +349,7 @@ const ViewLedgerAccount=React.memo(()=> {
                             </TableCell>
                           </>
                         ) : (
-                          <TableCell
+                          <StyledTableCell
                             key={column.id}
                             align={column.align}
                             style={{ cursor: "pointer" }}
@@ -340,7 +358,7 @@ const ViewLedgerAccount=React.memo(()=> {
                             {column.format && typeof value === "number"
                               ? column.format(value)
                               : value}
-                          </TableCell>
+                          </StyledTableCell>
                         );
                       })}
                     </TableRow>

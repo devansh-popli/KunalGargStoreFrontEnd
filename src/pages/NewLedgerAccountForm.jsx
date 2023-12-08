@@ -361,7 +361,7 @@ const NewLedgerAccountForm=React.memo(()=> {
     <Container className="mt-3">
       {/* {JSON.stringify(formData)} */}
       <div className="d-flex justify-content-center">
-        <Paper elevation={3} style={{ padding: "20px" }} className="w-60">
+        <Paper elevation={3} style={{ padding: "20px" ,borderRadius: '10px' }} className="w-60">
           <h4 className="fw-bold mb-3">New Ledger Account Form</h4>
           <form onSubmit={handleSubmit}>
             <Grid

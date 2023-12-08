@@ -640,7 +640,7 @@ const EmployeeEnrollmentForm=React.memo(({
         <Paper
           elevation={3}
           style={
-            paper ? { padding: "20px" } : { margin: "0px", padding: "10px" }
+            paper ? { padding: "20px",borderRadius: '10px'  } : { margin: "0px", padding: "10px" ,borderRadius: '10px' }
           }
           className={paper ? "w-custom" : "w-100"}
         >

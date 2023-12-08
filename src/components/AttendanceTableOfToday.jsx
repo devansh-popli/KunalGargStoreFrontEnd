@@ -20,6 +20,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  styled,
+  tableCellClasses,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -227,10 +229,19 @@ const AttendanceTableOfToday = ({ employeeList }) => {
       console.log(e);
     }
   };
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#205072",
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
   return (
     <Paper
       elevation={3}
-      style={{ padding: "20px", margin: "0px 20px" }}
+      style={{ padding: "20px", margin: "0px 20px",borderRadius: '10px'  }}
       className="mt-1"
     >
       <h5 className="fw-bold">Attendance Records</h5>
@@ -367,11 +378,11 @@ const AttendanceTableOfToday = ({ employeeList }) => {
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>Employee Name</TableCell>
-              <TableCell>Time In</TableCell>
-              <TableCell>Time Out</TableCell>
-              <TableCell>Actions</TableCell>
+              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Employee Name</StyledTableCell>
+              <StyledTableCell>Time In</StyledTableCell>
+              <StyledTableCell>Time Out</StyledTableCell>
+              <StyledTableCell>Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

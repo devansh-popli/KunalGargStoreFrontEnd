@@ -12,6 +12,8 @@ import {
   InputAdornment,
   IconButton,
   Container,
+  styled,
+  tableCellClasses,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -148,10 +150,19 @@ const EmployeeDirectory = React.memo(() => {
   const [imageSrc, setImageSrc] = useState(null);
   const userContext = useContext(UserContext);
   const imageRef = useRef(null);
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#205072",
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Employee Directory</h4>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} style={{borderRadius: '10px' }}>
         <Table  size="small" aria-label="a dense table">
           <TableHead>
             <TextField
@@ -172,44 +183,44 @@ const EmployeeDirectory = React.memo(() => {
               }}
             />
             <TableRow>
-              <TableCell style={{ width: "8%" }} className="text-center">Profile Image</TableCell>
-              <TableCell
+              <StyledTableCell style={{ width: "8%" }} className="text-center">Profile Image</StyledTableCell>
+              <StyledTableCell
                 onClick={() => handleSort("empCode")}
                 style={{ width: "15%", cursor: "pointer" }}
               >
                 Emp Code {getSortIcon("empCode")}
-              </TableCell>
-              <TableCell
+              </StyledTableCell>
+              <StyledTableCell
                 onClick={() => handleSort("firstName")}
                 style={{ width: "15%", cursor: "pointer" }}
               >
                 Emp Name {getSortIcon("firstName")}
-              </TableCell>
-              <TableCell
+              </StyledTableCell>
+              <StyledTableCell
                 onClick={() => handleSort("department")}
                 style={{ width: "15%", cursor: "pointer" }}
               >
                 Department {getSortIcon("department")}
-              </TableCell>
-              <TableCell
+              </StyledTableCell>
+              <StyledTableCell
                 onClick={() => handleSort("designation")}
                 style={{ width: "15%", cursor: "pointer" }}
               >
                 Designation {getSortIcon("designation")}
-              </TableCell>
-              <TableCell
+              </StyledTableCell>
+              <StyledTableCell
                 onClick={() => handleSort("phoneNumber")}
                 style={{ width: "15%", cursor: "pointer" }}
               >
                 Mobile No {getSortIcon("phoneNumber")}
-              </TableCell>
-              <TableCell
+              </StyledTableCell>
+              <StyledTableCell
                 onClick={() => handleSort("cityTehsil")}
                 style={{ width: "15%", cursor: "pointer" }}
               >
                 Location {getSortIcon("cityTehsil")}
-              </TableCell>
-              <TableCell style={{ width: "15%" }}>Actions</TableCell>
+              </StyledTableCell>
+              <StyledTableCell style={{ width: "15%" }}>Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -964,7 +964,7 @@ const StockItemMenu = React.memo(() => {
           ))}
         </Stepper>
         <div className="d-flex justify-content-center mt-3">
-          <Paper elevation={3} style={{ padding: "20px" }} className="w-custom">
+          <Paper elevation={3} style={{ padding: "20px" ,borderRadius: '10px' }} className="w-custom">
             <Typography>{getStepContent(activeStep)}</Typography>
             <Container className="mt-3">
               <Grid container spacing={2}>

@@ -183,7 +183,7 @@ const [searchTerm,setSearchTerm]=useState("")
   return (
     <Paper
       elevation={3}
-      style={{ padding: "20px", maxWidth: "400px", margin: "auto" }} className="mt-1"
+      style={{ padding: "20px", maxWidth: "400px", margin: "auto",borderRadius: '10px'  }} className="mt-1"
     >
       <h5 className="fw-bold">Attendance</h5>
       {/* <FormControl fullWidth style={{ marginBottom: "20px" }}>

@@ -2,7 +2,7 @@
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
@@ -12,7 +12,7 @@ import { privateAxios } from "../services/AxiosService";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 // import { Container } from "react-bootstrap";
-import { Button, Container, IconButton, TextField, Tooltip } from "@mui/material";
+import { Button, Container, IconButton, TextField, Tooltip, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
 import { toast } from "react-toastify";
@@ -289,11 +289,20 @@ const ViewStockItemMenu=React.memo(()=>
         console.error("Error fetching stock items:", error);
       });
   };
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#205072",
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
   const userContext = React.useContext(UserContext);
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
-      <Paper className="w-100">
+      <Paper className="w-100" style={{borderRadius: '10px' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <TextField
             className="w-50 m-4"
@@ -322,13 +331,13 @@ const ViewStockItemMenu=React.memo(()=>
             </TableRow> */}
               <TableRow>
                 {columns.map((column) => (
-                  <TableCell
+                  <StyledTableCell
                     key={column.id}
                     align={column.align}
                     style={{ top: 57, minWidth: column.minWidth }}
                   >
                     {column.label}
-                  </TableCell>
+                  </StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>
