@@ -17,6 +17,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
 import { toast } from "react-toastify";
 import { Delete } from "@mui/icons-material";
+import useJwtChecker from "../helper/useJwtChecker";
 const columns = [
   {
     id: "accountCode",
@@ -298,6 +299,7 @@ const ViewStockItemMenu=React.memo(()=>
       fontSize: 14,
     },
   }));
+  const jetChecker=useJwtChecker()
   const userContext = React.useContext(UserContext);
   return userContext.isLogin ? (
     <Container className="mt-3">

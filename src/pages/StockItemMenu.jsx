@@ -40,6 +40,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material";
+import useJwtChecker from "../helper/useJwtChecker";
 // const useStyles = makeStyles((theme) => ({
 //   activeStepLabel: {
 //     color: '#78C2AD', // Set the desired color for active step label
@@ -214,6 +215,7 @@ const StockItemMenu = React.memo(() => {
   //   // Fetch the last account code from the backend
 
   // }, []);
+  const jetChecker=useJwtChecker()
   const [formData, setFormData] = useState({
     accountCode: "",
     name: "",

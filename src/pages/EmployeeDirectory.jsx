@@ -36,6 +36,7 @@ import { Navigate } from "react-router-dom";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import SortIcon from "@mui/icons-material/Sort";
+import useJwtChecker from "../helper/useJwtChecker";
 const EmployeeDirectory = React.memo(() => {
   const [searchTerm, setSearchTerm] = useState("");
   const [employees, setEmployees] = useState([]);
@@ -159,6 +160,7 @@ const EmployeeDirectory = React.memo(() => {
       fontSize: 14,
     },
   }));
+  const jetChecker=useJwtChecker()
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Employee Directory</h4>

@@ -14,6 +14,7 @@ import { Navigate } from "react-router-dom";
 import AttendanceChart from "../components/AttendanceChart";
 import WorkHoursPieChart from "../components/WorkHoursPieChart";
 import AttendanceTableOfToday from "../components/AttendanceTableOfToday";
+import useJwtChecker from "../helper/useJwtChecker";
 const AttendanceTracker=React.memo(()=> {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -27,6 +28,7 @@ const AttendanceTracker=React.memo(()=> {
         console.log("Internal Server Error while getting employees");
       });
   }, []);
+  const jetChecker=useJwtChecker()
   const markAttendance = () => {
     // Your logic to mark attendance goes here
     // You may want to send a request to your server to record attendance

@@ -10,6 +10,7 @@ import { UserContext } from "../context/UserContext";
 import AttendanceChartMonthly from "../components/AttendanceChartMonthly";
 import AttendanceChart1 from "../components/AttendanceChart1";
 import { Navigate } from "react-router-dom";
+import useJwtChecker from "../helper/useJwtChecker";
 
 const AttendanceRecords = React.memo(() => {
   const [employees, setEmployees] = useState([]);
@@ -22,6 +23,7 @@ const AttendanceRecords = React.memo(() => {
         toast.error("ERROR occured file fetching employees");
       });
   }, []);
+  const jetChecker=useJwtChecker()
   const userContext = useContext(UserContext);
   return userContext.isLogin?(
     <Container>
