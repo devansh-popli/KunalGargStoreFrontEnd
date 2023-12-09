@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { getJwtToken } from "../auth/HelperAuth";
 import isJwtTokenExpired from "jwt-check-expiry";
 import { toast } from "react-toastify";
-import SweetAlert2 from "react-sweetalert2";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { UserContext } from "../context/UserContext";
