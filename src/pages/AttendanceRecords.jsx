@@ -33,11 +33,11 @@ const AttendanceRecords = React.memo(() => {
           <AttendanceChart data={userContext.monthlyAttendance} />
         </Col>
         <Col sm={8}>
-          <Container className="mt-3 w-100">
+          <div className="mt-3 w-100">
             <AttendanceTable employeeList={employees} />
             
             {/* <AttendanceChartMonthly /> */}
-          </Container>
+          </div>
         </Col>
       </Row>
     </Container>

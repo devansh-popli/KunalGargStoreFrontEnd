@@ -13,13 +13,14 @@ import {
   TableSortLabel,
 } from "@mui/material";
 import { Container } from "react-bootstrap";
+import { getVisitorImageByTypeURl } from "../services/VisitorService";
 
 const VisitorTable = ({ visitors, handleTimeout }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
-  const [orderBy, setOrderBy] = useState("name");
-  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("timeIn");
+  const [order, setOrder] = useState("desc");
 
   const handleSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -48,9 +49,19 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
 
   const sortedVisitors = filteredVisitors.sort((a, b) => {
     const isAsc = order === "asc";
-    return isAsc
-      ? a[orderBy].localeCompare(b[orderBy])
-      : b[orderBy].localeCompare(a[orderBy]);
+    if (orderBy === "timeIn") {
+        // Convert time strings to Date objects
+        const timeInA = new Date(a[orderBy]);
+        const timeInB = new Date(b[orderBy]);
+        
+        // Compare the Date objects
+        return isAsc ? timeInA - timeInB : timeInB - timeInA;
+      } else {
+        // Default comparison for other columns
+        return isAsc
+          ? a[orderBy].localeCompare(b[orderBy])
+          : b[orderBy].localeCompare(a[orderBy]);
+      }
   });
 
   const slicedVisitors = sortedVisitors.slice(
@@ -69,8 +80,8 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <TableContainer>
-        <Table style={{minHeight:"380px"}} className="position-relative">
-          <TableHead>
+        <Table stickyHeader size="small" aria-label="a dense table"  style={visitors.length==0?{minHeight:"380px"}:{}}>
+          <TableHead className="position-relative">
             <TableRow>
               <TableCell>Photo</TableCell>
               <TableCell>
@@ -78,6 +89,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "name"}
                   direction={orderBy === "name" ? order : "asc"}
                   onClick={() => handleSort("name")}
+                  style={{width:"100px"}}
                 >
                   Name
                 </TableSortLabel>
@@ -96,6 +108,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "phone"}
                   direction={orderBy === "phone" ? order : "asc"}
                   onClick={() => handleSort("phone")}
+                  style={{width:"130px"}}
                 >
                   Phone Number
                 </TableSortLabel>
@@ -105,6 +118,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "address"}
                   direction={orderBy === "address" ? order : "asc"}
                   onClick={() => handleSort("address")}
+                style={{width:"200px"}}
                 >
                   Address
                 </TableSortLabel>
@@ -123,6 +137,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "timeIn"}
                   direction={orderBy === "timeIn" ? order : "asc"}
                   onClick={() => handleSort("timeIn")}
+                  style={{width:"100px"}}
                 >
                   Time In
                 </TableSortLabel>
@@ -132,6 +147,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "timeOut"}
                   direction={orderBy === "timeOut" ? order : "asc"}
                   onClick={() => handleSort("timeOut")}
+                  style={{width:"100px"}}
                 >
                   Time Out
                 </TableSortLabel>
@@ -155,29 +171,31 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   {/* Display the photo or a placeholder */}
                   {visitor.photo ? (
                     <img
-                      src={URL.createObjectURL(visitor.photo)}
+                    className="rounded-circle"
+                      src={getVisitorImageByTypeURl(visitor.id)}
                       alt="Visitor"
-                      style={{ maxWidth: "50px", maxHeight: "50px" }}
+                      style={{ width: "40px", height: "40px" }}
                     />
                   ) : (
-                    "No Photo"
+                    <img src="../../user.jpg" className="rounded-circle" height={40} width={40} alt="" />
                   )}
                 </TableCell>
 
                 <TableCell>{visitor.name}</TableCell>
-                <TableCell>{visitor.fatherName}</TableCell>
+                {/* <TableCell>{visitor.fatherName}</TableCell> */}
                 <TableCell>{visitor.phone}</TableCell>
                 <TableCell>{visitor.address}</TableCell>
                 <TableCell>{visitor.purpose}</TableCell>
-                <TableCell>{visitor.timeIn}</TableCell>
-                <TableCell>{visitor.timeOut}</TableCell>
-                <TableCell>{visitor.aadharNumber}</TableCell>
+                <TableCell>{new Date(visitor.timeIn).toLocaleString()}</TableCell>
+                <TableCell>{new Date(visitor.timeOut).toLocaleString()}</TableCell>
+                {/* <TableCell>{visitor.aadharNumber}</TableCell> */}
                 <TableCell>
                   {!visitor.timeOut && (
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={() => handleTimeout(visitor.name)}
+                      size="small"
+                      onClick={() => handleTimeout(visitor)}
                     >
                       Timeout
                     </Button>

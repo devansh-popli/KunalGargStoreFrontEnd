@@ -216,6 +216,7 @@ const ViewLedgerAccount=React.memo(()=> {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  
   const [stockItems, setStockItems] = useState([]);
   const [oldStockItems, setOldStockItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -258,10 +259,10 @@ const ViewLedgerAccount=React.memo(()=> {
   return userContext.isLogin  ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Ledger Directory</h4>
-      <Paper className="w-100" style={{borderRadius: '10px' }}>
+      <Paper  style={{borderRadius: '10px' }}>
         <TableContainer sx={{ borderRadius: '10px' }}>
-          <Table stickyHeader  size="small" aria-label="a dense table" className="position-relative" style={stockItems?.content?.length<=0?{minHeight:"420px"}:{}}>
-            <TableHead>
+          <Table stickyHeader  size="small" aria-label="a dense table" className="d-flex justify-content-center flex-column " style={stockItems?.content?.length<=0?{minHeight:"420px"}:{}}>
+            <TableHead >
             
               <TableRow>
                 <TableCell align="left" colSpan={12}>
@@ -370,9 +371,12 @@ const ViewLedgerAccount=React.memo(()=> {
                 })}
             </TableBody>
             {stockItems?.content?.length <= 0 && (
-                <Container >
-                <img src="../../noData.svg" width={250} height={250} alt="" className="position-absolute" style={{ top: '60%', left: '35%', transform: 'translate(-50%, -50%)' }} />
-                </Container>
+               <div  className="d-flex text-center justify-content-center">
+                 <img
+                   src="../../noData.svg"
+                   alt=""
+                 />
+               </div>
             )}
           </Table>
         </TableContainer>

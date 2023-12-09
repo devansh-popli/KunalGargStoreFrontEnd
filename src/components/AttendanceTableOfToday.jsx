@@ -244,7 +244,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
   return (
     <Paper
       elevation={3}
-      style={{ padding: "20px", margin: "0px 20px", borderRadius: "10px" }}
+      style={{ padding: "10px", borderRadius: "10px" }}
       className="mt-1"
     >
       <h5 className="fw-bold">Attendance Records</h5>
@@ -378,8 +378,8 @@ const AttendanceTableOfToday = ({ employeeList }) => {
       </div>
 
       <TableContainer>
-        <Table size="small" aria-label="a dense table" className="position-relative" style={{minHeight:"380px"}}>
-          <TableHead>
+        <Table size="small" aria-label="a dense table" className="position-relative" style={attendanceData?.length<=0?{minHeight:"360px"}:{}}>
+          <TableHead  className="position-relative" >
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
               <StyledTableCell>Employee Name</StyledTableCell>

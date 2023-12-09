@@ -324,8 +324,8 @@ const ViewStockItemMenu = React.memo(() => {
             // value={searchTerm}
             // onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Table stickyHeader size="small" aria-label="a dense table" className="position-relative" style={stockItems?.content?.length <= 0 ?{minHeight:"340px"}:{}}>
-            <TableHead>
+          <Table stickyHeader size="small" aria-label="a dense table"  style={stockItems?.content?.length <= 0 ?{minHeight:"340px"}:{}}>
+            <TableHead className="position-relative">
               {/* <TableRow>
               <TableCell align="center" colSpan={3}>
                 
@@ -419,8 +419,8 @@ const ViewStockItemMenu = React.memo(() => {
               <Container>
                 <img
                   src="../../noData.svg"
-                  width={250}
-                  height={250}
+                  width={220}
+                  height={220}
                   alt=""
                   className="position-absolute"
                   style={{

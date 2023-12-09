@@ -219,8 +219,8 @@ const AttendanceTable = React.memo(({ employeeList }) => {
   }));
   return (
     <Paper
-      elevation={3}
-      style={{ padding: "20px", margin: "0px 20px", borderRadius: "10px" }}
+      // elevation={3}
+      style={{ padding: "7px", borderRadius: "10px" }}
       className="mt-1"
     >
       <h5 className="fw-bold">Attendance Records</h5>
@@ -295,6 +295,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
 
         <Button
           className="mx-2"
+          size="small"
           variant="outlined"
           onClick={searchAttendanceData}
         >
@@ -302,6 +303,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
           <SearchIcon /> Search
         </Button>
         <Button
+        size="small"
           onClick={() => {
             setSelectedEmployee("");
             setSelectedMonth("");
@@ -358,8 +360,8 @@ const AttendanceTable = React.memo(({ employeeList }) => {
       </div>
 
       <TableContainer>
-        <Table size="small" aria-label="a dense table" className="position-relative" style={{minHeight:'380px'}}>
-          <TableHead>
+        <Table size="small" aria-label="a dense table"className="position-relative" style={{minHeight:'380px'}}>
+          <TableHead className="position-relative">
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
               <StyledTableCell>Employee Name</StyledTableCell>
