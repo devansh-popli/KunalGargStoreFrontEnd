@@ -39,6 +39,7 @@ import EmployeeDirectory from "./pages/EmployeeDirectory";
 import AttendanceTracker from "./pages/AttendanceTracker";
 import AttendanceRecords from "./pages/AttendanceRecords";
 import ViewLedgerAccount from "./pages/ViewLedgerAccount";
+import VisitorForm from "./pages/VisitorForm";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -125,6 +126,10 @@ function App() {
                 <Route
                   path="/attendance-records"
                   element={<AttendanceRecords />}
+                />
+                <Route
+                  path="/visitor-entry"
+                  element={<VisitorForm />}
                 />
             
               </Routes>

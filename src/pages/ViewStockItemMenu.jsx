@@ -12,7 +12,14 @@ import { privateAxios } from "../services/AxiosService";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 // import { Container } from "react-bootstrap";
-import { Button, Container, IconButton, TextField, Tooltip, styled } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  TextField,
+  Tooltip,
+  styled,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
 import { toast } from "react-toastify";
@@ -71,14 +78,14 @@ const columns = [
   {
     id: "saleRate",
     label: "Sale Rate",
-    minWidth: 100,
+    minWidth: 95,
     align: "left",
     format: (value) => value.toFixed(2),
   },
   {
     id: "totalGST",
     label: "Total GST @",
-    minWidth: 120,
+    minWidth: 115,
     align: "left",
     format: (value) => value.toFixed(2),
   },
@@ -240,8 +247,7 @@ const rows = [
   createData("Brazil", "BR", 210147125, 8515767),
 ];
 
-const ViewStockItemMenu=React.memo(()=> 
-{
+const ViewStockItemMenu = React.memo(() => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -299,12 +305,12 @@ const ViewStockItemMenu=React.memo(()=>
       fontSize: 14,
     },
   }));
-  const jetChecker=useJwtChecker()
+  const jetChecker = useJwtChecker();
   const userContext = React.useContext(UserContext);
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
-      <Paper className="w-100" style={{borderRadius: '10px' }}>
+      <Paper className="w-100" style={{ borderRadius: "10px" }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <TextField
             className="w-50 m-4"
@@ -318,7 +324,7 @@ const ViewStockItemMenu=React.memo(()=>
             // value={searchTerm}
             // onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Table stickyHeader  size="small" aria-label="a dense table">
+          <Table stickyHeader size="small" aria-label="a dense table" className="position-relative" style={stockItems?.content?.length <= 0 ?{minHeight:"340px"}:{}}>
             <TableHead>
               {/* <TableRow>
               <TableCell align="center" colSpan={3}>
@@ -360,28 +366,33 @@ const ViewStockItemMenu=React.memo(()=>
                           <>
                             <TableCell key={column.id} align={column.align}>
                               <Tooltip title="Delete" color="dark">
-                                <IconButton onClick={() => {
-                                  deleteStockItemMenuById(row.stockItemId)
-                                    .then((data) => {
-                                      toast.success(
-                                        "Record Deleted Successfully!!"
-                                      );
-                                      let newStockItems =
-                                        stockItems.content.filter(
-                                          (item) =>
-                                            item.stockItemId != row.stockItemId
+                                <IconButton
+                                  onClick={() => {
+                                    deleteStockItemMenuById(row.stockItemId)
+                                      .then((data) => {
+                                        toast.success(
+                                          "Record Deleted Successfully!!"
                                         );
-                                      setStockItems({
-                                        ...stockItems,
-                                        content: newStockItems,
-                                        totalElements:
-                                          stockItems.totalElements - 1,
+                                        let newStockItems =
+                                          stockItems.content.filter(
+                                            (item) =>
+                                              item.stockItemId !=
+                                              row.stockItemId
+                                          );
+                                        setStockItems({
+                                          ...stockItems,
+                                          content: newStockItems,
+                                          totalElements:
+                                            stockItems.totalElements - 1,
+                                        });
+                                      })
+                                      .catch((error) => {
+                                        toast.error(
+                                          "Error while deleted Record"
+                                        );
                                       });
-                                    })
-                                    .catch((error) => {
-                                      toast.error("Error while deleted Record");
-                                    });
-                                }}>
+                                  }}
+                                >
                                   <Delete color="error" />
                                 </IconButton>
                               </Tooltip>
@@ -404,12 +415,28 @@ const ViewStockItemMenu=React.memo(()=>
                   );
                 })}
             </TableBody>
+            {stockItems?.content?.length <= 0 && (
+              <Container>
+                <img
+                  src="../../noData.svg"
+                  width={250}
+                  height={250}
+                  alt=""
+                  className="position-absolute"
+                  style={{
+                    top: "60%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              </Container>
+            )}
           </Table>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={stockItems?.content?.length}
+          count={stockItems?.content?.length || 0}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -565,4 +592,4 @@ const ViewStockItemMenu=React.memo(()=>
 //     ):<Navigate to="/"/>
 // };
 
-export default ViewStockItemMenu
+export default ViewStockItemMenu;

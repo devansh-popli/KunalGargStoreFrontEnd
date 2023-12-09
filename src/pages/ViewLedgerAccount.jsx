@@ -259,8 +259,8 @@ const ViewLedgerAccount=React.memo(()=> {
     <Container className="mt-3">
       <h4 className="fw-bold">Ledger Directory</h4>
       <Paper className="w-100" style={{borderRadius: '10px' }}>
-        <TableContainer sx={{ maxHeight: 540,borderRadius: '10px' }}>
-          <Table stickyHeader  size="small" aria-label="a dense table">
+        <TableContainer sx={{ borderRadius: '10px' }}>
+          <Table stickyHeader  size="small" aria-label="a dense table" className="position-relative" style={stockItems?.content?.length<=0?{minHeight:"420px"}:{}}>
             <TableHead>
             
               <TableRow>
@@ -369,6 +369,11 @@ const ViewLedgerAccount=React.memo(()=> {
                   );
                 })}
             </TableBody>
+            {stockItems?.content?.length <= 0 && (
+                <Container >
+                <img src="../../noData.svg" width={250} height={250} alt="" className="position-absolute" style={{ top: '60%', left: '35%', transform: 'translate(-50%, -50%)' }} />
+                </Container>
+            )}
           </Table>
         </TableContainer>
         <TablePagination

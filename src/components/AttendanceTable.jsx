@@ -22,6 +22,7 @@ import {
   ListItemText,
   styled,
   tableCellClasses,
+  Container,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -219,7 +220,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
   return (
     <Paper
       elevation={3}
-      style={{ padding: "20px", margin: "0px 20px" ,borderRadius: '10px' }}
+      style={{ padding: "20px", margin: "0px 20px", borderRadius: "10px" }}
       className="mt-1"
     >
       <h5 className="fw-bold">Attendance Records</h5>
@@ -357,7 +358,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
       </div>
 
       <TableContainer>
-        <Table size="small" aria-label="a dense table">
+        <Table size="small" aria-label="a dense table" className="position-relative" style={{minHeight:'380px'}}>
           <TableHead>
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
@@ -393,6 +394,22 @@ const AttendanceTable = React.memo(({ employeeList }) => {
                 </TableRow>
               ))}
           </TableBody>
+          {attendanceData.length <= 0 && (
+          <Container>
+            <img
+              src="../../noData.svg"
+              width={250}
+              height={250}
+              alt=""
+              className="position-absolute"
+              style={{
+                top: "60%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </Container>
+)}
         </Table>
       </TableContainer>
 

@@ -139,9 +139,7 @@ const EmployeeDirectory = React.memo(() => {
     }
   };
   const handleImageError = (id) => {
-    console.error(
-      "Error loading image for employee with ID:"+id
-    );
+    console.error("Error loading image for employee with ID:" + id);
 
     // Set a default/static image when there's an error
     if (imageRef.current) {
@@ -160,12 +158,12 @@ const EmployeeDirectory = React.memo(() => {
       fontSize: 14,
     },
   }));
-  const jetChecker=useJwtChecker()
+  const jetChecker = useJwtChecker();
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Employee Directory</h4>
-      <TableContainer component={Paper} style={{borderRadius: '10px' }}>
-        <Table  size="small" aria-label="a dense table">
+      <TableContainer component={Paper} style={{ borderRadius: "10px" }}>
+        <Table size="small" aria-label="a dense table" className="position-relative" style={{minHeight:"380px"}}>
           <TableHead>
             <TextField
               label="Search"
@@ -185,7 +183,9 @@ const EmployeeDirectory = React.memo(() => {
               }}
             />
             <TableRow>
-              <StyledTableCell style={{ width: "8%" }} className="text-center">Profile Image</StyledTableCell>
+              <StyledTableCell style={{ width: "8%" }} className="text-center">
+                Profile Image
+              </StyledTableCell>
               <StyledTableCell
                 onClick={() => handleSort("empCode")}
                 style={{ width: "15%", cursor: "pointer" }}
@@ -222,7 +222,9 @@ const EmployeeDirectory = React.memo(() => {
               >
                 Location {getSortIcon("cityTehsil")}
               </StyledTableCell>
-              <StyledTableCell style={{ width: "15%" }}>Actions</StyledTableCell>
+              <StyledTableCell style={{ width: "15%" }}>
+                Actions
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -236,14 +238,18 @@ const EmployeeDirectory = React.memo(() => {
                       width={30}
                       className="rounded-circle"
                       style={{ backgroundPosition: "contain" }}
-                      src={imageSrc && imageSrc[employee.id]? imageSrc[employee.id] : getEmployeeImageByTypeURl(
-                        employee?.id,
-                        "profileImage"
-                      )}
+                      src={
+                        imageSrc && imageSrc[employee.id]
+                          ? imageSrc[employee.id]
+                          : getEmployeeImageByTypeURl(
+                              employee?.id,
+                              "profileImage"
+                            )
+                      }
                       onError={() => {
                         setImageSrc((prevMap) => ({
                           ...prevMap,
-                          [employee.id]: '../../user.jpg',
+                          [employee.id]: "../../user.jpg",
                         }));
                       }}
                       alt=""
@@ -292,6 +298,22 @@ const EmployeeDirectory = React.memo(() => {
                 </TableRow>
               ))}
           </TableBody>
+          {sortedEmployees().length <= 0 && (
+            <Container>
+              <img
+                src="../../noData.svg"
+                width={250}
+                height={250}
+                alt=""
+                className="position-absolute"
+                style={{
+                  top: "60%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </Container>
+          )}
         </Table>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}

@@ -44,6 +44,7 @@ import {
   Event,
   Group,
   ListAlt,
+  Person,
   PersonAdd,
   ShoppingBag,
   ShoppingBasket,
@@ -202,6 +203,20 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>{<Event className="text-white" />}</ListItemIcon>
               <ListItemText
                 primary={"Attendance Records"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/visitor-entry"}>
+            <ListItemButton>
+              <ListItemIcon>{<Person className="text-white" />}</ListItemIcon>
+              <ListItemText
+                primary={"Visitor Form"}
                 primaryTypographyProps={{
                   color: "white",
                   fontWeight: "medium",
