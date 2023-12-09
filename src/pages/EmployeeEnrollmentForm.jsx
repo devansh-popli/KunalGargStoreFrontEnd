@@ -939,6 +939,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
             label="Phone Number"
             name="phoneNumber"
             fullWidth
+            type="number"
             value={formData.phoneNumber}
             onChange={handleInputChange}
             error={Boolean(errors.phoneNumber)}
@@ -965,6 +966,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
               label="Additional Phone Number"
               name="additionalPhoneNumber"
               fullWidth
+              type="number"
               value={formData.additionalPhoneNumber}
               onChange={handleInputChange}
               error={Boolean(errors.additionalPhoneNumber)}

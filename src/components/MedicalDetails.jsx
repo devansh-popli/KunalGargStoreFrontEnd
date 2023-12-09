@@ -101,6 +101,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
             label="Doctor's Phone No"
             name="doctorPhone"
             fullWidth
+            type='number'
             value={formData.doctorPhone}
             onChange={handleInputChange}
             error={Boolean(errors.doctorPhone)}

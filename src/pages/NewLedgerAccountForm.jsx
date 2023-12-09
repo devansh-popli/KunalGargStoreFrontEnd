@@ -641,6 +641,7 @@ const NewLedgerAccountForm=React.memo(()=> {
                   label="Contact No."
                   variant="standard"
                   name="contactNo"
+                  type="number"
                   value={formData.contactNo}
                   onChange={handleChange}
                   fullWidth
