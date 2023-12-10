@@ -359,8 +359,8 @@ const AttendanceTable = React.memo(({ employeeList }) => {
         )}
       </div>
 
-      <TableContainer style={{minHeight:'480px'}}>
-        <Table size="small" aria-label="a dense table"className="position-relative" style={{minHeight:'380px'}}>
+      <TableContainer className="position-relative" style={{minHeight:'480px'}}>
+        <Table size="small" aria-label="a dense table" style={{minHeight:'380px'}}>
           <TableHead className="position-relative">
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
