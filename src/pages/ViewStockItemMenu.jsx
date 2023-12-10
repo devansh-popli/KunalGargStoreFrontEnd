@@ -311,7 +311,7 @@ const ViewStockItemMenu = React.memo(() => {
     <Container className="mt-3">
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
       <Paper className="w-100" style={{ borderRadius: "10px" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 440 }} className="position-relative" style={stockItems?.content?.length<=0?{minHeight:'380px'}:{}}>
           <TextField
             className="w-50 m-4"
             label={
