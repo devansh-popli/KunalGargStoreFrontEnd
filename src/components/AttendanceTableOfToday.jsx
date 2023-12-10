@@ -377,8 +377,8 @@ const AttendanceTableOfToday = ({ employeeList }) => {
         )}
       </div>
 
-      <TableContainer>
-        <Table size="small" aria-label="a dense table" className="position-relative" style={attendanceData?.length<=0?{minHeight:"360px"}:{}}>
+      <TableContainer className="position-relative" style={attendanceData?.length<=0?{minHeight:'380px'}:{}}>
+        <Table size="small" aria-label="a dense table" style={attendanceData?.length<=0?{minHeight:"360px"}:{}}>
           <TableHead  className="position-relative" >
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
