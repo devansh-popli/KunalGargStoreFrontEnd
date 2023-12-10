@@ -360,7 +360,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
       </div>
 
       <TableContainer>
-        <Table size="small" aria-label="a dense table"className="position-relative" style={{minHeight:'380px'}}>
+        <Table size="small" aria-label="a dense table"className="position-relative" style={{minHeight:'1000px'}}>
           <TableHead className="position-relative">
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
