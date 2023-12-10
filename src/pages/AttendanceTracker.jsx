@@ -50,12 +50,12 @@ const AttendanceTracker=React.memo(()=> {
   return userContext.isLogin ? (
     <Container className="mt-2">
       <Row>
-        <Col md={4}>
+        <Col sm={12} md={4}>
         <AttendanceForm employees={employees} />
         <AttendanceChart  data={userContext.monthlyAttendance}/>
         <WorkHoursPieChart data={userContext.dailyData}/>
         </Col>
-        <Col md={8}>
+        <Col sm={12} md={8}>
         <AttendanceTableOfToday attendanceRecords={attendanceRecords} employeeList={employees} />
         </Col>
       </Row>
