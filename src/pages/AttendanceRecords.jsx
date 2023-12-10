@@ -1,9 +1,8 @@
-import { Container } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import AttendanceTable from "../components/AttendanceTable";
 import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
 import { toast } from "react-toastify";
-import { Col, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import AttendanceChart from "../components/AttendanceChart";
 import WorkHoursPieChart from "../components/WorkHoursPieChart";
 import { UserContext } from "../context/UserContext";
