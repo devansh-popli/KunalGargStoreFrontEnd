@@ -45,7 +45,7 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import { Delete } from "@mui/icons-material";
 import useJwtChecker from "../helper/useJwtChecker";
-const NewLedgerAccountForm=React.memo(()=> {
+const NewLedgerAccountForm = React.memo(() => {
   const [nextAccountCode, setNextAccountCode] = useState("");
 
   const { id } = useParams();
@@ -358,12 +358,16 @@ const NewLedgerAccountForm=React.memo(()=> {
   };
   const stateList = states;
   const userContext = useContext(UserContext);
-  const jetChecker=useJwtChecker()
+  const jetChecker = useJwtChecker();
   return userContext.isLogin ? (
     <Container className="mt-3">
       {/* {JSON.stringify(formData)} */}
       <div className="d-flex justify-content-center">
-        <Paper elevation={3} style={{ padding: "20px" ,borderRadius: '10px' }} className="w-60">
+        <Paper
+          elevation={3}
+          style={{ padding: "20px", borderRadius: "10px" }}
+          className="w-60"
+        >
           <h4 className="fw-bold mb-3">New Ledger Account Form</h4>
           <form onSubmit={handleSubmit}>
             <Grid
@@ -375,7 +379,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="A/c Code"
-                  variant="standard"
                   name="accountCode"
                   disabled
                   value={formData.accountCode}
@@ -399,7 +402,7 @@ const NewLedgerAccountForm=React.memo(()=> {
                   value={formData.approved}
                   onChange={handleOptionChange}
                   style={{ display: "flex", flexDirection: "row" }}
-                error={Boolean(formData.approvedError)}
+                  error={Boolean(formData.approvedError)}
                 >
                   <FormControlLabel
                     value="supplier"
@@ -424,7 +427,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem mx-1" item xs={8} sm={4}>
                 <TextField
                   label="GST No."
-                  variant="standard"
                   name="gstNo"
                   value={formData.gstNo}
                   onChange={(event) => {
@@ -453,7 +455,7 @@ const NewLedgerAccountForm=React.memo(()=> {
                   color="primary"
                   size="small"
                   style={{ fontSize: "11px" }}
-                  className="mt-4 mx-2 custom-btn"
+                  className="mt-1 mx-2 "
                   onClick={() => fetchGSTINDetails()}
                 >
                   fetch gst Details
@@ -472,7 +474,7 @@ const NewLedgerAccountForm=React.memo(()=> {
             <Grid className="myGridItem" item xs={8} className="mx-1" sm={6}>
               <TextField
                 label="GST No."
-                variant="standard"
+                
                 name="gstNo"
                 value={formData.gstNo}
                 onChange={(event) => {
@@ -510,7 +512,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="A/c Name"
-                  variant="standard"
                   name="accountName"
                   value={formData.accountName}
                   onChange={(event) => {
@@ -536,7 +537,7 @@ const NewLedgerAccountForm=React.memo(()=> {
                 )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <FormControl fullWidth variant="standard">
+                <FormControl fullWidth>
                   <InputLabel>MSMED Status</InputLabel>
                   <Select
                     name="msmedStatus"
@@ -561,7 +562,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Opening Balance"
-                  variant="standard"
                   name="openingBalance"
                   value={formData.openingBalance}
                   onChange={handleChange}
@@ -570,22 +570,21 @@ const NewLedgerAccountForm=React.memo(()=> {
                 />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={12}>
-                <FormControl fullWidth>
                   <TextField
                     label="Address"
-                    variant="standard" // Set the desired variant here
+                    // Set the desired variant here
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    // multiline
-                    // rows={3}
+                    multiline
+                    fullWidth
+                    rows={2}
+                    maxRows={4}
                   />
-                </FormControl>
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="City"
-                  variant="standard"
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
@@ -602,7 +601,7 @@ const NewLedgerAccountForm=React.memo(()=> {
                 )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <FormControl fullWidth variant="standard">
+                <FormControl fullWidth>
                   <InputLabel>State</InputLabel>
                   <Select
                     name="state"
@@ -627,7 +626,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Pincode"
-                  variant="standard"
                   name="pincode"
                   value={formData.pincode}
                   onChange={handleChange}
@@ -639,7 +637,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Contact No."
-                  variant="standard"
                   name="contactNo"
                   type="number"
                   value={formData.contactNo}
@@ -659,7 +656,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Email Id/Area"
-                  variant="standard"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -669,7 +665,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="PAN"
-                  variant="standard"
                   name="pan"
                   value={formData.pan}
                   onChange={handleChange}
@@ -677,9 +672,8 @@ const NewLedgerAccountForm=React.memo(()=> {
                 />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-              <FormLabel component="legend" >Turnover Below 10 Cr</FormLabel>
+                <FormLabel component="legend">Turnover Below 10 Cr</FormLabel>
                 <RadioGroup
-                  
                   aria-label="turnoverBelow10Cr"
                   name="turnoverBelow10Cr"
                   value={formData.turnoverBelow10Cr}
@@ -699,7 +693,7 @@ const NewLedgerAccountForm=React.memo(()=> {
                 </RadioGroup>
               </Grid>
               {/* <Grid className="myGridItem" item xs={12} sm={6}>
-                <FormControl fullWidth variant="standard">
+                <FormControl fullWidth >
                   <InputLabel>Whether Approved</InputLabel>
                   <Select
                     name="approved"
@@ -714,7 +708,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Account Num"
-                  variant="standard"
                   name="accountNum"
                   value={formData.accountNum}
                   onChange={handleChange}
@@ -724,7 +717,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Account Name"
-                  variant="standard"
                   name="accountNameBank"
                   value={formData.accountNameBank}
                   onChange={handleChange}
@@ -734,7 +726,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="IFSC"
-                  variant="standard"
                   name="ifsc"
                   value={formData.ifsc}
                   onChange={handleChange}
@@ -744,7 +735,6 @@ const NewLedgerAccountForm=React.memo(()=> {
               <Grid className="myGridItem" item xs={12} sm={4}>
                 <TextField
                   label="Branch"
-                  variant="standard"
                   name="branch"
                   value={formData.branch}
                   onChange={handleChange}
@@ -871,6 +861,6 @@ const NewLedgerAccountForm=React.memo(()=> {
   ) : (
     <Navigate to={"/"} />
   );
-})
+});
 
 export default NewLedgerAccountForm;

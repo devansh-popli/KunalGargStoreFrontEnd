@@ -40,6 +40,8 @@ import AttendanceTracker from "./pages/AttendanceTracker";
 import AttendanceRecords from "./pages/AttendanceRecords";
 import ViewLedgerAccount from "./pages/ViewLedgerAccount";
 import VisitorForm from "./pages/VisitorForm";
+import VehiceEntryForm1 from "./pages/VehiceEntryForm1";
+import VehicleEntryForm2 from "./pages/VehicleEntryForm2";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -130,6 +132,15 @@ function App() {
                 <Route
                   path="/visitor-entry"
                   element={<VisitorForm />}
+                />
+            
+                <Route
+                  path="/vehicle-entry"
+                  element={<VehiceEntryForm1 />}
+                />
+                <Route
+                  path="/vehicle-entry-form"
+                  element={<VehicleEntryForm2 />}
                 />
             
               </Routes>

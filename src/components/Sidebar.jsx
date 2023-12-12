@@ -41,6 +41,8 @@ import {
   AccountBalanceWallet,
   AddBox,
   AddBoxOutlined,
+  DriveEta,
+  DriveFolderUpload,
   Event,
   Group,
   ListAlt,
@@ -217,6 +219,34 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>{<Person className="text-white" />}</ListItemIcon>
               <ListItemText
                 primary={"Visitor Form"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/vehicle-entry"}>
+            <ListItemButton>
+              <ListItemIcon>{<DriveEta className="text-white" />}</ListItemIcon>
+              <ListItemText
+                primary={"Vehicle Entry Form"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/vehicle-entry-form"}>
+            <ListItemButton>
+              <ListItemIcon>{<DriveFolderUpload className="text-white" />}</ListItemIcon>
+              <ListItemText
+                primary={"Vehicle Entry Form 2"}
                 primaryTypographyProps={{
                   color: "white",
                   fontWeight: "medium",
