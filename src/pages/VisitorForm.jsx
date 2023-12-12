@@ -163,7 +163,7 @@ useEffect(()=>{
   return userContext.isLogin ? (
     <Grid container spacing={2} justifyContent="start">
       <Grid item xs={12} md={5}>
-        <Paper elevation={3} style={{ padding: "20px" }} className="ms-3 mt-3">
+        <Paper elevation={3} style={{ padding: "20px",borderRadius:"10px" }} className="ms-3 mt-3">
           <h4 className="fw-bold">Visitor Entry Form</h4>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>

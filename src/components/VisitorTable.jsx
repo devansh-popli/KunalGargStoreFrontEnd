@@ -70,7 +70,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
   );
 
   return (
-    <Paper className="mt-3 me-2" >
+    <Paper className="mt-3 me-2" style={{borderRadius:"10px"}} >
       <TextField
         label="Search"
         variant="outlined"
