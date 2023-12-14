@@ -220,6 +220,9 @@ h6 {
 .w-90{
   width: 90%;
 }
+.w-92{
+  width: 90%;
+}
 .padding2{
   padding: 40px;
 }
@@ -252,11 +255,20 @@ h6 {
   .w-60{
     width: 100% !important;
   }
+  .w-40{
+    width: 40% !important;
+  }
   .w-30{
     width: 100% !important;
   }
+  .w-70{
+    width: 70%;
+  }
   .w-90{
     width: 100%;
+  }
+  .w-92{
+    width: 90%;
   }
   .hide-mobile{
     display: none !important;

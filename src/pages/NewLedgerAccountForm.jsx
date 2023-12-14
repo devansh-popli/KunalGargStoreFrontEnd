@@ -366,10 +366,11 @@ const NewLedgerAccountForm = React.memo(() => {
         <Paper
           elevation={3}
           style={{ padding: "20px", borderRadius: "10px" }}
-          className="w-60"
+          className="w-100"
         >
           <h4 className="fw-bold mb-3">New Ledger Account Form</h4>
-          <form onSubmit={handleSubmit}>
+          <div className="d-flex">
+          <form onSubmit={handleSubmit} className="w-60">
             <Grid
               className="myGridItem"
               container
@@ -855,6 +856,10 @@ const NewLedgerAccountForm = React.memo(() => {
               </Row>
             </Container>
           </form>
+          <div className="w-30 text-center mt-5 ms-5 isDesktop">
+            <img src="../../ledger.jpg" className="w-100" alt="" />
+          </div>      
+          </div>
         </Paper>
       </div>
     </Container>
