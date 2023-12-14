@@ -220,6 +220,9 @@ h6 {
 .w-90{
   width: 90%;
 }
+.padding2{
+  padding: 40px;
+}
 @media (max-width:900px) {
   .isMobile{
     display: block;
