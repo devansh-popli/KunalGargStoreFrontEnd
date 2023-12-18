@@ -19,7 +19,11 @@ import { toast } from "react-toastify";
 import VisitorTable from "../components/VisitorTable";
 import { UserContext } from "../context/UserContext";
 import { Navigate } from "react-router-dom";
-import { getVisitorData, saveVisitorDocumentToBackend, submitVisitorData } from "../services/VisitorService";
+import {
+  getVisitorData,
+  saveVisitorDocumentToBackend,
+  submitVisitorData,
+} from "../services/VisitorService";
 
 const VisitorForm = () => {
   const [formData, setFormData] = useState({
@@ -50,12 +54,12 @@ const VisitorForm = () => {
       photo: file,
     });
   };
-  const [visitors, setVisitors] = useState([])
-useEffect(()=>{
-    getVisitorData().then(data=>{
-        setVisitors(data)
-    })
-},[])
+  const [visitors, setVisitors] = useState([]);
+  useEffect(() => {
+    getVisitorData().then((data) => {
+      setVisitors(data);
+    });
+  }, []);
   const handleSubmit = () => {
     // Validate mandatory fields
     if (
@@ -71,19 +75,42 @@ useEffect(()=>{
 
     // Handle form submission
     // Add your logic to submit the form data
-    submitVisitorData(formData,new Date()).then((res) => {
-      saveVisitorDocumentToBackend(res.id,formData.profileImage).then(data=>{
-        res.photo=data.imageName
-          setVisitors([...visitors,res])
+    submitVisitorData(formData, new Date())
+      .then(async (res) => {
+        if(formData.profileImage)
+        {
+          await saveVisitorDocumentToBackend(res.id, formData.profileImage,"profile")
+          
+          .then((data) => {
+            res.photo = data.imageName;
+            setVisitors([...visitors, res]);
+            // toast.success("Visitor Logged Successfully");
+          })
+          .catch((error) => {
+            setVisitors([...visitors, res]);
+            toast.error("Visitor Logged but error uploading profile Image");
+            return;
+          });
+        }
+      if(formData.aadharImage)
+      {
+
+        await saveVisitorDocumentToBackend(res.id, formData.aadharImage,"aadhar")
+        .then((data) => {
+          res.photo = data.imageName;
+          setVisitors([...visitors, res]);
           toast.success("Visitor Logged Successfully");
-        }).catch(error=>{
-          setVisitors([...visitors,res])
-          toast.error("Visitor Logged but error uploading profile Image")
         })
-    }).catch(data=>{
-        toast.error("Internal Server Error")
-    });
-    // Reset the form after submission
+          .catch((error) => {
+            setVisitors([...visitors, res]);
+            toast.error("Visitor Logged but error uploading aadhar Image");
+          });
+        }
+      })
+      .catch((data) => {
+        toast.error("Internal Server Error");
+      });
+      // Reset the form after submission
     setFormData({
       name: "",
       fatherName: "",
@@ -143,6 +170,51 @@ useEffect(()=>{
       }
     }
   };
+  const handleFileChangeAadhar = (event, type = "file") => {
+    if (type == "cam") {
+      if (showCameraAadhar) {
+        const imageSrc = webcamRefAadhar.current.getScreenshot();
+        setFormData({
+          ...formData,
+          placeholderAadhar: imageSrc,
+          aadharImage: dataURLtoFile(imageSrc, "captured_image.jpg"),
+        });
+        webcamRefAadhar.current.video.srcObject
+          .getTracks()
+          .forEach((track) => track.stop());
+        setShowCameraAadhar(false);
+      } else {
+        setShowCameraAadhar(true);
+      }
+    } else {
+      const localFile = event.target.files[0];
+      if (
+        localFile.type === "image/png" ||
+        localFile.type === "image/jpeg" ||
+        localFile.type === "image/jpg"
+      ) {
+        const reader = new FileReader();
+        reader.onload = (r) => {
+          setFormData(
+            {
+              ...formData,
+              placeholderAadhar: r.target.result,
+              aadharImage: localFile,
+            },
+            () => {}
+          );
+        };
+        reader.readAsDataURL(localFile);
+      } else {
+        toast.error("Invalid File Format only jpeg/jpg/png allowed");
+        setFormData({
+          ...formData,
+          placeholderAadhar: null,
+          aadharImage: null,
+        });
+      }
+    }
+  };
   const dataURLtoFile = (dataURL, filename) => {
     const arr = dataURL.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
@@ -159,11 +231,17 @@ useEffect(()=>{
   const webcamRef = useRef(null);
   const webcamRefSignature = useRef(null);
   const [showCamera, setShowCamera] = useState(false);
+  const webcamRefAadhar = useRef(null);
+  const [showCameraAadhar, setShowCameraAadhar] = useState(false);
   const userContext = useContext(UserContext);
   return userContext.isLogin ? (
     <Grid container spacing={2} justifyContent="start">
       <Grid item xs={12} md={5}>
-        <Paper elevation={3} style={{ padding: "20px",borderRadius:"10px" }} className="ms-3 mt-3">
+        <Paper
+          elevation={3}
+          style={{ padding: "20px", borderRadius: "10px" }}
+          className="ms-3 mt-3"
+        >
           <h4 className="fw-bold">Visitor Entry Form</h4>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
@@ -203,17 +281,17 @@ useEffect(()=>{
             <Grid item xs={12} sm={6}>
               <Form.Group className="mb-2">
                 <Container
-                  className="text-center py-3 border"
+                  className="text-center border py-1"
                   style={{ borderRadius: "10px" }}
                   fluid
                 >
-                  <p className="text-muted">Profile Image Preview</p>
+                  <p className="text-muted m-0 p-0">Profile Image Preview</p>
                   {!showCamera && (
                     <img
                       className="img-fluid rounded"
                       style={{
                         objectFit: "contain",
-                        maxHeight: "200px",
+                        maxHeight: "130px",
                         width: "100%",
                       }}
                       src={formData.placeholderProfile}
@@ -224,8 +302,8 @@ useEffect(()=>{
                   {showCamera && (
                     <div className="text-center">
                       <Webcam
-                        width={160}
-                        height={160}
+                        width={130}
+                        height={130}
                         audio={false}
                         ref={webcamRef}
                         screenshotFormat="image/jpeg"
@@ -281,12 +359,84 @@ useEffect(()=>{
               </Form.Group>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Purpose"
-                fullWidth
-                value={formData.purpose}
-                onChange={(e) => handleInputChange("purpose", e.target.value)}
-              />
+              <Form.Group className="mb-2">
+                <Container
+                  className="text-center py-1 border"
+                  style={{ borderRadius: "10px" }}
+                  fluid
+                >
+                  <p className="text-muted m-0 p-0">Aadhar Preview</p>
+                  {!showCameraAadhar && (
+                    <img
+                      className="img-fluid rounded"
+                      style={{
+                        objectFit: "contain",
+                        maxHeight: "130px",
+                        width: "100%",
+                      }}
+                      src={formData.placeholderAadhar}
+                      alt=""
+                    />
+                  )}
+
+                  {showCameraAadhar && (
+                    <div className="text-center">
+                      <Webcam
+                        width={130}
+                        height={130}
+                        audio={false}
+                        ref={webcamRefAadhar}
+                        screenshotFormat="image/jpeg"
+                      />
+                    </div>
+                  )}
+                </Container>
+                <div>
+                  <Form.Label>Select Aadhar Image</Form.Label>
+                  <div className="d-flex align-items-center">
+                    <div>
+                      <Button
+                        data-for="happyFace"
+                        onClick={(event) =>
+                          handleFileChangeAadhar(event, "cam")
+                        }
+                        variant="outlined"
+                        type="error"
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content="Take Photo"
+                      >
+                        <CameraAlt />
+                      </Button>
+                      <Tooltip
+                        id="my-tooltip"
+                        place="bottom"
+                        type="info"
+                        effect="solid"
+                      />
+                    </div>
+
+                    <span className="mx-2">or</span>
+                    <InputGroup>
+                      <Form.Control
+                        onChange={(event) => handleFileChangeAadhar(event)}
+                        type="file"
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            placeholderAadhar: undefined,
+                            aadharImage: null,
+                          });
+                        }}
+                      >
+                        Clear
+                      </Button>
+                    </InputGroup>
+                  </div>
+                </div>
+              </Form.Group>
             </Grid>
             {/* <Grid item xs={12} sm={6}>
               <Button
@@ -306,18 +456,17 @@ useEffect(()=>{
             </Grid> */}
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Aadhar Card Number"
+                label="Purpose"
                 fullWidth
-                value={formData.aadharNumber}
-                onChange={(e) =>
-                  handleInputChange("aadharNumber", e.target.value)
-                }
+                value={formData.purpose}
+                onChange={(e) => handleInputChange("purpose", e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className="d-flex">
               <Button
                 variant="contained"
                 color="primary"
+                className="me-4"
                 onClick={handleSubmit}
               >
                 Time In
@@ -339,20 +488,18 @@ useEffect(()=>{
       <Grid item xs={12} md={7}>
         <VisitorTable
           visitors={visitors}
-          handleTimeout={(visitor) =>{
-            visitor.timeOut=new Date()
-            submitVisitorData(visitor).then(data=>{
-               let newvis= visitors.map(vis=>{
-                    if(vis.id==data.id)
-                    {
-                        vis=data
-                    }
-                    return vis
-                })
-                setVisitors(newvis)
-            })
-        
-        } }
+          handleTimeout={(visitor) => {
+            visitor.timeOut = new Date();
+            submitVisitorData(visitor).then((data) => {
+              let newvis = visitors.map((vis) => {
+                if (vis.id == data.id) {
+                  vis = data;
+                }
+                return vis;
+              });
+              setVisitors(newvis);
+            });
+          }}
         />
       </Grid>
     </Grid>

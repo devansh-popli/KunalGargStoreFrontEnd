@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Paper,
   Stepper,
@@ -20,19 +20,41 @@ import {
   Input,
 } from "@mui/material";
 import { Form } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import useJwtChecker from "../helper/useJwtChecker";
+import { saveVehicleDocument2ToBackend, saveVehicleEntry2 } from "../services/VehicleEntryService";
+import { toast } from "react-toastify";
 
-const steps = [
-  "Vehicle Information",
-  "Time",
-  "Documents",
-  "Owner Details",
-];
+const steps = ["Vehicle Information", "Time", "Documents", "Owner Details"];
 
 const VehicleEntryForm2 = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep === steps.length - 1) {
+      console.log(vehicleInfo);
+      saveVehicleEntry2(vehicleInfo).then(async(data)=>{
+        if(selectedFiles.driverDocuments.length>0)
+        {
+          await selectedFiles.driverDocuments.map(async(driverDocument)=>{
+            await saveVehicleDocument2ToBackend(data.id,driverDocument,"driver")
+          })
+        }
+      if(selectedFiles.vehicleDocuments.length>0)
+      {
+        await selectedFiles.vehicleDocuments.map(async (vehicleDocument)=>{
+          await saveVehicleDocument2ToBackend(data.id,vehicleDocument,"vehicle")
+        })
+      }
+        toast.success("Data Saved")
+      }).catch(error=>{
+        console.error(error)
+        toast.error("Error occured while saving data")
+      })
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -72,15 +94,15 @@ const VehicleEntryForm2 = () => {
     }));
   };
   const [selectedFiles, setSelectedFiles] = useState({
-    vehicleDocuments: null,
-    driverDocuments: null,
+    vehicleDocuments: [],
+    driverDocuments: [],
   });
 
   const handleFileChange = (type) => (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files;
     setSelectedFiles((prevFiles) => ({
       ...prevFiles,
-      [type]: file,
+      [type]: Array.from(file),
     }));
   };
 
@@ -122,7 +144,8 @@ const VehicleEntryForm2 = () => {
                 </RadioGroup>
               </Grid>
               <Grid item xs={12}>
-                <TextField className="w-60"
+                <TextField
+                  className="w-60"
                   label="Dated"
                   type="date"
                   fullWidth
@@ -175,7 +198,8 @@ const VehicleEntryForm2 = () => {
                 />
               </Grid> */}
               <Grid item xs={12}>
-                <TextField className="w-60"
+                <TextField
+                  className="w-60"
                   label="Vendor Name"
                   fullWidth
                   value={vehicleInfo.vendorName}
@@ -273,7 +297,8 @@ const VehicleEntryForm2 = () => {
         return (
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField className="w-60"
+              <TextField
+                className="w-60"
                 label="Date of Entry"
                 type="date"
                 fullWidth
@@ -285,7 +310,8 @@ const VehicleEntryForm2 = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField className="w-60"
+              <TextField
+                className="w-60"
                 label="Day of Entry"
                 fullWidth
                 value={vehicleInfo.dayOfEntry}
@@ -293,7 +319,8 @@ const VehicleEntryForm2 = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField className="w-60"
+              <TextField
+                className="w-60"
                 label="Time of Entry"
                 type="time"
                 fullWidth
@@ -305,7 +332,8 @@ const VehicleEntryForm2 = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField className="w-60"
+              <TextField
+                className="w-60"
                 label="Date of Exit"
                 type="date"
                 InputLabelProps={{
@@ -317,7 +345,8 @@ const VehicleEntryForm2 = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField className="w-60"
+              <TextField
+                className="w-60"
                 label="Day of Exit"
                 fullWidth
                 value={vehicleInfo.dayOfExit}
@@ -325,7 +354,8 @@ const VehicleEntryForm2 = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField className="w-60"
+              <TextField
+                className="w-60"
                 label="Time of Exit"
                 InputLabelProps={{
                   shrink: true,
@@ -349,15 +379,19 @@ const VehicleEntryForm2 = () => {
                 <Form>
                   <Form.Group controlId="vehicleDocuments">
                     <Form.Label>Vehicle Documents</Form.Label>
-                    <Form.Control className="w-60"
+                    <Form.Control
+                      className="w-60"
                       type="file"
+                      multiple
                       onChange={handleFileChange("vehicleDocuments")}
                     />
                   </Form.Group>
                   <Form.Group controlId="driverDocuments">
                     <Form.Label>Driver Documents</Form.Label>
-                    <Form.Control className="w-60"
+                    <Form.Control
+                      className="w-60"
                       type="file"
+                      multiple
                       onChange={handleFileChange("driverDocuments")}
                     />
                   </Form.Group>
@@ -373,7 +407,8 @@ const VehicleEntryForm2 = () => {
               <h4 className="fw-bold">Owner Details</h4>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={12}>
-                  <TextField className="w-60"
+                  <TextField
+                    className="w-60"
                     label="Phone No."
                     fullWidth
                     value={vehicleInfo.phoneNo}
@@ -381,7 +416,8 @@ const VehicleEntryForm2 = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <TextField className="w-60"
+                  <TextField
+                    className="w-60"
                     label="PAN No."
                     fullWidth
                     value={vehicleInfo.panNo}
@@ -389,19 +425,27 @@ const VehicleEntryForm2 = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <TextField className="w-60"
+                  <TextField
+                    className="w-60"
                     label="Bank Account No."
                     fullWidth
                     value={vehicleInfo.bankAccountNo}
                     onChange={handleFieldChange("bankAccountNo")}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField className="w-60"
-                    label="Brief Description"
-                    fullWidth
+                <Grid item xs={12} display={"flex"} flexDirection={"column"}>
+                  <FormLabel style={{ color: "#797979" }}>
+                    Brief Description
+                  </FormLabel>
+                  <textarea
+                    className="w-60"
+                    style={{
+                      border: "1.6px solid #CBCBCB",
+                      borderRadius: "5px",
+                    }}
                     multiline
                     rows={4}
+                    size="small"
                     value={vehicleInfo.briefDescription}
                     onChange={handleFieldChange("briefDescription")}
                   />
@@ -414,30 +458,36 @@ const VehicleEntryForm2 = () => {
         return null;
     }
   };
-
-  return (
+  const checktoken = useJwtChecker();
+  const userContext = useContext(UserContext);
+  return userContext.isLogin ? (
     <Container className="mt-3">
-      <Grid item xs={12}  className="isMobile">
-          <Paper
+      <Grid item xs={12} className="isMobile">
+        <Paper
           className="padding"
-            elevation={3}
-            style={{  marginBottom: 20, marginTop: 37 }}
-          >
-            <Stepper activeStep={activeStep} orientation="hoizontal">
-              {steps.map((label) => (
-                <Step key={label}>
-                  <StepLabel ><span className="font">{label}</span></StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-          </Paper>
-        </Grid>
+          elevation={3}
+          style={{ marginBottom: 20, marginTop: 37 }}
+        >
+          <Stepper activeStep={activeStep} orientation="hoizontal">
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>
+                  <span className="font">{label}</span>
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Paper>
+      </Grid>
 
       <Grid container spacing={2}>
-        
         <Grid item xs={12} md={8}>
           <h4 className="fw-bold">Vehicle Entry Form</h4>
-          <Paper elevation={3} className="padding2" style={{ marginBottom: 20 }}>
+          <Paper
+            elevation={3}
+            className="padding2"
+            style={{ marginBottom: 20 }}
+          >
             {getStepContent(activeStep)}
             <div style={{ marginTop: 20 }}>
               <Button disabled={activeStep === 0} onClick={handleBack}>
@@ -465,6 +515,8 @@ const VehicleEntryForm2 = () => {
         </Grid>
       </Grid>
     </Container>
+  ) : (
+    <Navigate to={"/"} />
   );
 };
 
