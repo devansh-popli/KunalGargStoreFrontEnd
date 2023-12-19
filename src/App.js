@@ -42,6 +42,8 @@ import ViewLedgerAccount from "./pages/ViewLedgerAccount";
 import VisitorForm from "./pages/VisitorForm";
 import VehiceEntryForm1 from "./pages/VehiceEntryForm1";
 import VehicleEntryForm2 from "./pages/VehicleEntryForm2";
+import VehicleEntryRecords from "./pages/VehicleEntryRecords";
+import VehicleEntryRecordsJCB from "./pages/VehicleEntryRecordsJCB";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -141,6 +143,14 @@ function App() {
                 <Route
                   path="/vehicle-entry-form"
                   element={<VehicleEntryForm2 />}
+                />
+                <Route
+                  path="/vehicle-entry-records"
+                  element={<VehicleEntryRecords />}
+                />
+                <Route
+                  path="/vehicle-entry-data-jcb-hydra"
+                  element={<VehicleEntryRecordsJCB />}
                 />
             
               </Routes>

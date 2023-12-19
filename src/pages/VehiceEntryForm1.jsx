@@ -77,17 +77,23 @@ useEffect(()=>{
 const handleSubmit=()=>{
   console.log( formData.photos)
   saveVehicleEntry(formData).then(res=>{
+    if(formData.photos)
+    {
     Array.from(formData.photos).map(img=>{
-      
-    saveVehicleDocumentToBackend(res.id,img).then(data=>{
-      res.photoUrl=data.imageName
-        toast.success("Data Saved Successfully")
-      }).catch(error=>{
-        toast.error("Vehicle Entry Logged but error uploading profile Image")
+        saveVehicleDocumentToBackend(res.id,img).then(data=>{
+          res.photoUrl=data.imageName
+          toast.success("Data Saved Successfully")
+        }).catch(error=>{
+          toast.error("Vehicle Entry Logged but error uploading profile Image")
+        })
+        
       })
-    
-  })
+    }
+    else{
+      toast.error("Form saved but image not added")
+    }
 }).catch(error=>{
+  console.error(error)
   toast.error("Internal Server Error")
 })
 }

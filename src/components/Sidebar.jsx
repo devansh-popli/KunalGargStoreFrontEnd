@@ -256,6 +256,34 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               />
             </ListItemButton>
           </ListItem>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/vehicle-entry-records"}>
+            <ListItemButton>
+              <ListItemIcon>{<DriveFolderUpload className="text-white" />}</ListItemIcon>
+              <ListItemText
+                primary={"Vehicle Entry Records"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"vehicle-entry-data-jcb-hydra"}>
+            <ListItemButton>
+              <ListItemIcon>{<DriveFolderUpload className="text-white" />}</ListItemIcon>
+              <ListItemText
+                primary={"JCB or HYDRA"}
+                primaryTypographyProps={{
+                  color: "white",
+                  fontWeight: "medium",
+                  variant: "body2",
+                  // fontSize:"20px"
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
       )}
     </div>
