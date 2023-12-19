@@ -97,6 +97,16 @@ const handleSubmit=()=>{
   toast.error("Internal Server Error")
 })
 }
+const handleVehicleTypeToggle = (type) => () => {
+  // const updatedVehicleTypes = formData.selectedOption.includes(type)
+  //   ? formData.selectedOption.filter((t) => t !== type)
+  //   : [...formData.selectedOption, type];
+
+  setFormData((prevData) => ({
+    ...prevData,
+    selectedOption: type,
+  }));
+};
 const checktoken=useJwtChecker()
 const userContext=useContext(UserContext)
   return userContext.isLogin ?(
@@ -194,6 +204,63 @@ const userContext=useContext(UserContext)
             />
           </Grid>
           <Grid item xs={12}>
+                <FormLabel component="legend">Vehicle Type</FormLabel>
+                <Grid container spacing={2}>
+                  <Grid item>
+                    <Button
+                      variant={
+                        formData?.selectedOption?.includes("Jcb")
+                          ? "contained"
+                          : "outlined"
+                      }
+                      color="primary"
+                      size="small"
+                      onClick={handleVehicleTypeToggle("Jcb")}
+                      style={{
+                        color: formData?.selectedOption?.includes("Jcb")
+                          ? "white"
+                          : "#78C2AD",
+                        borderColor: "#78C2AD",
+                        backgroundColor: formData?.selectedOption?.includes("Jcb")
+                          ? "#78C2AD"
+                          : "inherit",
+                        borderRadius: "30px",
+                      }}
+                    >
+                      Jcb
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant={
+                        formData?.selectedOption?.includes("Hydra")
+                          ? "contained"
+                          : "outlined"
+                      }
+                      color="primary"
+                      size="small"
+                      onClick={handleVehicleTypeToggle("Hydra")}
+                      style={{
+                        color: formData?.selectedOption?.includes("Hydra")
+                          ? "white"
+                          : "#78C2AD",
+                        borderColor: "#78C2AD",
+                        borderRadius: "30px",
+                        backgroundColor: formData?.selectedOption?.includes(
+                          "Hydra"
+                        )
+                          ? "#78C2AD"
+                          : "inherit",
+                      }}
+                    >
+                      Hydra
+                    </Button>
+                  </Grid>
+                 
+                  {/* Add more vehicle types as needed */}
+                </Grid>
+              </Grid>
+          {/* <Grid item xs={12}>
             <FormControl fullWidth size="small">
               <InputLabel>Vehicle Type</InputLabel>
               <Select
@@ -204,8 +271,8 @@ const userContext=useContext(UserContext)
                 <MenuItem value="Hydra">Hydra</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
-          {formData.selectedOption === "Hydra" && (
+          </Grid> */}
+          {formData?.selectedOption === "Hydra" && (
             <Grid item xs={12}>
               <FormControl fullWidth size="small">
                 <InputLabel>Hydra Capacity</InputLabel>
