@@ -17,6 +17,7 @@ import {
 import { error } from "highcharts";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Container } from "@mui/material";
 
 const columns = [
   { id: "gatePassNo", label: "Gate Pass No" },
@@ -101,7 +102,7 @@ const VehicleEntryRecordsJCB = () => {
           Add New
         </Button>
       </Stack>
-      <TableContainer>
+      <TableContainer className="position-relative" style={filteredRows.length==0?{minHeight:"380px"}:{}}> 
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -130,6 +131,22 @@ const VehicleEntryRecordsJCB = () => {
                 ))}
               </TableRow>
             ))}
+            {filteredRows.length <= 0 && (
+              <Container>
+                <img
+                  src="../../noData.svg"
+                  width={250}
+                  height={250}
+                  alt=""
+                  className="position-absolute"
+                  style={{
+                    top: "60%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              </Container>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

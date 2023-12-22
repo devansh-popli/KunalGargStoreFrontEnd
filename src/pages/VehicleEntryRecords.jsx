@@ -14,6 +14,7 @@ import { getVehicle2Entry, getVehicleEntry } from "../services/VehicleEntryServi
 import { error } from "highcharts";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Container } from "@mui/material";
 
 const columns = [
   { id: "purpose", label: "Purpose" },
@@ -91,8 +92,8 @@ navigate("/vehicle-entry-form")
           Add New
         </Button>
       </Stack>
-      <TableContainer>
-        <Table size="small">
+      <TableContainer className="position-relative">
+        <Table size="small" style={filteredRows.length==0?{minHeight:"380px"}:{}}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -120,6 +121,22 @@ navigate("/vehicle-entry-form")
                 ))}
               </TableRow>
             ))}
+              {filteredRows.length <= 0 && (
+              <Container>
+                <img
+                  src="../../noData.svg"
+                  width={250}
+                  height={250}
+                  alt=""
+                  className="position-absolute"
+                  style={{
+                    top: "60%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              </Container>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

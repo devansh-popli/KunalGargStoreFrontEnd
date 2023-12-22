@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext, useRef, useCallback } from "react";
 import {
   Stepper,
   Step,
@@ -77,6 +77,7 @@ const EmployeeEnrollmentForm=React.memo(({
   });
   const navigate = useNavigate();
   const setUpdateFormData = (employee) => {
+    console.log("update form data")
     let aadharImage = null;
     let drivingImage = null;
     let panCardImage = null;
@@ -520,6 +521,7 @@ const EmployeeEnrollmentForm=React.memo(({
     return newErrors;
   };
   const validateForm8 = () => {
+    console.log("val form")
     const newErrors = {};
 
     if (!formData.dateOfJoining) {
@@ -573,7 +575,7 @@ const EmployeeEnrollmentForm=React.memo(({
     "id",
     "nominees",
   ];
-  const calculateCompletionPercentage = () => {
+  const calculateCompletionPercentage = useCallback(() => {
     const totalFields = 38;
     const filledFields = Object.values(formData)
       .filter((value, index) => {
@@ -584,7 +586,7 @@ const EmployeeEnrollmentForm=React.memo(({
     console.log(filledFields);
     const percentage = (filledFields / totalFields) * 100;
     if (percentage <= 100) setCompletionPercentage(percentage.toFixed(2)); // Set the completion percentage with two decimal places
-  };
+  },[formData]);
 
   // Call the function to calculate the completion percentage whenever the form data changes
   useEffect(() => {
