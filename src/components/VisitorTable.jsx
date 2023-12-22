@@ -79,9 +79,9 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
         fullWidth
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <TableContainer>
-        <Table stickyHeader size="small" aria-label="a dense table"  style={visitors.length==0?{minHeight:"380px"}:{}}>
-          <TableHead className="position-relative">
+      <TableContainer className="position-relative">
+        <Table  stickyHeader size="small" aria-label="a dense table"  style={visitors.length==0?{minHeight:"380px"}:{}}>
+          <TableHead >
             <TableRow>
               <TableCell>Photo</TableCell>
               <TableCell>
