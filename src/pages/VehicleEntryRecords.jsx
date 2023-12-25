@@ -10,7 +10,10 @@ import TablePagination from "@mui/material/TablePagination";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { getVehicle2Entry, getVehicleEntry } from "../services/VehicleEntryService";
+import {
+  getVehicle2Entry,
+  getVehicleEntry,
+} from "../services/VehicleEntryService";
 import { error } from "highcharts";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -38,12 +41,14 @@ const VehicleEntryRecords = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [data, setData] = useState([]);
   useEffect(() => {
-    getVehicle2Entry().then((data) => {
+    getVehicle2Entry()
+      .then((data) => {
         setData(data);
-    }).catch(error=>{
-        toast.error("Internal Server Error")
-    });
-}, []);
+      })
+      .catch((error) => {
+        toast.error("Internal Server Error");
+      });
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -75,7 +80,7 @@ const VehicleEntryRecords = () => {
       value?.toString()?.toLowerCase()?.includes(searchTerm)
     )
   );
-const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
     <Paper className="m-3">
       <Stack
@@ -86,14 +91,21 @@ const navigate=useNavigate()
         p={2}
       >
         <TextField label="Search" variant="outlined" onChange={handleSearch} />
-        <Button variant="contained" color="primary" onClick={()=>{
-navigate("/vehicle-entry-form")
-        }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            navigate("/vehicle-entry-form");
+          }}
+        >
           Add New
         </Button>
       </Stack>
       <TableContainer className="position-relative">
-        <Table size="small" style={filteredRows.length==0?{minHeight:"380px"}:{}}>
+        <Table
+          size="small"
+          style={filteredRows.length == 0 ? { minHeight: "380px" } : {}}
+        >
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -121,7 +133,7 @@ navigate("/vehicle-entry-form")
                 ))}
               </TableRow>
             ))}
-              {filteredRows.length <= 0 && (
+            {filteredRows.length <= 0 && (
               <Container>
                 <img
                   src="../../noData.svg"

@@ -80,7 +80,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <TableContainer className="position-relative">
-        <Table  stickyHeader size="small" aria-label="a dense table"  style={visitors.length==0?{minHeight:"380px"}:{}}>
+        <Table  stickyHeader size="small" aria-label="a dense table"  style={slicedVisitors.length==0?{minHeight:"380px"}:{}}>
           <TableHead >
             <TableRow>
               <TableCell>Photo</TableCell>
@@ -206,7 +206,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
           </TableBody>
           {slicedVisitors.length <= 0 && (
                 <Container >
-                <img src="../../noData.svg" width={250} height={250} alt="" className="position-absolute" style={{ top: '60%', left: '50%', transform: 'translate(-50%, -50%)' }} />
+                <img src="../../noData2.jpg" width={"250"} height={250} alt="" className="position-absolute" style={{ top: '53%', left: '50%', transform: 'translate(-50%, -50%)',backgroundPosition:"contain" }} />
                 </Container>
             )}
         </Table>
