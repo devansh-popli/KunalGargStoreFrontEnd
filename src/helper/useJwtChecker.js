@@ -15,12 +15,13 @@ const useJwtChecker = () => {
     console.log(token,"tken")
     if (token!=undefined && token && token!='') {
       try{
-
+        // isJwtTokenExpired(token)
         if (isJwtTokenExpired(token)) {
           Swal.fire({
             icon: "error",
             title: "Session Expired",
             text: "Your session has expired. Please log in again.",
+            confirmButtonColor: "#78C2AD",
           });
           context.doLogout();
           navigate("/")

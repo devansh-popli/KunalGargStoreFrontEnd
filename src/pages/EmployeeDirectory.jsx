@@ -162,8 +162,8 @@ const EmployeeDirectory = React.memo(() => {
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Employee Directory</h4>
-      <TableContainer component={Paper} style={{ borderRadius: "10px" }}>
-        <Table size="small" aria-label="a dense table" className="position-relative" style={{minHeight:"380px"}}>
+      <TableContainer className="position-relative" component={Paper} style={{ borderRadius: "10px" }}>
+        <Table size="small" aria-label="a dense table"  style={{minHeight:"380px"}}>
           <TableHead>
             <TextField
               label="Search"

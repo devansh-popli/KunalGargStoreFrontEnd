@@ -27,11 +27,14 @@ const AttendanceRecords = React.memo(() => {
   return userContext.isLogin?(
     <Container>
       <Row>
-        <Col sm={12} md={4}>
+        {
+userContext.monthlyAttendance &&
+          <Col sm={12} md={4}>
         <AttendanceChart1 />
           <AttendanceChart data={userContext.monthlyAttendance} />
         </Col>
-        <Col sm={12} md={8}>
+        }
+        <Col sm={12} md={userContext.monthlyAttendance?8:12}>
           <div className="mt-3 w-100">
             <AttendanceTable employeeList={employees} />
             
