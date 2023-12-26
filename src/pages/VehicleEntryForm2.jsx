@@ -20,47 +20,70 @@ import {
   Input,
 } from "@mui/material";
 import { Form } from "react-bootstrap";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import useJwtChecker from "../helper/useJwtChecker";
-import { saveVehicleDocument2ToBackend, saveVehicleEntry2 } from "../services/VehicleEntryService";
+import {
+  saveVehicleDocument2ToBackend,
+  saveVehicleEntry2,
+} from "../services/VehicleEntryService";
 import { toast } from "react-toastify";
 
 const steps = ["Vehicle Information", "Time", "Documents", "Owner Details"];
 
 const VehicleEntryForm2 = () => {
   const [activeStep, setActiveStep] = useState(0);
-
+  const [errors, setErrors] = useState({});
+const navigate=useNavigate()
   const handleNext = () => {
-    if (activeStep === steps.length - 1) {
-      console.log(vehicleInfo);
-      saveVehicleEntry2(vehicleInfo).then(async(data)=>{
-        if(selectedFiles.driverDocuments.length>0)
-        {
-          await selectedFiles.driverDocuments.map(async(driverDocument)=>{
-            await saveVehicleDocument2ToBackend(data.id,driverDocument,"driver")
+    const isValid = validateForm(activeStep);
+
+    if (activeStep === steps.length - 1 && isValid) {
+      if (activeStep === steps.length - 1) {
+        console.log(vehicleInfo);
+        saveVehicleEntry2(vehicleInfo)
+          .then(async (data) => {
+            if (selectedFiles.driverDocuments.length > 0) {
+              await selectedFiles.driverDocuments.map(
+                async (driverDocument) => {
+                  await saveVehicleDocument2ToBackend(
+                    data.id,
+                    driverDocument,
+                    "driver"
+                  );
+                }
+              );
+            }
+            if (selectedFiles.vehicleDocuments.length > 0) {
+              await selectedFiles.vehicleDocuments.map(
+                async (vehicleDocument) => {
+                  await saveVehicleDocument2ToBackend(
+                    data.id,
+                    vehicleDocument,
+                    "vehicle"
+                  );
+                }
+              );
+            }
+            toast.success("Data Saved");
+            navigate("/vehicle-entry-records")
           })
-        }
-      if(selectedFiles.vehicleDocuments.length>0)
-      {
-        await selectedFiles.vehicleDocuments.map(async (vehicleDocument)=>{
-          await saveVehicleDocument2ToBackend(data.id,vehicleDocument,"vehicle")
-        })
+          .catch((error) => {
+            console.error(error);
+            toast.error("Error occurred while saving data");
+          });
       }
-        toast.success("Data Saved")
-      }).catch(error=>{
-        console.error(error)
-        toast.error("Error occured while saving data")
-      })
-    } else {
+    } else if (isValid) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    } else {
+      toast.error("Please fill in all required fields");
     }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  // State for storing form data
+
   const [vehicleInfo, setVehicleInfo] = useState({
     purpose: "",
     dated: "",
@@ -75,6 +98,10 @@ const VehicleEntryForm2 = () => {
     dateOfExit: "",
     dayOfExit: "",
     timeOfExit: "",
+    phoneNo: "",
+    panNo: "",
+    bankAccountNo: "",
+    briefDescription: "",
   });
 
   const handleFieldChange = (fieldName) => (event) => {
@@ -82,7 +109,13 @@ const VehicleEntryForm2 = () => {
       ...prevData,
       [fieldName]: event.target.value,
     }));
+    // Clear validation error when the user starts typing
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: undefined,
+    }));
   };
+
   const handleVehicleTypeToggle = (type) => () => {
     // const updatedVehicleTypes = vehicleInfo.vehicleType.includes(type)
     //   ? vehicleInfo.vehicleType.filter((t) => t !== type)
@@ -93,6 +126,7 @@ const VehicleEntryForm2 = () => {
       vehicleType: type,
     }));
   };
+
   const [selectedFiles, setSelectedFiles] = useState({
     vehicleDocuments: [],
     driverDocuments: [],
@@ -106,16 +140,92 @@ const VehicleEntryForm2 = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    // Handle file upload logic here
-    console.log("Uploading files:", selectedFiles);
-    // You can implement the logic to upload the files to your server or storage
+  const validateForm = (step) => {
+    const newErrors = {};
+
+    // Validate based on the step
+    switch (step) {
+      case 0:
+        // Validate Vehicle Information
+        if (!vehicleInfo.purpose) {
+          newErrors.purpose = "Purpose is required";
+        }
+        if (!vehicleInfo.dated) {
+          newErrors.dated = "Dated is required";
+        }
+        if (!vehicleInfo.documentType) {
+          newErrors.documentType = "Document Type is required";
+        }
+        if (vehicleInfo.vehicleType.length==0) {
+          newErrors.vehicleType = "Vehicle Type is required";
+        }
+        if (!vehicleInfo.vendorName) {
+          newErrors.vendorName = "Vendor Name is required";
+        }
+        // Add validations for other fields in Vehicle Information
+        break;
+      case 1:
+        // Validate Time
+        if (!vehicleInfo.dateOfEntry) {
+          newErrors.dateOfEntry = "Date of Entry is required";
+        }
+        if (!vehicleInfo.dayOfEntry) {
+          newErrors.dayOfEntry = "Day of Entry is required";
+        }
+        if (!vehicleInfo.timeOfEntry) {
+          newErrors.timeOfEntry = "Time of Entry is required";
+        }
+        if (!vehicleInfo.dateOfExit) {
+          newErrors.dateOfExit = "Date of Exit is required";
+        }
+        if (!vehicleInfo.dayOfExit) {
+          newErrors.dayOfExit = "Day of Exit is required";
+        }
+        if (!vehicleInfo.timeOfExit) {
+          newErrors.timeOfExit = "Time of Exit is required";
+        }
+        // Add validations for other fields in Time
+        break;
+      case 2:
+        // Validate Documents
+        if (selectedFiles.vehicleDocuments.length === 0) {
+          newErrors.vehicleDocuments = "Vehicle Documents are required";
+        }
+        if (selectedFiles.driverDocuments.length === 0) {
+          newErrors.driverDocuments = "Driver Documents are required";
+        }
+        break;
+      case 3:
+        // Validate Owner Details
+        if (!vehicleInfo.phoneNo) {
+          newErrors.phoneNo = "Phone No. is required";
+        }
+        if (!vehicleInfo.panNo) {
+          newErrors.panNo = "PAN No. is required";
+        }
+        if (!vehicleInfo.bankAccountNo) {
+          newErrors.bankAccountNo = "Bank Account No. is required";
+        }
+        if (!vehicleInfo.briefDescription) {
+          newErrors.briefDescription = "Brief Description is required";
+        }
+        break;
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
+
   const getStepContent = (step) => {
+    const hasValidationError = (field) => errors[field] !== undefined;
+
     switch (step) {
       case 0:
         return (
           <Grid container spacing={2}>
+            {/* ... (unchanged code for step 0) */}
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <h5 className="fw-bold">
@@ -142,6 +252,13 @@ const VehicleEntryForm2 = () => {
                     label="Unloading"
                   />
                 </RadioGroup>
+                {errors.purpose && (
+                  <Grid item xs={12}>
+                    <Typography variant="caption" color="error">
+                      {errors.purpose}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -155,6 +272,13 @@ const VehicleEntryForm2 = () => {
                   value={vehicleInfo.dated}
                   onChange={handleFieldChange("dated")}
                 />
+                {errors.dated && (
+                  <Grid item xs={12}>
+                    <Typography variant="caption" color="error">
+                      {errors.dated}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <FormLabel component="legend">Document Type</FormLabel>
@@ -176,6 +300,13 @@ const VehicleEntryForm2 = () => {
                     label="Invoice"
                   />
                 </RadioGroup>
+                {errors.documentType && (
+                  <Grid item xs={12}>
+                    <Typography variant="caption" color="error">
+                      {errors.documentType}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
               {/* <Grid item xs={12}>
                 <FormControl fullWidth>
@@ -205,6 +336,13 @@ const VehicleEntryForm2 = () => {
                   value={vehicleInfo.vendorName}
                   onChange={handleFieldChange("vendorName")}
                 />
+                {errors.vendorName && (
+                  <Grid item xs={12}>
+                    <Typography variant="caption" color="error">
+                      {errors.vendorName}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <FormLabel component="legend">Vehicle Type</FormLabel>
@@ -286,6 +424,13 @@ const VehicleEntryForm2 = () => {
                     </Button>
                   </Grid>
                   {/* Add more vehicle types as needed */}
+                  {errors.vehicleType && (
+                  <Grid item xs={12}>
+                    <Typography variant="caption" color="error">
+                      {errors.vehicleType}
+                    </Typography>
+                  </Grid>
+                )}
                 </Grid>
               </Grid>
             </Grid>
@@ -308,6 +453,13 @@ const VehicleEntryForm2 = () => {
                 value={vehicleInfo.dateOfEntry}
                 onChange={handleFieldChange("dateOfEntry")}
               />
+              {errors.dateOfEntry && (
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="error">
+                    {errors.dateOfEntry}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -317,6 +469,13 @@ const VehicleEntryForm2 = () => {
                 value={vehicleInfo.dayOfEntry}
                 onChange={handleFieldChange("dayOfEntry")}
               />
+              {errors.dayOfEntry && (
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="error">
+                    {errors.dayOfEntry}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -330,6 +489,13 @@ const VehicleEntryForm2 = () => {
                 }}
                 onChange={handleFieldChange("timeOfEntry")}
               />
+              {errors.timeOfEntry && (
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="error">
+                    {errors.timeOfEntry}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -343,6 +509,13 @@ const VehicleEntryForm2 = () => {
                 value={vehicleInfo.dateOfExit}
                 onChange={handleFieldChange("dateOfExit")}
               />
+              {errors.dateOfExit && (
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="error">
+                    {errors.dateOfExit}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -352,6 +525,13 @@ const VehicleEntryForm2 = () => {
                 value={vehicleInfo.dayOfExit}
                 onChange={handleFieldChange("dayOfExit")}
               />
+              {errors.dayOfExit && (
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="error">
+                    {errors.dayOfExit}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -365,9 +545,16 @@ const VehicleEntryForm2 = () => {
                 value={vehicleInfo.timeOfExit}
                 onChange={handleFieldChange("timeOfExit")}
               />
+              {errors.timeOfExit && (
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="error">
+                    {errors.timeOfExit}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
 
-            {/* Add other fields for Documents */}
+            {/* Add similar error checks for other fields in step 1 */}
           </Grid>
         );
       case 2:
@@ -385,6 +572,13 @@ const VehicleEntryForm2 = () => {
                       multiple
                       onChange={handleFileChange("vehicleDocuments")}
                     />
+                    {errors.vehicleDocuments && (
+                      <Grid item xs={12}>
+                        <Typography variant="caption" color="error">
+                          {errors.vehicleDocuments}
+                        </Typography>
+                      </Grid>
+                    )}
                   </Form.Group>
                   <Form.Group controlId="driverDocuments">
                     <Form.Label>Driver Documents</Form.Label>
@@ -394,6 +588,13 @@ const VehicleEntryForm2 = () => {
                       multiple
                       onChange={handleFileChange("driverDocuments")}
                     />
+                    {errors.driverDocuments && (
+                      <Grid item xs={12}>
+                        <Typography variant="caption" color="error">
+                          {errors.driverDocuments}
+                        </Typography>
+                      </Grid>
+                    )}
                   </Form.Group>
                 </Form>
               </div>
@@ -403,6 +604,7 @@ const VehicleEntryForm2 = () => {
       case 3:
         return (
           <Grid container spacing={2}>
+            {/* ... (unchanged code for step 3) */}
             <Grid item xs={12}>
               <h4 className="fw-bold">Owner Details</h4>
               <Grid container spacing={2}>
@@ -414,6 +616,13 @@ const VehicleEntryForm2 = () => {
                     value={vehicleInfo.phoneNo}
                     onChange={handleFieldChange("phoneNo")}
                   />
+                  {errors.phoneNo && (
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="caption" color="error">
+                        {errors.phoneNo}
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid item xs={12} md={12}>
                   <TextField
@@ -423,6 +632,13 @@ const VehicleEntryForm2 = () => {
                     value={vehicleInfo.panNo}
                     onChange={handleFieldChange("panNo")}
                   />
+                  {errors.panNo && (
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="caption" color="error">
+                        {errors.panNo}
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid item xs={12} md={12}>
                   <TextField
@@ -432,6 +648,13 @@ const VehicleEntryForm2 = () => {
                     value={vehicleInfo.bankAccountNo}
                     onChange={handleFieldChange("bankAccountNo")}
                   />
+                  {errors.bankAccountNo && (
+                    <Grid item xs={12} md={12}>
+                      <Typography variant="caption" color="error">
+                        {errors.bankAccountNo}
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
                 <Grid item xs={12} display={"flex"} flexDirection={"column"}>
                   <FormLabel style={{ color: "#797979" }}>
@@ -449,6 +672,18 @@ const VehicleEntryForm2 = () => {
                     value={vehicleInfo.briefDescription}
                     onChange={handleFieldChange("briefDescription")}
                   />
+                  {errors.briefDescription && (
+                    <Grid
+                      item
+                      xs={12}
+                      display={"flex"}
+                      flexDirection={"column"}
+                    >
+                      <Typography variant="caption" color="error">
+                        {errors.briefDescription}
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -458,8 +693,10 @@ const VehicleEntryForm2 = () => {
         return null;
     }
   };
+
   const checktoken = useJwtChecker();
   const userContext = useContext(UserContext);
+
   return userContext.isLogin ? (
     <Container className="mt-3">
       <Grid item xs={12} className="isMobile">
@@ -468,7 +705,7 @@ const VehicleEntryForm2 = () => {
           elevation={3}
           style={{ marginBottom: 20, marginTop: 37 }}
         >
-          <Stepper activeStep={activeStep} orientation="hoizontal">
+          <Stepper activeStep={activeStep} orientation="horizontal">
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>
@@ -505,7 +742,7 @@ const VehicleEntryForm2 = () => {
             style={{ padding: 20, marginBottom: 20, marginTop: 37 }}
           >
             <Stepper activeStep={activeStep} orientation="vertical">
-              {steps.map((label) => (
+              {steps.map((label, index) => (
                 <Step key={label}>
                   <StepLabel>{label}</StepLabel>
                 </Step>
