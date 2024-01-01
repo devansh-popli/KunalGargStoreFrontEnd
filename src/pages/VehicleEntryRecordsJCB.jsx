@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import {
   getVehicle2Entry,
   getVehicleEntry,
+  saveVehicleEntry,
 } from "../services/VehicleEntryService";
 import { error } from "highcharts";
 import { toast } from "react-toastify";
@@ -41,6 +42,30 @@ const VehicleEntryRecordsJCB = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [data, setData] = useState([]);
+  const timeOut=(formData)=>{
+    const currentDate = new Date();
+    // Format the time as "00:31:31"
+    const formattedTime = currentDate.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+    // Format the date as "YYYY-MM-DD"
+    const year = currentDate.getUTCFullYear();
+const month = String(currentDate.getUTCMonth() + 1).padStart(2, '0');
+const day = String(currentDate.getUTCDate()).padStart(2, '0');
+const formattedDate = `${year}-${month}-${day}`;
+    
+    // Set formData.outTime and formData.outDate
+    formData.outTime = formattedTime;
+    formData.outDate = formattedDate;
+    saveVehicleEntry(formData)
+    .then((res) => {
+      toast.success("outtime updated")
+    }).catch(error=>{
+      toast.error("Internal Server Error While Saving")
+    })
+  }
   useEffect(() => {
     getVehicleEntry()
       .then((data) => {
@@ -115,6 +140,7 @@ const VehicleEntryRecordsJCB = () => {
                   {column.label}
                 </TableCell>
               ))}
+          
             </TableRow>
           </TableHead>
           <TableBody>
@@ -129,6 +155,9 @@ const VehicleEntryRecordsJCB = () => {
                 {columns.map((column) => (
                   <TableCell key={column.id}>{row[column.id]}</TableCell>
                 ))}
+                    <TableCell>
+                <Button size="small" onClick={()=>timeOut(row)} variant="outlined"><small>Timeout</small></Button>
+              </TableCell>
               </TableRow>
             ))}
             {filteredRows.length <= 0 && (

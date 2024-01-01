@@ -207,7 +207,7 @@ const VehicleEntryForm1 = () => {
               }}
             />
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <TextField
               label="Out Time"
               type="time"
@@ -226,7 +226,7 @@ const VehicleEntryForm1 = () => {
                 ),
               }}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={6}>
             <TextField
               label="In Date"
@@ -240,7 +240,7 @@ const VehicleEntryForm1 = () => {
               size="small"
             />
           </Grid>
-          <Grid item xs={6}>
+          {/* <Grid item xs={6}>
             <TextField
               label="Out Date"
               type="date"
@@ -252,7 +252,7 @@ const VehicleEntryForm1 = () => {
               }}
               size="small"
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <FormLabel component="legend">Vehicle Type</FormLabel>
             <Grid container spacing={2}>
