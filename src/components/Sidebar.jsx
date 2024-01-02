@@ -41,6 +41,7 @@ import {
   AccountBalanceWallet,
   AddBox,
   AddBoxOutlined,
+  Dashboard,
   DriveEta,
   DriveFolderUpload,
   Event,
@@ -58,8 +59,6 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
     setIsMobile(window.innerWidth <= 768); // Adjust the threshold as needed
   };
   useEffect(() => {
-   
-
     // Initial check and set up event listener
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -70,6 +69,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
     };
   }, []);
   const userContext = useContext(UserContext);
+  const [isActive, setIsActive] = useState(1);
   return (
     <div
       className={cns(s.sidebar, toggle && userContext.isLogin ? s.active : ``)}
@@ -85,16 +85,41 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
       )}
       <div className="d-flex alignment justify-content-center align-items-center ">
         <img className="" src="../../download.png" width={56} alt="" />
-        <h5 className="mx-2">SHOPEASE</h5>
+        <h5 className="mx-2">ShopEase</h5>
       </div>
       {userContext.isLogin && (
         <List className="mt-3">
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={NavLink} to={"/new-ledger-account-form"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(1);
+              console.log(isActive+"isact")
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==1} className={isActive===1 ? "activeList":"active"}
+            to={"/home"}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                {<Dashboard className="text-white" />}
+              </ListItemIcon>
+              <h6 className="text-white m-0 p-0">Dashboard</h6>
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            onClick={() => {
+              setIsActive(2);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==2} className={isActive==1 ? "activeList":""}
+            to={"/new-ledger-account-form"}
+          >
             <ListItemButton>
               <ListItemIcon>
                 {<AccountBalanceWallet className="text-white" />}
               </ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"New Ledger Account Form"}
                 primaryTypographyProps={{
                   color: "white",
@@ -103,15 +128,24 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   // fontStyle:"italic"
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">New Ledger Account Form</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={NavLink} to={"/view-ledger-details"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(3);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==3} className={isActive==1 ? "activeList":""}
+            to={"/view-ledger-details"}
+          >
             <ListItemButton>
               <ListItemIcon>
                 {<AccountBalanceWallet className="text-white" />}
               </ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Ledger Directory"}
                 primaryTypographyProps={{
                   color: "white",
@@ -120,15 +154,24 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   // fontStyle:"italic"
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Ledger Directory</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={NavLink} to={"/stock-item-menu"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(4);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==4} className={isActive==1 ? "activeList":""}
+            to={"/stock-item-menu"}
+          >
             <ListItemButton>
               <ListItemIcon>
                 {<ShoppingBag className="text-white" />}
               </ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Stock Item Menu"}
                 primaryTypographyProps={{
                   color: "white",
@@ -136,14 +179,23 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Stock Item Menu</h6>
               {/* <h6 className='fw-medium--dark' style={{color:"white"}}>Stock Item Menu</h6> */}
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/view-stock-item-menu"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(5);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==5} className={isActive==1 ? "activeList":""}
+            to={"/view-stock-item-menu"}
+          >
             <ListItemButton>
               <ListItemIcon>{<ListAlt className="text-white" />}</ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"View Stock Item Menu"}
                 primaryTypographyProps={{
                   color: "white",
@@ -151,15 +203,24 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">View Stock Item Menu</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/employee-form"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(6);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==6} className={isActive==1 ? "activeList":""}
+            to={"/employee-form"}
+          >
             <ListItemButton>
               <ListItemIcon>
                 {<PersonAdd className="text-white" />}
               </ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Employee Form"}
                 primaryTypographyProps={{
                   color: "white",
@@ -167,13 +228,22 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Employee Form</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/employee-directory"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(7);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==7} className={isActive==1 ? "activeList":""}
+            to={"/employee-directory"}
+          >
             <ListItemButton>
               <ListItemIcon>{<Group className="text-white" />}</ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Employee Directory"}
                 primaryTypographyProps={{
                   color: "white",
@@ -181,15 +251,24 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Employee Directory</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/attendance-tracker"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(8);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==8} className={isActive==1 ? "activeList":""}
+            to={"/attendance-tracker"}
+          >
             <ListItemButton>
               <ListItemIcon>
                 {<AccessTime className="text-white" />}
               </ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Attendance Tracker"}
                 primaryTypographyProps={{
                   color: "white",
@@ -197,13 +276,22 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Attendance Tracker</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/attendance-records"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(9);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==9} className={isActive==1 ? "activeList":""}
+            to={"/attendance-records"}
+          >
             <ListItemButton>
               <ListItemIcon>{<Event className="text-white" />}</ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Attendance Records"}
                 primaryTypographyProps={{
                   color: "white",
@@ -211,13 +299,22 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Attendance Records</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/visitor-entry"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(10);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==10} className={isActive==1 ? "activeList":""}
+            to={"/visitor-entry"}
+          >
             <ListItemButton>
               <ListItemIcon>{<Person className="text-white" />}</ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Visitor Form"}
                 primaryTypographyProps={{
                   color: "white",
@@ -225,13 +322,22 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Visitor Form</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/vehicle-entry"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(11);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==11} className={isActive==1 ? "activeList":""}
+            to={"/vehicle-entry"}
+          >
             <ListItemButton>
               <ListItemIcon>{<DriveEta className="text-white" />}</ListItemIcon>
-              <ListItemText
+              {/* <ListItemText
                 primary={"Vehicle Entry Form"}
                 primaryTypographyProps={{
                   color: "white",
@@ -239,13 +345,24 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">JCB or HYDRA Form</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/vehicle-entry-form"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(12);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==12} className={isActive==1 ? "activeList":""}
+            to={"/vehicle-entry-form"}
+          >
             <ListItemButton>
-              <ListItemIcon>{<DriveFolderUpload className="text-white" />}</ListItemIcon>
-              <ListItemText
+              <ListItemIcon>
+                {<DriveFolderUpload className="text-white" />}
+              </ListItemIcon>
+              {/* <ListItemText
                 primary={"Vehicle Entry Form 2"}
                 primaryTypographyProps={{
                   color: "white",
@@ -253,13 +370,24 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Vehicle Entry Form</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"/vehicle-entry-records"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(13);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==13} className={isActive==1 ? "activeList":""}
+            to={"/vehicle-entry-records"}
+          >
             <ListItemButton>
-              <ListItemIcon>{<DriveFolderUpload className="text-white" />}</ListItemIcon>
-              <ListItemText
+              <ListItemIcon>
+                {<DriveFolderUpload className="text-white" />}
+              </ListItemIcon>
+              {/* <ListItemText
                 primary={"Vehicle Entry Records"}
                 primaryTypographyProps={{
                   color: "white",
@@ -267,13 +395,24 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">Vehicle Entry Records</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem onClick={() => isMobile && setToggle(!toggle)}disablePadding as={Link} to={"vehicle-entry-data-jcb-hydra"}>
+          <ListItem
+            onClick={() => {
+              setIsActive(14);
+              isMobile && setToggle(!toggle);
+            }}
+            disablePadding
+            as={NavLink} selected={isActive ==14} className={isActive==1 ? "activeList":""}
+            to={"vehicle-entry-data-jcb-hydra"}
+          >
             <ListItemButton>
-              <ListItemIcon>{<DriveFolderUpload className="text-white" />}</ListItemIcon>
-              <ListItemText
+              <ListItemIcon>
+                {<DriveFolderUpload className="text-white" />}
+              </ListItemIcon>
+              {/* <ListItemText
                 primary={"JCB or HYDRA"}
                 primaryTypographyProps={{
                   color: "white",
@@ -281,7 +420,8 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                   variant: "body2",
                   // fontSize:"20px"
                 }}
-              />
+              /> */}
+              <h6 className="text-white m-0 p-0">JCB or HYDRA</h6>
             </ListItemButton>
           </ListItem>
         </List>
