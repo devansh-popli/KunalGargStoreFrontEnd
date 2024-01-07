@@ -7,7 +7,7 @@ export const saveEmployeeDataToBackend = (formData) => {
 };
 export const getEmployeeDataFromBackend = (
   pageNum = 0,
-  pageSize = 10,
+  pageSize = 10000,
   sortBy = "firstName",
   sortDir = "asc"
 ) => {
@@ -58,7 +58,7 @@ export const getAttendanceDataFromBackend = (
 
 export const getAttendanceDataFromBackendByMonth = (
   month,
-  year=2023,
+  year=2024,
   pageNum = 0,
   pageSize = 10000,
   sortBy = "attendanceDate",

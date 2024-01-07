@@ -163,7 +163,7 @@ const EmployeeDirectory = React.memo(() => {
     <Container className="mt-3">
       <h4 className="fw-bold">Employee Directory</h4>
       <TableContainer className="position-relative" component={Paper} style={{ borderRadius: "10px" }}>
-        <Table size="small" aria-label="a dense table"  style={{minHeight:"380px"}}>
+        <Table size="small" aria-label="a dense table"  style={sortedEmployees()?.length<=0?{minHeight:'380px'}:{}}>
           <TableHead>
             <TextField
               label="Search"

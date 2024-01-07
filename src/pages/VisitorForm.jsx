@@ -11,6 +11,8 @@ import {
   Tooltip,
   Container,
   TableContainer,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import Webcam from "react-webcam";
 import { Form, InputGroup } from "react-bootstrap";
@@ -77,40 +79,41 @@ const VisitorForm = () => {
     // Add your logic to submit the form data
     submitVisitorData(formData, new Date())
       .then(async (res) => {
-        if(formData.profileImage)
-        {
-          await saveVisitorDocumentToBackend(res.id, formData.profileImage,"profile")
-          
-          .then((data) => {
-            res.photo = data.imageName;
-            setVisitors([...visitors, res]);
-            // toast.success("Visitor Logged Successfully");
-          })
-          .catch((error) => {
-            setVisitors([...visitors, res]);
-            toast.error("Visitor Logged but error uploading profile Image");
-            return;
-          });
+        if (formData.profileImage) {
+          await saveVisitorDocumentToBackend(
+            res.id,
+            formData.profileImage,
+            "profile"
+          )
+            .then((data) => {
+              res.photo = data.imageName;
+              // toast.success("Visitor Logged Successfully");
+            })
+            .catch((error) => {
+              toast.error("Visitor Logged but error uploading profile Image");
+              return;
+            });
         }
-      if(formData.aadharImage)
-      {
-
-        await saveVisitorDocumentToBackend(res.id, formData.aadharImage,"aadhar")
-        .then((data) => {
-          res.photo = data.imageName;
-          setVisitors([...visitors, res]);
-          toast.success("Visitor Logged Successfully");
-        })
-          .catch((error) => {
-            setVisitors([...visitors, res]);
-            toast.error("Visitor Logged but error uploading aadhar Image");
-          });
+        if (formData.aadharImage) {
+          await saveVisitorDocumentToBackend(
+            res.id,
+            formData.aadharImage,
+            "aadhar"
+          )
+            .then((data) => {
+              res.photo = data.imageName;
+              toast.success("Visitor Logged Successfully");
+            })
+            .catch((error) => {
+              toast.error("Visitor Logged but error uploading aadhar Image");
+            });
         }
+        setVisitors([...visitors, res]);
       })
       .catch((data) => {
         toast.error("Internal Server Error");
       });
-      // Reset the form after submission
+    // Reset the form after submission
     setFormData({
       name: "",
       fatherName: "",
@@ -228,6 +231,24 @@ const VisitorForm = () => {
 
     return new File([u8arr], filename, { type: mime });
   };
+  const purposeList = [
+    { id: 1, name: "Meeting" },
+    { id: 2, name: "Interview" },
+    { id: 3, name: "Delivery" },
+    { id: 4, name: "Appointment" },
+    { id: 5, name: "Event" },
+    { id: 6, name: "Training" },
+    { id: 7, name: "Consultation" },
+    { id: 8, name: "Maintenance" },
+    { id: 9, name: "Site Visit" },
+    { id: 10, name: "Vendor Visit" },
+    { id: 11, name: "Customer Support" },
+    { id: 12, name: "Sales Presentation" },
+    { id: 13, name: "Networking" },
+    { id: 14, name: "Workshop" },
+    { id: 15, name: "Audition" },
+    { id: 16, name: "Other" },
+  ];
   const webcamRef = useRef(null);
   const webcamRefSignature = useRef(null);
   const [showCamera, setShowCamera] = useState(false);
@@ -455,12 +476,18 @@ const VisitorForm = () => {
               </Button>
             </Grid> */}
             <Grid item xs={12} sm={6}>
-              <TextField
+              <Select
                 label="Purpose"
                 fullWidth
                 value={formData.purpose}
                 onChange={(e) => handleInputChange("purpose", e.target.value)}
-              />
+              >
+                {purposeList.map((data) => (
+                  <MenuItem key={data.id} value={data.name}>
+                    {data.name}
+                  </MenuItem>
+                ))}
+              </Select>
             </Grid>
             <Grid item xs={12} className="d-flex">
               <Button
