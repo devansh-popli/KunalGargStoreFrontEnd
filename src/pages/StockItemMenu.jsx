@@ -933,7 +933,7 @@ const StockItemMenu = React.memo(() => {
         return "Unknown step";
     }
   };
-  return isUserLoggedIn() ? (
+  return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className={`fw-bold`}>Stock Item Menu</h4>
       <div>

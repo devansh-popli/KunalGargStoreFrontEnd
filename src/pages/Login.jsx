@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Container, Form, Card, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext";
 import { loginUser } from "../services/UserService";
@@ -44,7 +44,7 @@ function Login() {
   };
 
   return (
-    !userContext.isLogin && (
+    !userContext.isLogin ? (
       <Container className="mt-2 jsc" style={{flexDirection:"column"}}>
         <Container className="text-center mt-4 mb-2 d-flex align-items-center justify-content-center">
           <img src="../../download.png" height={60} alt="" />
@@ -100,6 +100,8 @@ function Login() {
         </Card>
         <p>© 2023 Shopease | All Rights Reserved</p>
       </Container>
+    ):(
+      <Navigate to={"/home"}/>
     )
   );
 }
