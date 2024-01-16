@@ -27,7 +27,17 @@ const [day, month, year] = currentDate.split('/').map(Number);
 
 const currentIndianDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(new Date().getHours()+":"+new Date().getMinutes());
+ 
+  useEffect(()=>{
+    const intverl=setInterval(() => {
+      const hours = new Date().getHours().toString().padStart(2, '0');
+      const minutes = new Date().getMinutes().toString().padStart(2, '0');
+      setTime(`${hours}:${minutes}`);
+      
+    }, 1000)
+    return()=>clearInterval(intverl)
+  },[])
   const [searchResults, setSearchResults] = useState([]);
   const [timeOut, setTimeOut] = useState("");
   const userContext = useContext(UserContext);
@@ -37,7 +47,7 @@ const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
     // Replace this with your actual employee data and search logic
     if (searchTermN != "") {
       let filteredEmployees=""
-      if(searchTermN.includes("EMP"))
+      if(searchTermN.includes("EMP") || !isNaN(searchTermN) || searchTermN.includes("emp"))
       {
          filteredEmployees = employees.filter((employee) =>
         employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())

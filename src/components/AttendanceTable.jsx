@@ -38,7 +38,8 @@ import { Delete, TrySharp } from "@mui/icons-material";
 import EmployeeSearchBar from "./EmployeeSearchBar";
 const AttendanceTable = React.memo(({ employeeList }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const currmonth=new Date().getMonth()
+  const [selectedMonth, setSelectedMonth] = useState(currmonth+1);
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -66,7 +67,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
       //   });
     } else {
       setSelectedEmployee("");
-      setSelectedMonth("");
+      setSelectedMonth(currmonth+1)
       // getAttendanceDataOfTodayFromBackend(currentIndianDate)
       //   .then((data) => {
       //     setShowTotalHrs(false);
@@ -86,7 +87,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
     // Replace this with your actual employee data and search logic
     if (searchTermN != "") {
       let filteredEmployees = "";
-      if (searchTermN.includes("EMP")) {
+      if (searchTermN.includes("EMP") || !isNaN(searchTermN) || searchTermN.includes("emp")) {
         filteredEmployees = employeeList.filter((employee) =>
           employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
         );
@@ -306,7 +307,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
         size="small"
           onClick={() => {
             setSelectedEmployee("");
-            setSelectedMonth("");
+            setSelectedMonth(currmonth+1);
             setShowTotalHrs(false);
             setSearchTerm("");
             userContext.setMonthlyAttendance(null);

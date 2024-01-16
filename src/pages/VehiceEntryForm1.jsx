@@ -25,7 +25,7 @@ import useJwtChecker from "../helper/useJwtChecker";
 const VehicleEntryForm1 = () => {
   const [formData, setFormData] = useState({
     gatePassNo: "",
-    site: "",
+    site: "Thuhi Plant",
     inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
     outTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
     inDate: new Date().toISOString().split("T")[0],
@@ -39,6 +39,19 @@ const VehicleEntryForm1 = () => {
     enteredBy: "",
   });
 
+  useEffect(() => {
+    fetchLastAccountCode();
+    const interval = setInterval(() => {
+      setFormData((prev) => ({
+        ...prev,
+        inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
+        outTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
+        inDate: new Date().toISOString().split("T")[0],
+        outDate: new Date().toISOString().split("T")[0],
+      }));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
   const [errors, setErrors] = useState({});
 
   const handleFieldChange = (fieldName, value) => {
@@ -52,15 +65,12 @@ const VehicleEntryForm1 = () => {
     }));
   };
 
-  useEffect(() => {
-    fetchLastAccountCode();
-  }, []);
-
   const handleOptionChange = (event) => {
     handleFieldChange("selectedOption", event.target.value);
   };
 
   const handleHydraCapacityChange = (event) => {
+    
     handleFieldChange("hydraCapacity", event.target.value);
   };
 
@@ -75,9 +85,10 @@ const VehicleEntryForm1 = () => {
       );
       const lastAccountCode = response.data;
       const nextNumericPart = parseInt(lastAccountCode.split("-")[1]) + 1;
-      setFormData({
+      setFormData((prevData) => ({
+        ...prevData,
         gatePassNo: `abc-${String(nextNumericPart).padStart(3, "0")}`,
-      });
+      }));
     } catch (error) {
       toast.error("Error while fetching gate pass no.");
       console.error("Error fetching last account code:", error);
@@ -88,7 +99,6 @@ const VehicleEntryForm1 = () => {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length === 0) {
       saveData();
-      
     } else {
       setErrors(validationErrors);
     }
@@ -121,6 +131,8 @@ const VehicleEntryForm1 = () => {
   };
 
   const saveData = () => {
+    if(formData.hydraCapacity=="manual")
+    formData.hydraCapacity=formData.hydraCapacity2
     saveVehicleEntry(formData)
       .then((res) => {
         if (formData.photos) {
@@ -181,7 +193,13 @@ const VehicleEntryForm1 = () => {
             <TextField
               label="Site"
               fullWidth
+              value={formData.site}
               size="small"
+              InputLabelProps={
+                formData.site.length > 0 && {
+                  shrink: true,
+                }
+              }
               onChange={(e) => handleFieldChange("site", e.target.value)}
               error={!!errors.site}
               helperText={errors.site}
@@ -307,30 +325,46 @@ const VehicleEntryForm1 = () => {
             </Grid>
           </Grid>
           {formData?.selectedOption === "Hydra" && (
-            <Grid item xs={12}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Hydra Capacity</InputLabel>
-                <Select
-                  value={formData.hydraCapacity}
-                  onChange={handleHydraCapacityChange}
-                  error={!!errors.hydraCapacity}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  <MenuItem value="" disabled>
-                    Select Hydra Capacity
-                  </MenuItem>
-                  <MenuItem value="12">12 ton</MenuItem>
-                  <MenuItem value="16">16 ton</MenuItem>
-                  <MenuItem value="manual">Manual Text</MenuItem>
-                </Select>
-                {errors.hydraCapacity && (
-                  <Typography variant="caption" color="error">
-                    {errors.hydraCapacity}
-                  </Typography>
+            <>
+              <Grid container spacing={2} className="my-2" style={{marginLeft:"3px"}}>
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel>Hydra Capacity</InputLabel>
+                    <Select
+                      value={formData.hydraCapacity}
+                      onChange={handleHydraCapacityChange}
+                      error={!!errors.hydraCapacity}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Without label" }}
+                    >
+                      <MenuItem value="">Select Hydra Capacity</MenuItem>
+                      <MenuItem value="12">12 ton</MenuItem>
+                      <MenuItem value="16">16 ton</MenuItem>
+                      <MenuItem value="manual">Others</MenuItem>
+                    </Select>
+                    {errors.hydraCapacity && (
+                      <Typography variant="caption" color="error">
+                        {errors.hydraCapacity}
+                      </Typography>
+                    )}
+                  </FormControl>
+                </Grid>
+                {formData.hydraCapacity == "manual" && (
+                  <Grid xs={12} item md={6}>
+                    <TextField
+                      label="Hydra Capacity"
+                      fullWidth
+                      size="small"
+                      onChange={(e) =>
+                        handleFieldChange("hydraCapacity2", e.target.value)
+                      }
+                      error={!!errors.hydraCapacity}
+                      helperText={errors.hydraCapacity}
+                    />
+                  </Grid>
                 )}
-              </FormControl>
-            </Grid>
+              </Grid>
+            </>
           )}
           <Grid item xs={12}>
             <input
@@ -357,6 +391,7 @@ const VehicleEntryForm1 = () => {
               label="Owner Phone No."
               fullWidth
               size="small"
+              type="number"
               onChange={(e) => handleFieldChange("ownerPhone", e.target.value)}
               error={!!errors.ownerPhone}
               helperText={errors.ownerPhone}

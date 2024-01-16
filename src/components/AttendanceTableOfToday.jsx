@@ -91,7 +91,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
       let filteredEmployees = [];
       let filteredAttendanceData = [];
 
-      if (searchTermN.toLowerCase().includes("emp")) {
+      if (searchTermN.toLowerCase().includes("emp") || !isNaN(searchTermN) || searchTermN.includes("EMP")) {
         // If the searchTerm starts with "EMP"
         filteredEmployees = employeeList.filter((employee) =>
           employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
@@ -277,7 +277,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
           />
           {/* Render your search results or other components based on the search */}
 
-          <List
+          <List             
             class={"bg-white border-1 shadow p-0"}
             style={{
               width: "216px",
@@ -401,13 +401,17 @@ const AttendanceTableOfToday = ({ employeeList }) => {
                     <Tooltip title="Delete">
                       <IconButton
                         onClick={() => {
-                          deleteAttendanceDataByDateFromBackend(entry.id);
-                          setAttendanceData(
-                            attendanceData.filter((data) => data.id != entry.id)
-                          );
-                          setOldAttendance(
-                            attendanceData.filter((data) => data.id != entry.id)
-                          );
+                          deleteAttendanceDataByDateFromBackend(entry.id).then(res=>{
+                            setAttendanceData(
+                              attendanceData.filter((data) => data.id != entry.id)
+                            );
+                            setOldAttendance(
+                              attendanceData.filter((data) => data.id != entry.id)
+                            );
+                          }).catch(error=>{
+                            toast.error("Access Denied or Internal Server error")
+                          });
+                        
                         }}
                       >
                         <Delete color="error" />
