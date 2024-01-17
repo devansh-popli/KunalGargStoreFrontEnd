@@ -15,7 +15,7 @@ import {
 import { Container } from "react-bootstrap";
 import { getVisitorImageByTypeURl } from "../services/VisitorService";
 
-const VisitorTable = ({ visitors, handleTimeout }) => {
+const VisitorTable = ({ visitors, handleTimeout, title }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,19 +50,23 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
   const sortedVisitors = filteredVisitors.sort((a, b) => {
     const isAsc = order === "asc";
     if (orderBy === "timeIn") {
-        // Convert time strings to Date objects
-        const timeInA = new Date(a[orderBy]);
-        const timeInB = new Date(b[orderBy]);
-        
-        // Compare the Date objects
-        return isAsc ? timeInA - timeInB : timeInB - timeInA;
-      } else {
-        // Default comparison for other columns
-        return isAsc
-          ? a[orderBy].localeCompare(b[orderBy])
-          : b[orderBy].localeCompare(a[orderBy]);
-      }
-  });
+      // Convert time strings to Date objects
+      const timeInA = new Date(a[orderBy]);
+      const timeInB = new Date(b[orderBy]);
+
+      // Compare the Date objects
+      return isAsc ? timeInA - timeInB : timeInB - timeInA;
+    } else {
+      // Default comparison for other columns
+      return isAsc
+        ? a[orderBy].localeCompare(b[orderBy])
+        : b[orderBy].localeCompare(a[orderBy]);
+    }
+  }).filter((visitor) =>
+  title === "Current Visitors"
+    ? visitor.timeOut.length <= 0
+    : visitor.timeOut.length > 0
+);
 
   const slicedVisitors = sortedVisitors.slice(
     page * rowsPerPage,
@@ -70,18 +74,24 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
   );
 
   return (
-    <Paper className="mt-3 me-2" style={{borderRadius:"10px"}} >
+    <Paper className="mt-3 me-2" style={{ borderRadius: "10px" }}>
+      <h4 className="fw-bold pt-3 ms-3">{title}</h4>
       <TextField
         label="Search"
         variant="outlined"
-        className="w-30 ms-2"
+        className="w-30 ms-2 mt-0"
         margin="normal"
         fullWidth
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <TableContainer className="position-relative">
-        <Table  stickyHeader size="small" aria-label="a dense table"  style={slicedVisitors.length==0?{minHeight:"380px"}:{}}>
-          <TableHead >
+        <Table
+          stickyHeader
+          size="small"
+          aria-label="a dense table"
+          style={slicedVisitors.length == 0 ? { minHeight: "380px" } : {}}
+        >
+          <TableHead>
             <TableRow>
               <TableCell>Photo</TableCell>
               <TableCell>
@@ -89,7 +99,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "name"}
                   direction={orderBy === "name" ? order : "asc"}
                   onClick={() => handleSort("name")}
-                  style={{width:"100px"}}
+                  style={{ width: "100px" }}
                 >
                   Name
                 </TableSortLabel>
@@ -108,7 +118,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "phone"}
                   direction={orderBy === "phone" ? order : "asc"}
                   onClick={() => handleSort("phone")}
-                  style={{width:"130px"}}
+                  style={{ width: "130px" }}
                 >
                   Phone Number
                 </TableSortLabel>
@@ -118,7 +128,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "address"}
                   direction={orderBy === "address" ? order : "asc"}
                   onClick={() => handleSort("address")}
-                style={{width:"200px"}}
+                  style={{ width: "200px" }}
                 >
                   Address
                 </TableSortLabel>
@@ -137,7 +147,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "timeIn"}
                   direction={orderBy === "timeIn" ? order : "asc"}
                   onClick={() => handleSort("timeIn")}
-                  style={{width:"100px"}}
+                  style={{ width: "100px" }}
                 >
                   Time In
                 </TableSortLabel>
@@ -147,7 +157,7 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
                   active={orderBy === "timeOut"}
                   direction={orderBy === "timeOut" ? order : "asc"}
                   onClick={() => handleSort("timeOut")}
-                  style={{width:"100px"}}
+                  style={{ width: "100px" }}
                 >
                   Time Out
                 </TableSortLabel>
@@ -165,50 +175,73 @@ const VisitorTable = ({ visitors, handleTimeout }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {slicedVisitors.map((visitor) => (
-              <TableRow key={visitor.name}>
-                <TableCell>
-                  {/* Display the photo or a placeholder */}
-                  {visitor.photo ? (
-                    <img
-                    className="rounded-circle"
-                      src={getVisitorImageByTypeURl(visitor.id)}
-                      alt="Visitor"
-                      style={{ width: "40px", height: "40px" }}
-                    />
-                  ) : (
-                    <img src="../../user.jpg" className="rounded-circle" height={40} width={40} alt="" />
-                  )}
-                </TableCell>
+            {slicedVisitors
+              .map((visitor) => (
+                <TableRow key={visitor.id}>
+                  <TableCell>
+                    {/* Display the photo or a placeholder */}
+                    {visitor.photo ? (
+                      <img
+                        className="rounded-circle"
+                        src={getVisitorImageByTypeURl(visitor.id)}
+                        alt="Visitor"
+                        style={{ width: "40px", height: "40px" }}
+                      />
+                    ) : (
+                      <img
+                        src="../../user.jpg"
+                        className="rounded-circle"
+                        height={40}
+                        width={40}
+                        alt=""
+                      />
+                    )}
+                  </TableCell>
 
-                <TableCell>{visitor.name}</TableCell>
-                {/* <TableCell>{visitor.fatherName}</TableCell> */}
-                <TableCell>{visitor.phone}</TableCell>
-                <TableCell>{visitor.address}</TableCell>
-                <TableCell>{visitor.purpose}</TableCell>
-                <TableCell>{new Date(visitor.timeIn).toLocaleString()}</TableCell>
-                <TableCell>{new Date(visitor.timeOut).toLocaleString()}</TableCell>
-                {/* <TableCell>{visitor.aadharNumber}</TableCell> */}
-                <TableCell>
-                  {!visitor.timeOut && (
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                      onClick={() => handleTimeout(visitor)}
-                    >
-                      Timeout
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell>{visitor.name}</TableCell>
+                  {/* <TableCell>{visitor.fatherName}</TableCell> */}
+                  <TableCell>{visitor.phone}</TableCell>
+                  <TableCell>{visitor.address}</TableCell>
+                  <TableCell>{visitor.purpose}</TableCell>
+                  <TableCell>
+                    {new Date(visitor.timeIn).toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(visitor.timeOut).toLocaleString()}
+                  </TableCell>
+                  {/* <TableCell>{visitor.aadharNumber}</TableCell> */}
+                  <TableCell>
+                    {!visitor.timeOut && (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={() => handleTimeout(visitor)}
+                      >
+                        Timeout
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
           {slicedVisitors.length <= 0 && (
-                <Container >
-                <img src="../../noData2.jpg" width={"250"} height={250} alt="" className="position-absolute" style={{ top: '53%', left: '50%', transform: 'translate(-50%, -50%)',backgroundPosition:"contain" }} />
-                </Container>
-            )}
+            <Container>
+              <img
+                src="../../noData2.jpg"
+                width={"250"}
+                height={250}
+                alt=""
+                className="position-absolute"
+                style={{
+                  top: "53%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundPosition: "contain",
+                }}
+              />
+            </Container>
+          )}
         </Table>
       </TableContainer>
       <TablePagination

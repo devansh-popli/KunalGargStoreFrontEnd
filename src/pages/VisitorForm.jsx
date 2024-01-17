@@ -14,6 +14,8 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 import Webcam from "react-webcam";
 import { Form, InputGroup } from "react-bootstrap";
 import { CameraAlt } from "@mui/icons-material";
@@ -77,6 +79,7 @@ const VisitorForm = () => {
 
     // Handle form submission
     // Add your logic to submit the form data
+    if (formData.purpose == "Other") formData.purpose = formData.purpose1;
     submitVisitorData(formData, new Date())
       .then(async (res) => {
         if (formData.profileImage) {
@@ -113,6 +116,7 @@ const VisitorForm = () => {
       .catch((data) => {
         toast.error("Internal Server Error");
       });
+
     // Reset the form after submission
     setFormData({
       name: "",
@@ -125,7 +129,7 @@ const VisitorForm = () => {
       timeOut: "",
       aadharNumber: "",
     });
-
+    handleClose();
     setMandatoryFieldsError(false);
   };
   const handleFileChangeProfile = (event, type = "file") => {
@@ -249,217 +253,242 @@ const VisitorForm = () => {
     { id: 15, name: "Audition" },
     { id: 16, name: "Other" },
   ];
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    padding: 20,
+    p: 4,
+  };
   const webcamRef = useRef(null);
   const webcamRefSignature = useRef(null);
   const [showCamera, setShowCamera] = useState(false);
   const webcamRefAadhar = useRef(null);
   const [showCameraAadhar, setShowCameraAadhar] = useState(false);
   const userContext = useContext(UserContext);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return userContext.isLogin ? (
-    <Grid container spacing={2} justifyContent="start">
-      <Grid item xs={12} md={5}>
-        <Paper
-          elevation={3}
-          style={{ padding: "20px", borderRadius: "10px" }}
-          className="ms-3 mt-3"
+    <>
+      <div className="container">
+        <div className="d-flex flex-row-reverse m-4 ">
+          {" "}
+          <Button variant="contained" onClick={handleOpen}>
+            Add Visitor
+          </Button>
+        </div>
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
-          <h4 className="fw-bold">Visitor Entry Form</h4>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Name"
-                fullWidth
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Father's Name"
-                fullWidth
-                value={formData.fatherName}
-                onChange={(e) =>
-                  handleInputChange("fatherName", e.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Phone Number"
-                fullWidth
-                value={formData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Address"
-                fullWidth
-                value={formData.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Form.Group className="mb-2">
-                <Container
-                  className="text-center border py-1"
-                  style={{ borderRadius: "10px" }}
-                  fluid
-                >
-                  <p className="text-muted m-0 p-0">Profile Image Preview</p>
-                  {!showCamera && (
-                    <img
-                      className="img-fluid rounded"
-                      style={{
-                        objectFit: "contain",
-                        maxHeight: "130px",
-                        width: "100%",
-                      }}
-                      src={formData.placeholderProfile}
-                      alt=""
-                    />
-                  )}
-
-                  {showCamera && (
-                    <div className="text-center">
-                      <Webcam
-                        width={130}
-                        height={130}
-                        audio={false}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                      />
-                    </div>
-                  )}
-                </Container>
-                <div>
-                  <Form.Label>Select Profile Image</Form.Label>
-                  <div className="d-flex align-items-center">
-                    <div>
-                      <Button
-                        data-for="happyFace"
-                        onClick={(event) =>
-                          handleFileChangeProfile(event, "cam")
-                        }
-                        variant="outlined"
-                        type="error"
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Take Photo"
-                      >
-                        <CameraAlt />
-                      </Button>
-                      <Tooltip
-                        id="my-tooltip"
-                        place="bottom"
-                        type="info"
-                        effect="solid"
-                      />
-                    </div>
-
-                    <span className="mx-2">or</span>
-                    <InputGroup>
-                      <Form.Control
-                        onChange={(event) => handleFileChangeProfile(event)}
-                        type="file"
-                      />
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => {
-                          setFormData({
-                            ...formData,
-                            placeholderProfile: undefined,
-                            profileImage: null,
-                          });
+          <Paper elevation={3} style={style} className="ms-3 mt-3 w-50">
+            <h4 className="fw-bold">Visitor Entry Form</h4>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Name"
+                  fullWidth
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Father's Name"
+                  fullWidth
+                  value={formData.fatherName}
+                  onChange={(e) =>
+                    handleInputChange("fatherName", e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Phone Number"
+                  fullWidth
+                  type="number"
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Address"
+                  fullWidth
+                  value={formData.address}
+                  onChange={(e) => handleInputChange("address", e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Form.Group className="mb-2">
+                  <Container
+                    className="text-center border py-1"
+                    style={{ borderRadius: "10px" }}
+                    fluid
+                  >
+                    <p className="text-muted m-0 p-0">Profile Image Preview</p>
+                    {!showCamera && (
+                      <img
+                        className="img-fluid rounded"
+                        style={{
+                          objectFit: "contain",
+                          maxHeight: "130px",
+                          width: "100%",
                         }}
-                      >
-                        Clear
-                      </Button>
-                    </InputGroup>
+                        src={formData.placeholderProfile}
+                        alt=""
+                      />
+                    )}
+
+                    {showCamera && (
+                      <div className="text-center">
+                        <Webcam
+                          width={130}
+                          height={130}
+                          audio={false}
+                          ref={webcamRef}
+                          screenshotFormat="image/jpeg"
+                        />
+                      </div>
+                    )}
+                  </Container>
+                  <div>
+                    <Form.Label>Select Profile Image</Form.Label>
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <Button
+                          data-for="happyFace"
+                          onClick={(event) =>
+                            handleFileChangeProfile(event, "cam")
+                          }
+                          variant="outlined"
+                          type="error"
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content="Take Photo"
+                        >
+                          <CameraAlt />
+                        </Button>
+                        <Tooltip
+                          id="my-tooltip"
+                          place="bottom"
+                          type="info"
+                          effect="solid"
+                        />
+                      </div>
+
+                      <span className="mx-2">or</span>
+                      <InputGroup>
+                        <Form.Control
+                          onChange={(event) => handleFileChangeProfile(event)}
+                          type="file"
+                        />
+                        <Button
+                          variant="outline-secondary"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              placeholderProfile: undefined,
+                              profileImage: null,
+                            });
+                          }}
+                        >
+                          Clear
+                        </Button>
+                      </InputGroup>
+                    </div>
                   </div>
-                </div>
-              </Form.Group>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Form.Group className="mb-2">
-                <Container
-                  className="text-center py-1 border"
-                  style={{ borderRadius: "10px" }}
-                  fluid
-                >
-                  <p className="text-muted m-0 p-0">Aadhar Preview</p>
-                  {!showCameraAadhar && (
-                    <img
-                      className="img-fluid rounded"
-                      style={{
-                        objectFit: "contain",
-                        maxHeight: "130px",
-                        width: "100%",
-                      }}
-                      src={formData.placeholderAadhar}
-                      alt=""
-                    />
-                  )}
-
-                  {showCameraAadhar && (
-                    <div className="text-center">
-                      <Webcam
-                        width={130}
-                        height={130}
-                        audio={false}
-                        ref={webcamRefAadhar}
-                        screenshotFormat="image/jpeg"
-                      />
-                    </div>
-                  )}
-                </Container>
-                <div>
-                  <Form.Label>Select Aadhar Image</Form.Label>
-                  <div className="d-flex align-items-center">
-                    <div>
-                      <Button
-                        data-for="happyFace"
-                        onClick={(event) =>
-                          handleFileChangeAadhar(event, "cam")
-                        }
-                        variant="outlined"
-                        type="error"
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Take Photo"
-                      >
-                        <CameraAlt />
-                      </Button>
-                      <Tooltip
-                        id="my-tooltip"
-                        place="bottom"
-                        type="info"
-                        effect="solid"
-                      />
-                    </div>
-
-                    <span className="mx-2">or</span>
-                    <InputGroup>
-                      <Form.Control
-                        onChange={(event) => handleFileChangeAadhar(event)}
-                        type="file"
-                      />
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => {
-                          setFormData({
-                            ...formData,
-                            placeholderAadhar: undefined,
-                            aadharImage: null,
-                          });
+                </Form.Group>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Form.Group className="mb-2">
+                  <Container
+                    className="text-center py-1 border"
+                    style={{ borderRadius: "10px" }}
+                    fluid
+                  >
+                    <p className="text-muted m-0 p-0">Aadhar Preview</p>
+                    {!showCameraAadhar && (
+                      <img
+                        className="img-fluid rounded"
+                        style={{
+                          objectFit: "contain",
+                          maxHeight: "130px",
+                          width: "100%",
                         }}
-                      >
-                        Clear
-                      </Button>
-                    </InputGroup>
+                        src={formData.placeholderAadhar}
+                        alt=""
+                      />
+                    )}
+
+                    {showCameraAadhar && (
+                      <div className="text-center">
+                        <Webcam
+                          width={130}
+                          height={130}
+                          audio={false}
+                          ref={webcamRefAadhar}
+                          screenshotFormat="image/jpeg"
+                        />
+                      </div>
+                    )}
+                  </Container>
+                  <div>
+                    <Form.Label>Select Aadhar Image</Form.Label>
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <Button
+                          data-for="happyFace"
+                          onClick={(event) =>
+                            handleFileChangeAadhar(event, "cam")
+                          }
+                          variant="outlined"
+                          type="error"
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content="Take Photo"
+                        >
+                          <CameraAlt />
+                        </Button>
+                        <Tooltip
+                          id="my-tooltip"
+                          place="bottom"
+                          type="info"
+                          effect="solid"
+                        />
+                      </div>
+
+                      <span className="mx-2">or</span>
+                      <InputGroup>
+                        <Form.Control
+                          onChange={(event) => handleFileChangeAadhar(event)}
+                          type="file"
+                        />
+                        <Button
+                          variant="outline-secondary"
+                          onClick={() => {
+                            setFormData({
+                              ...formData,
+                              placeholderAadhar: undefined,
+                              aadharImage: null,
+                            });
+                          }}
+                        >
+                          Clear
+                        </Button>
+                      </InputGroup>
+                    </div>
                   </div>
-                </div>
-              </Form.Group>
-            </Grid>
-            {/* <Grid item xs={12} sm={6}>
+                </Form.Group>
+              </Grid>
+              {/* <Grid item xs={12} sm={6}>
               <Button
                 variant="contained"
                 color="primary"
@@ -475,61 +504,100 @@ const VisitorForm = () => {
                 Time Out
               </Button>
             </Grid> */}
-            <Grid item xs={12} sm={6}>
-              <Select
-                label="Purpose"
-                fullWidth
-                value={formData.purpose}
-                onChange={(e) => handleInputChange("purpose", e.target.value)}
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
               >
-                {purposeList.map((data) => (
-                  <MenuItem key={data.id} value={data.name}>
-                    {data.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-            <Grid item xs={12} className="d-flex">
-              <Button
-                variant="contained"
-                color="primary"
-                className="me-4"
-                onClick={handleSubmit}
-              >
-                Time In
-              </Button>
-              {mandatoryFieldsError && (
-                <Typography
-                  color="error"
-                  variant="caption"
-                  display="block"
-                  marginTop="10px"
+                <Select
+                  label="Purpose"
+                  className="mt-1"
+                  fullWidth
+                  value={formData.purpose}
+                  onChange={(e) => handleInputChange("purpose", e.target.value)}
                 >
-                  * Please fill in all mandatory fields.
-                </Typography>
-              )}
+                  {purposeList.map((data) => (
+                    <MenuItem key={data.id} value={data.name}>
+                      {data.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {formData.purpose == "Other" && (
+                  <TextField
+                    label="Other"
+                    fullWidth
+                    className="ms-2 my-0"
+                    value={formData.purpose1}
+                    onChange={(e) =>
+                      handleInputChange("purpose1", e.target.value)
+                    }
+                  />
+                )}
+              </Grid>
+              <Grid item xs={12} className="d-flex">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="me-4"
+                  onClick={handleSubmit}
+                >
+                  Time In
+                </Button>
+                {mandatoryFieldsError && (
+                  <Typography
+                    color="error"
+                    variant="caption"
+                    display="block"
+                    marginTop="10px"
+                  >
+                    * Please fill in all mandatory fields.
+                  </Typography>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </Grid>
-      <Grid item xs={12} md={7}>
-        <VisitorTable
-          visitors={visitors}
-          handleTimeout={(visitor) => {
-            visitor.timeOut = new Date();
-            submitVisitorData(visitor).then((data) => {
-              let newvis = visitors.map((vis) => {
-                if (vis.id == data.id) {
-                  vis = data;
-                }
-                return vis;
+          </Paper>
+        </Modal>
+        <Grid item xs={12} md={12} className="px-2">
+          <VisitorTable
+            title={"Current Visitors"}
+            visitors={visitors}
+            handleTimeout={(visitor) => {
+              visitor.timeOut = new Date();
+              submitVisitorData(visitor).then((data) => {
+                let newvis = visitors.map((vis) => {
+                  if (vis.id == data.id) {
+                    vis = data;
+                  }
+                  return vis;
+                });
+                setVisitors(newvis);
               });
-              setVisitors(newvis);
-            });
-          }}
-        />
-      </Grid>
-    </Grid>
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} md={12} className="px-2">
+          <VisitorTable
+            title={"Visitors History"}
+            visitors={visitors}
+            handleTimeout={(visitor) => {
+              visitor.timeOut = new Date();
+              submitVisitorData(visitor).then((data) => {
+                let newvis = visitors.map((vis) => {
+                  if (vis.id == data.id) {
+                    vis = data;
+                  }
+                  return vis;
+                });
+                setVisitors(newvis);
+              });
+            }}
+          />
+        </Grid>
+      </div>
+    </>
   ) : (
     <Navigate to={"/"} />
   );

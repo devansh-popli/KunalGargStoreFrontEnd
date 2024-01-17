@@ -191,6 +191,18 @@ const VehicleEntryForm1 = () => {
           </Grid>
           <Grid item xs={6}>
             <TextField
+              label="Vehicle Number"
+              fullWidth
+              size="small"
+              value={formData.vehicleNumber}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(e) => handleFieldChange("vehicleNumber", e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
               label="Site"
               fullWidth
               value={formData.site}
@@ -205,7 +217,7 @@ const VehicleEntryForm1 = () => {
               helperText={errors.site}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <TextField
               label="In Time"
               type="time"
@@ -245,7 +257,7 @@ const VehicleEntryForm1 = () => {
               }}
             />
           </Grid> */}
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <TextField
               label="In Date"
               type="date"
@@ -367,10 +379,13 @@ const VehicleEntryForm1 = () => {
             </>
           )}
           <Grid item xs={12}>
+            <label htmlFor="vehicle">Driver Documents</label>
             <input
+            id="vehicle"
               type="file"
               accept="image/*"
               multiple
+              className="form-control"
               onChange={handlePhotosChange}
             />
           </Grid>

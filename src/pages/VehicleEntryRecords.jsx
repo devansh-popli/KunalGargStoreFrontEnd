@@ -13,24 +13,40 @@ import Button from "@mui/material/Button";
 import {
   getVehicle2Entry,
   getVehicleEntry,
+  getVehicleImageByNameURl,
+  saveVehicleEntry,
+  saveVehicleEntry2,
 } from "../services/VehicleEntryService";
 import { error } from "highcharts";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Container } from "@mui/material";
+import {
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+  Skeleton,
+  Tooltip,
+} from "@mui/material";
+import { AccessTime, Cancel, Visibility } from "@mui/icons-material";
+import { Carousel } from "react-bootstrap";
 
 const columns = [
   { id: "purpose", label: "Purpose" },
-  { id: "dated", label: "Dated" },
+  // { id: "dated", label: "Dated" },
   { id: "documentType", label: "Document Type" },
+  { id: "vehicleNumber", label: "Vehicle Number" },
   { id: "vendorName", label: "Vendor Name" },
   { id: "vehicleType", label: "Vehicle Type" },
   { id: "dateOfEntry", label: "Date of Entry" },
-  { id: "dayOfEntry", label: "Day of Entry" },
-  { id: "timeOfEntry", label: "Time of Entry" },
+  // { id: "dayOfEntry", label: "Day of Entry" },
+  // { id: "timeOfEntry", label: "Time of Entry" },
   { id: "dateOfExit", label: "Date of Exit" },
-  { id: "dayOfExit", label: "Day of Exit" },
-  { id: "timeOfExit", label: "Time of Exit" },
+  // { id: "dayOfExit", label: "Day of Exit" },
+  // { id: "timeOfExit", label: "Time of Exit" },
 ];
 
 const VehicleEntryRecords = () => {
@@ -40,6 +56,21 @@ const VehicleEntryRecords = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [data, setData] = useState([]);
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minWidth:400,
+    maxWidth: 700,
+    maxHeight: 650,
+    overflowX:"hidden",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    padding: 10,
+    borderRadius: 10,
+    p: 4,
+  };
   useEffect(() => {
     getVehicle2Entry()
       .then((data) => {
@@ -57,6 +88,26 @@ const VehicleEntryRecords = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+  const [open, setOpen] = React.useState(false);
+  const [driverData, setDriverData] = useState([]);
+  const handleOpen = (ddata) => {
+    setDriverData(ddata);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setImgLoading(true);
+    setSelectedImageIndex(0);
+  };
+  const [imgLoading, setImgLoading] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const handleSelect = (selectedIndex, e) => {
+    setSelectedImageIndex(selectedIndex);
+  };
+  const handleImageLoad = () => {
+    setImgLoading(false); // Set loading state to false when the image is loaded
   };
 
   const handleSearch = (e) => {
@@ -80,6 +131,48 @@ const VehicleEntryRecords = () => {
       value?.toString()?.toLowerCase()?.includes(searchTerm)
     )
   );
+  const timeOut = (formData) => {
+    const currentDate = new Date();
+    // Format the time as "00:31:31"
+    const formattedTime = currentDate.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    // Format the date as "YYYY-MM-DD"
+    const year = currentDate.getUTCFullYear();
+    const month = String(currentDate.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getUTCDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
+    // Set formData.outTime and formData.outDate
+    formData.timeOfExit = formattedTime;
+    formData.dateOfExit = formattedDate;
+    var days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    formData.dayOfExit = days[currentDate.getDay()];
+    saveVehicleEntry2(formData)
+      .then((res) => {
+        toast.success("outtime updated");
+      })
+      .catch((error) => {
+        toast.error("Internal Server Error While Saving");
+      });
+  };
+  const excludedFields = [
+    "documentNo",
+    "vehicleDocument",
+    "id",
+    "driverDocument",
+    "tuuAbo",
+  ];
   const navigate = useNavigate();
   return (
     <Paper className="m-3">
@@ -103,20 +196,24 @@ const VehicleEntryRecords = () => {
       </Stack>
       <TableContainer className="position-relative">
         <Table
+        aria-label="a dense table"
           size="small"
           style={filteredRows.length == 0 ? { minHeight: "380px" } : {}}
         >
-          <TableHead>
+          <TableHead style={{backgroundColor:"#205072",color:"white"}}>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
+                align="start"
                   key={column.id}
                   onClick={() => handleSort(column.id)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer",minWidth:"150px",color:"white"}}
                 >
                   {column.label}
+                  
                 </TableCell>
               ))}
+              <TableCell   style={{minWidth:"150px",color:"white"}} className="px-5">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -129,8 +226,139 @@ const VehicleEntryRecords = () => {
             ).map((row, index) => (
               <TableRow key={index}>
                 {columns.map((column) => (
-                  <TableCell key={column.id}>{row[column.id]}</TableCell>
+                  <TableCell  key={column.id}>{row[column.id]}</TableCell>
                 ))}
+                <TableCell className="w-100">
+                  <Tooltip title="View" className="">
+                    <Button onClick={() => handleOpen(row)}>
+                      <Visibility />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Time Out" className="">
+                    <Button size="small" onClick={() => timeOut(row)}>
+                      <small>
+                        <AccessTime />
+                      </small>
+                    </Button>
+                  </Tooltip>
+                </TableCell>
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Paper style={style}>
+                    <div className="d-flex justify-content-between">
+                      <DialogTitle className="fw-bold">
+                        Vehicle Details
+                      </DialogTitle>
+                      <Cancel
+                        onClick={handleClose}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </div>
+                    <DialogContentText>
+                      <strong>Vehicle Document:</strong>
+                    </DialogContentText>
+                    <Carousel
+                      data-bs-theme="dark"
+                      indicators={false}
+                      activeIndex={selectedImageIndex}
+                      onSelect={handleSelect}
+                      interval={null} // Disable automatic sliding
+                    >
+                      {imgLoading && (
+                        <Skeleton variant="rect" width="100%" height={200} />
+                      )}
+                      {driverData?.vehicleDocument?.map((image, index) => (
+                        <Carousel.Item key={index}>
+                          <img
+                            style={{ height: "150px", objectFit: "contain" }}
+                            className={`w-100  d-block ${
+                              imgLoading ? "d-none" : ""
+                            }`}
+                            src={getVehicleImageByNameURl(image)}
+                            alt={`Vehicle Document ${index + 1}`}
+                            onLoad={handleImageLoad}
+                          />
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+
+                    {/* Driver Document Image Slider */}
+                    <DialogContentText>
+                      <strong>Driver Document:</strong>
+                    </DialogContentText>
+                    <Carousel
+                      data-bs-theme="dark"
+                      indicators={false}
+                      activeIndex={selectedImageIndex}
+                      onSelect={handleSelect}
+                      interval={null} // Disable automatic sliding
+                    >
+                      {imgLoading && (
+                        <Skeleton variant="rect" width="100%" height={200} />
+                      )}
+                      {driverData?.driverDocument?.map((image, index) => (
+                        <Carousel.Item key={index}>
+                          <img
+                            style={{ height: "150px", objectFit: "contain" }}
+                            className={`w-100 d-block ${
+                              imgLoading ? "d-none" : ""
+                            }`}
+                            src={getVehicleImageByNameURl(image)}
+                            alt={`Driver Document ${index + 1}`}
+                            onLoad={handleImageLoad}
+                          />
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                    <DialogContent>
+                      <div className="d-flex flex-wrap">
+                        <div style={{ flex: 1, marginRight: "20px" }}>
+                          {Object.entries(driverData)
+                            .slice(0, 9)
+                            .filter(([key]) => !excludedFields.includes(key))
+                            .map(([key, value], index) => (
+                              <div key={index} style={{ marginBottom: "10px" }}>
+                                <strong>{key}:</strong>{" "}
+                                {typeof value === "string"
+                                  ? value
+                                  : JSON.stringify(value)}
+                              </div>
+                            ))}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          {Object.entries(driverData)
+                            .slice(9, 15)
+                            .filter(([key]) => !excludedFields.includes(key))
+                            .map(([key, value], index) => (
+                              <div key={index} style={{ marginBottom: "10px" }}>
+                                <strong>{key}:</strong>{" "}
+                                {typeof value === "string"
+                                  ? value
+                                  : JSON.stringify(value)}
+                              </div>
+                            ))}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          {Object.entries(driverData)
+                            .slice(15)
+                            .filter(([key]) => !excludedFields.includes(key))
+                            .map(([key, value], index) => (
+                              <div key={index} style={{ marginBottom: "10px" }}>
+                                <strong>{key}:</strong>{" "}
+                                {typeof value === "string"
+                                  ? value
+                                  : JSON.stringify(value)}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Paper>
+                </Modal>
               </TableRow>
             ))}
             {filteredRows.length <= 0 && (

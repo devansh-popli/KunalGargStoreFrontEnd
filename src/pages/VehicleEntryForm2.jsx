@@ -18,23 +18,26 @@ import {
   Radio,
   FormLabel,
   Input,
+  Skeleton,
 } from "@mui/material";
-import { Form } from "react-bootstrap";
+import { Carousel, Form } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import useJwtChecker from "../helper/useJwtChecker";
 import {
+  getVehicleImageByNameURl,
   saveVehicleDocument2ToBackend,
   saveVehicleEntry2,
 } from "../services/VehicleEntryService";
 import { toast } from "react-toastify";
+import { privateAxios } from "../services/AxiosService";
 
 const steps = ["Vehicle Information", "Time", "Documents", "Owner Details"];
 
 const VehicleEntryForm2 = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState({});
-const navigate=useNavigate()
+  const navigate = useNavigate();
   const handleNext = () => {
     const isValid = validateForm(activeStep);
 
@@ -66,7 +69,7 @@ const navigate=useNavigate()
               );
             }
             toast.success("Data Saved");
-            navigate("/vehicle-entry-records")
+            navigate("/vehicle-entry-records");
           })
           .catch((error) => {
             console.error(error);
@@ -95,6 +98,8 @@ const navigate=useNavigate()
     dateOfEntry: "",
     dayOfEntry: "",
     timeOfEntry: "",
+    vehicleDocument:[],
+    driverDocument:[],
     dateOfExit: "",
     dayOfExit: "",
     timeOfExit: "",
@@ -105,6 +110,19 @@ const navigate=useNavigate()
   });
 
   const handleFieldChange = (fieldName) => (event) => {
+    if (fieldName == "vehicleNumber") {
+      privateAxios
+        .get(`/api/v2/vehicle-entries/vehicleNumber/${event.target.value}`)
+        .then((data) => {
+          if (data.data.id != null) {
+            data.data.id = null;
+            setVehicleInfo(data.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
     setVehicleInfo((prevData) => ({
       ...prevData,
       [fieldName]: event.target.value,
@@ -156,7 +174,7 @@ const navigate=useNavigate()
         if (!vehicleInfo.documentType) {
           newErrors.documentType = "Document Type is required";
         }
-        if (vehicleInfo.vehicleType.length==0) {
+        if (vehicleInfo.vehicleType.length == 0) {
           newErrors.vehicleType = "Vehicle Type is required";
         }
         if (!vehicleInfo.vendorName) {
@@ -175,23 +193,23 @@ const navigate=useNavigate()
         if (!vehicleInfo.timeOfEntry) {
           newErrors.timeOfEntry = "Time of Entry is required";
         }
-        if (!vehicleInfo.dateOfExit) {
-          newErrors.dateOfExit = "Date of Exit is required";
-        }
-        if (!vehicleInfo.dayOfExit) {
-          newErrors.dayOfExit = "Day of Exit is required";
-        }
-        if (!vehicleInfo.timeOfExit) {
-          newErrors.timeOfExit = "Time of Exit is required";
-        }
+        // if (!vehicleInfo.dateOfExit) {
+        //   newErrors.dateOfExit = "Date of Exit is required";
+        // }
+        // if (!vehicleInfo.dayOfExit) {
+        //   newErrors.dayOfExit = "Day of Exit is required";
+        // }
+        // if (!vehicleInfo.timeOfExit) {
+        //   newErrors.timeOfExit = "Time of Exit is required";
+        // }
         // Add validations for other fields in Time
         break;
       case 2:
         // Validate Documents
-        if (selectedFiles.vehicleDocuments.length === 0) {
+        if (selectedFiles.vehicleDocuments.length === 0 && vehicleInfo?.vehicleDocument?.length<=0) {
           newErrors.vehicleDocuments = "Vehicle Documents are required";
         }
-        if (selectedFiles.driverDocuments.length === 0) {
+        if (selectedFiles.driverDocuments.length === 0 && vehicleInfo?.driverDocument?.length<=0) {
           newErrors.driverDocuments = "Driver Documents are required";
         }
         break;
@@ -217,6 +235,15 @@ const navigate=useNavigate()
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  const [imgLoading, setImgLoading] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const handleSelect = (selectedIndex, e) => {
+    setSelectedImageIndex(selectedIndex);
+  };
+  const handleImageLoad = () => {
+    setImgLoading(false); // Set loading state to false when the image is loaded
+  };
 
   const getStepContent = (step) => {
     const hasValidationError = (field) => errors[field] !== undefined;
@@ -231,6 +258,22 @@ const navigate=useNavigate()
                 <h5 className="fw-bold">
                   Please fill Vehicle Information to Proceed
                 </h5>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  className="w-60"
+                  label="Vehicle Number"
+                  fullWidth
+                  value={vehicleInfo.vehicleNumber}
+                  onChange={handleFieldChange("vehicleNumber")}
+                />
+                {errors.vehicleNumber && (
+                  <Grid item xs={12}>
+                    <Typography variant="caption" color="error">
+                      {errors.vehicleNumber}
+                    </Typography>
+                  </Grid>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <FormLabel component="legend">Purpose</FormLabel>
@@ -344,6 +387,7 @@ const navigate=useNavigate()
                   </Grid>
                 )}
               </Grid>
+
               <Grid item xs={12}>
                 <FormLabel component="legend">Vehicle Type</FormLabel>
                 <Grid container spacing={2}>
@@ -425,12 +469,12 @@ const navigate=useNavigate()
                   </Grid>
                   {/* Add more vehicle types as needed */}
                   {errors.vehicleType && (
-                  <Grid item xs={12}>
-                    <Typography variant="caption" color="error">
-                      {errors.vehicleType}
-                    </Typography>
-                  </Grid>
-                )}
+                    <Grid item xs={12}>
+                      <Typography variant="caption" color="error">
+                        {errors.vehicleType}
+                      </Typography>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -497,7 +541,7 @@ const navigate=useNavigate()
                 </Grid>
               )}
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <TextField
                 className="w-60"
                 label="Date of Exit"
@@ -552,7 +596,7 @@ const navigate=useNavigate()
                   </Typography>
                 </Grid>
               )}
-            </Grid>
+            </Grid> */}
 
             {/* Add similar error checks for other fields in step 1 */}
           </Grid>
@@ -563,6 +607,64 @@ const navigate=useNavigate()
             <Container>
               <div className="mt-3">
                 <h4 className="fw-bold">Document Upload Form</h4>
+                {vehicleInfo?.vehicleDocument.length>0 && (
+                  <>
+                    <h5 className="fw-bold">Vehicle Document</h5>
+                    <Carousel
+                      data-bs-theme="dark"
+                      indicators={false}
+                      activeIndex={selectedImageIndex}
+                      onSelect={handleSelect}
+                      interval={null} // Disable automatic sliding
+                    >
+                      {imgLoading && (
+                        <Skeleton variant="rect" width="100%" height={200} />
+                      )}
+                      {vehicleInfo?.vehicleDocument?.map((image, index) => (
+                        <Carousel.Item key={index}>
+                          <img
+                            style={{ height: "150px", objectFit: "contain" }}
+                            className={`w-100  d-block ${
+                              imgLoading ? "d-none" : ""
+                            }`}
+                            src={getVehicleImageByNameURl(image)}
+                            alt={`Vehicle Document ${index + 1}`}
+                            onLoad={handleImageLoad}
+                          />
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+
+                    {/* Driver Document Image Slider */}
+                    <h5>
+                      <strong>Driver Document:</strong>
+                    </h5>
+                    <Carousel
+                      data-bs-theme="dark"
+                      indicators={false}
+                      activeIndex={selectedImageIndex}
+                      onSelect={handleSelect}
+                      interval={null} // Disable automatic sliding
+                    >
+                      {imgLoading && (
+                        <Skeleton variant="rect" width="100%" height={200} />
+                      )}
+                      {vehicleInfo?.driverDocument?.map((image, index) => (
+                        <Carousel.Item key={index}>
+                          <img
+                            style={{ height: "150px", objectFit: "contain" }}
+                            className={`w-100 d-block ${
+                              imgLoading ? "d-none" : ""
+                            }`}
+                            src={getVehicleImageByNameURl(image)}
+                            alt={`Driver Document ${index + 1}`}
+                            onLoad={handleImageLoad}
+                          />
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  </>
+                )}
                 <Form>
                   <Form.Group controlId="vehicleDocuments">
                     <Form.Label>Vehicle Documents</Form.Label>
@@ -613,6 +715,7 @@ const navigate=useNavigate()
                     className="w-60"
                     label="Phone No."
                     fullWidth
+                    type="number"
                     value={vehicleInfo.phoneNo}
                     onChange={handleFieldChange("phoneNo")}
                   />

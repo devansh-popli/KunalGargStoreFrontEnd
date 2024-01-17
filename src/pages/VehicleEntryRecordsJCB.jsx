@@ -13,26 +13,52 @@ import Button from "@mui/material/Button";
 import {
   getVehicle2Entry,
   getVehicleEntry,
+  getVehicleImageByTypeURl,
   saveVehicleEntry,
 } from "../services/VehicleEntryService";
 import { error } from "highcharts";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Container } from "@mui/material";
+import {
+  Container,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+  Skeleton,
+  Tooltip,
+} from "@mui/material";
+import { AccessTime, Cancel, Visibility } from "@mui/icons-material";
+import { Carousel } from "react-bootstrap";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  padding: 10,
+  borderRadius: 10,
+  p: 4,
+};
 
 const columns = [
   { id: "gatePassNo", label: "Gate Pass No" },
   { id: "site", label: "Site" },
+  { id: "vehicleNumber", label: "Vehicle Number" },
   { id: "inTime", label: "In Time" },
   { id: "outTime", label: "Out Time" },
   { id: "inDate", label: "In Date" },
   { id: "outDate", label: "Out Date" },
   { id: "selectedOption", label: "Selected Option" },
-  { id: "hydraCapacity", label: "Hydra Capacity" },
-  { id: "ownerBankAccount", label: "Owner Bank Account" },
-  { id: "ownerPhone", label: "Owner Phone" },
-  { id: "justification", label: "Justification" },
-  { id: "enteredBy", label: "Entered By" },
+  // { id: "hydraCapacity", label: "Hydra Capacity" },
+  // { id: "ownerBankAccount", label: "Owner Bank Account" },
+  // { id: "ownerPhone", label: "Owner Phone" },
+  // { id: "justification", label: "Justification" },
+  // { id: "enteredBy", label: "Entered By" },
 ];
 
 const VehicleEntryRecordsJCB = () => {
@@ -42,30 +68,33 @@ const VehicleEntryRecordsJCB = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [data, setData] = useState([]);
-  const timeOut=(formData)=>{
+  const [driverData, setDriverData] = useState([]);
+  const timeOut = (formData) => {
     const currentDate = new Date();
+
     // Format the time as "00:31:31"
-    const formattedTime = currentDate.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+    const formattedTime = currentDate.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
     // Format the date as "YYYY-MM-DD"
     const year = currentDate.getUTCFullYear();
-const month = String(currentDate.getUTCMonth() + 1).padStart(2, '0');
-const day = String(currentDate.getUTCDate()).padStart(2, '0');
-const formattedDate = `${year}-${month}-${day}`;
-    
+    const month = String(currentDate.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getUTCDate()).padStart(2, "0");
+    const formattedDate = `${year}-${month}-${day}`;
+
     // Set formData.outTime and formData.outDate
     formData.outTime = formattedTime;
     formData.outDate = formattedDate;
     saveVehicleEntry(formData)
-    .then((res) => {
-      toast.success("outtime updated")
-    }).catch(error=>{
-      toast.error("Internal Server Error While Saving")
-    })
-  }
+      .then((res) => {
+        toast.success("outtime updated");
+      })
+      .catch((error) => {
+        toast.error("Internal Server Error While Saving");
+      });
+  };
   useEffect(() => {
     getVehicleEntry()
       .then((data) => {
@@ -106,6 +135,25 @@ const formattedDate = `${year}-${month}-${day}`;
       value?.toString()?.toLowerCase()?.includes(searchTerm)
     )
   );
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = (ddata) => {
+    setDriverData(ddata);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setImgLoading(true);
+    setSelectedImageIndex(0);
+  };
+  const [imgLoading, setImgLoading] = useState(true);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const handleSelect = (selectedIndex, e) => {
+    setSelectedImageIndex(selectedIndex);
+  };
+  const handleImageLoad = () => {
+    setImgLoading(false); // Set loading state to false when the image is loaded
+  };
   const navigate = useNavigate();
   return (
     <Paper className="m-3">
@@ -127,20 +175,26 @@ const formattedDate = `${year}-${month}-${day}`;
           Add New
         </Button>
       </Stack>
-      <TableContainer className="position-relative" style={filteredRows.length==0?{minHeight:"380px"}:{}}> 
+      <TableContainer
+        className="position-relative"
+        style={filteredRows.length == 0 ? { minHeight: "380px" } : {}}
+      >
         <Table size="small">
-          <TableHead>
+          <TableHead style={{ backgroundColor: "#205072", color: "white" }}>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
+                  align="center"
                   key={column.id}
                   onClick={() => handleSort(column.id)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", color: "white" }}
                 >
                   {column.label}
                 </TableCell>
               ))}
-          
+              <TableCell style={{ color: "white" }} align="center">
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -155,9 +209,111 @@ const formattedDate = `${year}-${month}-${day}`;
                 {columns.map((column) => (
                   <TableCell key={column.id}>{row[column.id]}</TableCell>
                 ))}
-                    <TableCell>
-                <Button size="small" onClick={()=>timeOut(row)} variant="outlined"><small>Timeout</small></Button>
-              </TableCell>
+                <TableCell className="">
+                  <Tooltip title="View">
+                    <Button onClick={() => handleOpen(row)}>
+                      <Visibility />
+                    </Button>
+                  </Tooltip>
+
+                  {/* Tooltip for AccessTime button */}
+                  <Tooltip title="Time Out">
+                    <Button size="small" onClick={() => timeOut(row)}>
+                      <small>
+                        <AccessTime />
+                      </small>
+                    </Button>
+                  </Tooltip>
+                </TableCell>
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Paper style={style}>
+                    <div className="d-flex justify-content-between">
+                      <DialogTitle className="fw-bold">
+                        JCB or HYDRA Details
+                      </DialogTitle>
+                      <Cancel
+                        onClick={handleClose}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </div>
+                    <DialogContent>
+                      <Carousel
+                        activeIndex={selectedImageIndex}
+                        onSelect={handleSelect}
+                        interval={null} // Disable automatic sliding
+                      >
+                        {imgLoading && (
+                          <Carousel.Item>
+                            <Skeleton
+                              variant="rect"
+                              width="100%"
+                              height={200}
+                              className="rounded"
+                            />
+                          </Carousel.Item>
+                        )}
+                        {driverData.photoUrl && (
+                          <Carousel.Item>
+                            <img
+                              className="d-block w-100 rounded"
+                              src={getVehicleImageByTypeURl(driverData.id)}
+                              alt="Driver Document"
+                              onLoad={handleImageLoad}
+                            />
+                          </Carousel.Item>
+                        )}
+
+                        {/* Add more items as needed */}
+                      </Carousel>
+                      <DialogContentText>
+                        <strong>Gate Pass No:</strong> {driverData.gatePassNo}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Site:</strong> {driverData.site}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Out Time:</strong> {driverData.outTime}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Out Date:</strong> {driverData.outDate}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Selected Option:</strong>{" "}
+                        {driverData.selectedOption}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Hydra Capacity:</strong>{" "}
+                        {driverData.hydraCapacity}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Owner Bank Account:</strong>{" "}
+                        {driverData.ownerBankAccount}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Owner Phone:</strong> {driverData.ownerPhone}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Justification:</strong>{" "}
+                        {driverData.justification}
+                      </DialogContentText>
+                      <DialogContentText>
+                        <strong>Entered By:</strong> {driverData.enteredBy}
+                      </DialogContentText>
+
+                      {/* React Bootstrap Carousel */}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        Close
+                      </Button>
+                    </DialogActions>
+                  </Paper>
+                </Modal>
               </TableRow>
             ))}
             {filteredRows.length <= 0 && (

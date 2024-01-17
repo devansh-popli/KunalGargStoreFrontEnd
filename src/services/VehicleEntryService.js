@@ -1,4 +1,4 @@
-import { privateAxios } from "./AxiosService"
+import { BASE_URL, privateAxios } from "./AxiosService"
 
 export const saveVehicleEntry=(formData)=>{
     return privateAxios.post("/api/vehicle-entries",formData).then(data=>data.data)
@@ -20,7 +20,12 @@ export const saveVehicleDocumentToBackend = (vehicleEntryId, file) => {
       .post(`/api/vehicle-entries/upload/image/${vehicleEntryId}`, vehicleEntryProfileImage)
       .then((data) => data.data);
   };
-
+  export const getVehicleImageByTypeURl = (entryId) => {
+    return `${BASE_URL}/api/vehicle-entries/image/${entryId}`;
+  };
+  export const getVehicleImageByNameURl = (imageName) => {
+    return `${BASE_URL}/api/v2/vehicle-entries/image/${imageName}`;
+  };
 export const saveVehicleDocument2ToBackend = (vehicleEntryId, file,type) => {
     const vehicleEntryProfileImage = new FormData();
     vehicleEntryProfileImage.append("vehicleProfileImage", file);
