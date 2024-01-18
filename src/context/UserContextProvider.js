@@ -24,7 +24,7 @@ export const UserContextProvider = ({children}) => {
         doLogoutFromLocalStorage()
         setIsLogin(false)
         setUserData(null)
-        document.getElementById('theme-color-meta').setAttribute('content', 'RGB(250, 249, 248)');
+        document.getElementById('theme-color-meta').setAttribute('content', '#C4EDDD');
     }
     return (
         <UserContext.Provider value={{dailyData:dailyData,setDailyData:setDailyData,setMonthlyAttendance:setMonthlyAttendance,monthlyAttendance:monthlyAttendance,doLogin: doLogin ,isLogin:isLogin,userData:userData,doLogout:doLogout,updatedAttendance:updatedAttendance, setUpdatedAttendance:setUpdatedAttendance}}>
