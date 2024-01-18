@@ -50,6 +50,9 @@ body {
   align-items: 'center';
   height: '100%';
 }
+.w-41{
+  width: 40%;
+}
 .font-primary{
   color: #78C2AD !important;
 }
@@ -275,6 +278,9 @@ h6 {
   }
   .w-40{
     width: 40% !important;
+  }
+  .w-41{
+    width: 100% !important;
   }
   .w-30{
     width: 100% !important;

@@ -51,7 +51,7 @@ function Login() {
           style={{  }}
         >
           <Container className="text-center  mb-2 d-flex align-items-center justify-content-center">
-            <img className="mx-0 m-0" src="../../logo.png" width={120} alt="" />
+            {/* <img className="mx-0 m-0" src="../../logo.png" width={120} alt="" /> */}
             <h1 className="my-5 mx-0 p-0 fw-bold" style={{color:"#5B6E80"}}>MittalSteelIndustries</h1>
           </Container>
           <img src="../../home.svg" className="imgWidth" style={{maxWidth:"650px"}} alt="" />
@@ -62,7 +62,7 @@ function Login() {
           style={{ flexDirection: "column" }}
         >
           <div
-            className=" w-40 mb-5 jsc"
+            className=" w-41 mb-5 jsc"
             // style={{ border: "0px", borderRadius: "10px" }}
           >
             <Container>
@@ -118,7 +118,7 @@ function Login() {
               </Form>
             </Container>
           </div>
-          <p>© 2024 MittalSteelIndustries | All Rights Reserved</p>
+          <p className="text-center">© 2024 MittalSteelIndustries | All Rights Reserved</p>
         </div>
       </div>
     </div>
