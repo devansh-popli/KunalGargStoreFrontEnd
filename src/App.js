@@ -69,7 +69,7 @@ function App() {
   useEffect(()=>{
     if (window.location.pathname === "/") {
       console.log(window.location.pathname+"inside if")
-      document.getElementById('theme-color-meta').setAttribute('content', 'RGB(250, 249, 248)');
+      document.getElementById('theme-color-meta').setAttribute('content', '#C4EDDD');
     } else {
       console.log(window.location.pathname+"inside else")
       document.getElementById('theme-color-meta').setAttribute('content', 'white');
