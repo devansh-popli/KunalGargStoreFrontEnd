@@ -44,6 +44,9 @@ body {
 .isMobile{
   display: none;
 }
+.fs{
+  font-size: larger;
+}
 .centeredCell {
   display: 'flex';
   justify-content: 'center';
@@ -256,6 +259,9 @@ h6 {
 }
 .imgWidth{
   width: 320px;
+}
+.fs{
+  font-size:medium;
 }
   .isMobile{
     display: block;
