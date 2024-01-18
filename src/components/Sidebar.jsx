@@ -83,12 +83,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
           onClick={() => setToggle(false)}
         />
       )}
-      <div className="d-flex alignment justify-content-center align-items-center ">
-        <img className="" src="../../download.png" width={56} alt="" />
-        <h5 className="mx-2">ShopEase</h5>
+      <div className="d-flex  align-items-center ">
+        <img className="mx-0 m-0" src="../../logo.png" width={80} alt="" />
+        <h5 className=" m-0 p-0">MittalSteelIndustries</h5>
       </div>
       {userContext.isLogin && (
-        <List className="mt-3">
+        <List className="mt-1">
           <ListItem
             onClick={() => {
               setIsActive(1);

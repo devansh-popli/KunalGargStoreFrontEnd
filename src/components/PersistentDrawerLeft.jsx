@@ -155,7 +155,7 @@ setOpen(true)
           
           <img src="../../download.png" className='w-25 m-2 my-3' alt="" />
         <h4 >
-          <b>SHOPEASE</b>
+          <b>MittalSteelIndustries</b>
         </h4>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
@@ -242,7 +242,7 @@ setOpen(true)
           <MenuIcon />
         </IconButton>}
         <Typography variant="h6" className='fw-bold' noWrap component="div">
-          ShopEase
+          MittalSteelIndustries
         </Typography>
       </Grid>
       <Grid item display={'flex'} justifyContent={'center'} alignItems={'center'}>
@@ -263,7 +263,7 @@ setOpen(true)
   <DrawerHeader>
     <img src="../../download.png" className='w-25 my-3 mx-2' alt="" />
   <Typography variant="h6" noWrap component="div">
-          <b>SHOPEASE</b>
+          <b>MittalSteelIndustries</b>
         </Typography>
           <IconButton onClick={toggleDrawer}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
