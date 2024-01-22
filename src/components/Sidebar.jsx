@@ -41,6 +41,7 @@ import {
   AccountBalanceWallet,
   AddBox,
   AddBoxOutlined,
+  CarRental,
   Dashboard,
   DriveEta,
   DriveFolderUpload,
@@ -106,7 +107,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <h6 className="text-white m-0 p-0">Dashboard</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem
+          {/* <ListItem
             onClick={() => {
               setIsActive(2);
               isMobile && setToggle(!toggle);
@@ -119,19 +120,9 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>
                 {<AccountBalanceWallet className="text-white" />}
               </ListItemIcon>
-              {/* <ListItemText
-                primary={"New Ledger Account Form"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontStyle:"italic"
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">New Ledger Account Form</h6>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             onClick={() => {
               setIsActive(3);
@@ -145,20 +136,10 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>
                 {<AccountBalanceWallet className="text-white" />}
               </ListItemIcon>
-              {/* <ListItemText
-                primary={"Ledger Directory"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontStyle:"italic"
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">Ledger Directory</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem
+          {/* <ListItem
             onClick={() => {
               setIsActive(4);
               isMobile && setToggle(!toggle);
@@ -171,19 +152,9 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>
                 {<ShoppingBag className="text-white" />}
               </ListItemIcon>
-              {/* <ListItemText
-                primary={"Stock Item Menu"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">Stock Item Menu</h6>
-              {/* <h6 className='fw-medium--dark' style={{color:"white"}}>Stock Item Menu</h6> */}
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             onClick={() => {
               setIsActive(5);
@@ -195,19 +166,10 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
           >
             <ListItemButton>
               <ListItemIcon>{<ListAlt className="text-white" />}</ListItemIcon>
-              {/* <ListItemText
-                primary={"View Stock Item Menu"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">View Stock Item Menu</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem
+          {/* <ListItem
             onClick={() => {
               setIsActive(6);
               isMobile && setToggle(!toggle);
@@ -220,18 +182,9 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>
                 {<PersonAdd className="text-white" />}
               </ListItemIcon>
-              {/* <ListItemText
-                primary={"Employee Form"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">Employee Form</h6>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             onClick={() => {
               setIsActive(7);
@@ -243,15 +196,6 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
           >
             <ListItemButton>
               <ListItemIcon>{<Group className="text-white" />}</ListItemIcon>
-              {/* <ListItemText
-                primary={"Employee Directory"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">Employee Directory</h6>
             </ListItemButton>
           </ListItem>
@@ -268,15 +212,6 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>
                 {<AccessTime className="text-white" />}
               </ListItemIcon>
-              {/* <ListItemText
-                primary={"Attendance Tracker"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">Attendance Tracker</h6>
             </ListItemButton>
           </ListItem>
@@ -291,15 +226,6 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
           >
             <ListItemButton>
               <ListItemIcon>{<Event className="text-white" />}</ListItemIcon>
-              {/* <ListItemText
-                primary={"Attendance Records"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">Attendance Records</h6>
             </ListItemButton>
           </ListItem>
@@ -326,7 +252,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <h6 className="text-white m-0 p-0">Visitor Form</h6>
             </ListItemButton>
           </ListItem>
-          <ListItem
+          {/* <ListItem
             onClick={() => {
               setIsActive(11);
               isMobile && setToggle(!toggle);
@@ -337,19 +263,10 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
           >
             <ListItemButton>
               <ListItemIcon>{<DriveEta className="text-white" />}</ListItemIcon>
-              {/* <ListItemText
-                primary={"Vehicle Entry Form"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">JCB or HYDRA Form</h6>
             </ListItemButton>
-          </ListItem>
-          <ListItem
+          </ListItem> */}
+          {/* <ListItem
             onClick={() => {
               setIsActive(12);
               isMobile && setToggle(!toggle);
@@ -362,18 +279,9 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               <ListItemIcon>
                 {<DriveFolderUpload className="text-white" />}
               </ListItemIcon>
-              {/* <ListItemText
-                primary={"Vehicle Entry Form 2"}
-                primaryTypographyProps={{
-                  color: "white",
-                  fontWeight: "medium",
-                  variant: "body2",
-                  // fontSize:"20px"
-                }}
-              /> */}
               <h6 className="text-white m-0 p-0">Vehicle Entry Form</h6>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             onClick={() => {
               setIsActive(13);
@@ -410,7 +318,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
           >
             <ListItemButton>
               <ListItemIcon>
-                {<DriveFolderUpload className="text-white" />}
+                {<CarRental className="text-white" />}
               </ListItemIcon>
               {/* <ListItemText
                 primary={"JCB or HYDRA"}

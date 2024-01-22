@@ -187,6 +187,7 @@ const VehicleEntryRecords = () => {
         <Button
           variant="contained"
           color="primary"
+          style={{backgroundColor:"#78C2AD"}}
           onClick={() => {
             navigate("/vehicle-entry-form");
           }}

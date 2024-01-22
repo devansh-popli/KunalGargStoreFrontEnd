@@ -9,13 +9,14 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import React, { useState, useEffect, useContext } from "react";
 import { privateAxios } from "../services/AxiosService";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 // import { Container } from "react-bootstrap";
 import {
   Button,
   Container,
   IconButton,
+  Stack,
   TextField,
   Tooltip,
   styled,
@@ -311,9 +312,18 @@ const ViewStockItemMenu = React.memo(() => {
     <Container className="mt-3">
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
       <Paper className="w-100" style={{ borderRadius: "10px" }}>
-        <TableContainer sx={{ maxHeight: 440 }} className="position-relative" style={stockItems?.content?.length<=0?{minHeight:'380px'}:{}}>
+      <Stack 
+          spacing={2}
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          paddingTop={2}
+          paddingLeft={2}
+          paddingRight={2}
+        >
           <TextField
-            className="w-50 m-4"
+            style={{ width: "300px" }}
+            className=""
             label={
               <>
                 <SearchIcon />
@@ -324,6 +334,23 @@ const ViewStockItemMenu = React.memo(() => {
             // value={searchTerm}
             // onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <Button
+            as={Link}
+            to="/stock-item-menu"
+            style={{
+              backgroundColor: "#78C2AD",
+              textDecoration: "none",
+              fontSize:"11px",
+              width:"90px"
+            }}
+            size="small"
+            variant="contained"
+          >
+            Add New
+          </Button>
+        </Stack>
+        <TableContainer sx={{ maxHeight: 440 }} className="position-relative" style={stockItems?.content?.length<=0?{minHeight:'380px'}:{}}>
+       <div className="mt-2"></div>
           <Table stickyHeader size="small" aria-label="a dense table"  style={stockItems?.content?.length <= 0 ?{minHeight:"340px"}:{}}>
             <TableHead className="position-relative">
               {/* <TableRow>
@@ -342,7 +369,7 @@ const ViewStockItemMenu = React.memo(() => {
                   <StyledTableCell
                     key={column.id}
                     align={column.align}
-                    style={{ top: 57, minWidth: column.minWidth }}
+                    style={{  minWidth: column.minWidth }}
                   >
                     {column.label}
                   </StyledTableCell>

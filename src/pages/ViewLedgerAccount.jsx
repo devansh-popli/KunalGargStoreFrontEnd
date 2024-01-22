@@ -9,13 +9,14 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import React, { useState, useEffect, useContext } from "react";
 import { privateAxios } from "../services/AxiosService";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 // import { Container } from "react-bootstrap";
 import {
   Button,
   Container,
   IconButton,
+  Stack,
   TextField,
   Tooltip,
   styled,
@@ -36,13 +37,13 @@ const columns = [
     align: "left",
     format: (value) => value.toFixed(2),
   },
-  {
-    id: "gstNo",
-    label: "GST No",
-    minWidth: 100,
-    align: "left",
-    format: (value) => value.toFixed(2),
-  },
+  // {
+  //   id: "gstNo",
+  //   label: "GST No",
+  //   minWidth: 100,
+  //   align: "left",
+  //   format: (value) => value.toFixed(2),
+  // },
   {
     id: "accountName",
     label: "Account Name",
@@ -85,17 +86,17 @@ const columns = [
     align: "left",
     format: (value) => value.toFixed(2),
   },
-  {
-    id: "msmedStatus",
-    label: "MSMED Status",
-    minWidth: 160,
-    align: "left",
-    format: (value) => value.toFixed(2),
-  },
+  // {
+  //   id: "msmedStatus",
+  //   label: "MSMED Status",
+  //   minWidth: 160,
+  //   align: "left",
+  //   format: (value) => value.toFixed(2),
+  // },
   {
     id: "contactNo",
     label: "Contact No",
-    minWidth: 100,
+    minWidth: 120,
     align: "left",
     format: (value) => value.toFixed(2),
   },
@@ -120,27 +121,27 @@ const columns = [
   //   align: "left",
   //   format: (value) => value.toFixed(2),
   // },
-  {
-    id: "approved",
-    label: "Approved",
-    minWidth: 100,
-    align: "left",
-    format: (value) => value.toFixed(2),
-  },
-  {
-    id: "accountNum",
-    label: "Account Number",
-    minWidth: 140,
-    align: "left",
-    format: (value) => value.toFixed(2),
-  },
-//   {
-//     id: "accountNameBank",
-//     label: "Account Name Bank",
-//     minWidth: 100,
-//     align: "left",
-//     format: (value) => value.toFixed(2),
-//   },
+  // {
+  //   id: "approved",
+  //   label: "Approved",
+  //   minWidth: 100,
+  //   align: "left",
+  //   format: (value) => value.toFixed(2),
+  // },
+  // {
+  //   id: "accountNum",
+  //   label: "Account Number",
+  //   minWidth: 140,
+  //   align: "left",
+  //   format: (value) => value.toFixed(2),
+  // },
+  //   {
+  //     id: "accountNameBank",
+  //     label: "Account Name Bank",
+  //     minWidth: 100,
+  //     align: "left",
+  //     format: (value) => value.toFixed(2),
+  //   },
   {
     id: "actions",
     label: "Actions",
@@ -187,7 +188,7 @@ const rows = [
   createData("Brazil", "BR", 210147125, 8515767),
 ];
 
-const ViewLedgerAccount=React.memo(()=> {
+const ViewLedgerAccount = React.memo(() => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -204,11 +205,11 @@ const ViewLedgerAccount=React.memo(()=> {
     },
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    '&:last-child td, &:last-child th': {
+    "&:last-child td, &:last-child th": {
       border: 0,
     },
   }));
@@ -216,12 +217,12 @@ const ViewLedgerAccount=React.memo(()=> {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  
+
   const [stockItems, setStockItems] = useState([]);
   const [oldStockItems, setOldStockItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = React.useState("");
-  const jetChecker=useJwtChecker()
+  const jetChecker = useJwtChecker();
   React.useEffect(() => {
     // Fetch data from your backend API
     privateAxios
@@ -256,31 +257,58 @@ const ViewLedgerAccount=React.memo(()=> {
       });
   };
   const userContext = React.useContext(UserContext);
-  return userContext.isLogin  ? (
+  return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">Ledger Directory</h4>
-      <Paper  style={{borderRadius: '10px' }}>
-        <TableContainer sx={{ borderRadius: '10px' }}>
-          <Table stickyHeader  size="small" aria-label="a dense table" className="d-flex justify-content-center flex-column " style={stockItems?.content?.length<=0?{minHeight:"420px"}:{}}>
-            <TableHead >
-            
-              <TableRow>
-                <TableCell align="left" colSpan={12}>
-                   <TextField
-                    style={{ width: "300px" }}
-                    className=""
-                    label={
-                      <>
-                        <SearchIcon />
-                        <span className="ms-4">Search</span>
-                      </>
-                    }
-                    variant="outlined"
-                    // value={searchTerm}
-                    // onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </TableCell>
-              </TableRow>
+      <Paper style={{ borderRadius: "10px" }}>
+        <Stack
+          spacing={2}
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          paddingTop={2}
+          paddingLeft={2}
+          paddingRight={2}
+        >
+          <TextField
+            style={{ width: "300px" }}
+            className=""
+            label={
+              <>
+                <SearchIcon />
+                <span className="ms-4">Search</span>
+              </>
+            }
+            variant="outlined"
+            // value={searchTerm}
+            // onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Button
+            as={Link}
+            to="/new-ledger-account-form"
+            style={{
+              backgroundColor: "#78C2AD",
+              textDecoration: "none",
+              fontSize:"11px",
+              width:"90px"
+            }}
+            size="small"
+            variant="contained"
+          >
+            Add New
+          </Button>
+        </Stack>
+        <TableContainer sx={{ borderRadius: "10px" }}>
+          <Table
+            stickyHeader
+            size="small"
+            aria-label="a dense table"
+            className="d-flex justify-content-center flex-column "
+            style={
+              stockItems?.content?.length <= 0 ? { minHeight: "420px" } : {}
+            }
+          >
+            <TableHead>
               {/* <TableRow>
               <TableCell align="center" colSpan={3}>
                 
@@ -292,7 +320,7 @@ const ViewLedgerAccount=React.memo(()=> {
                 
               </TableCell>
             </TableRow> */}
-              <TableRow >
+              <TableRow>
                 {columns.map((column) => (
                   <StyledTableCell
                     key={column.id}
@@ -330,9 +358,7 @@ const ViewLedgerAccount=React.memo(()=> {
                                         );
                                         let newStockItems =
                                           stockItems.content.filter(
-                                            (item) =>
-                                              item.id !=
-                                              row.id
+                                            (item) => item.id != row.id
                                           );
                                         setStockItems({
                                           ...stockItems,
@@ -371,12 +397,9 @@ const ViewLedgerAccount=React.memo(()=> {
                 })}
             </TableBody>
             {stockItems?.content?.length <= 0 && (
-               <div  className="d-flex text-center justify-content-center">
-                 <img
-                   src="../../noData.svg"
-                   alt=""
-                 />
-               </div>
+              <div className="d-flex text-center justify-content-center">
+                <img src="../../noData.svg" alt="" />
+              </div>
             )}
           </Table>
         </TableContainer>
@@ -539,4 +562,4 @@ const ViewLedgerAccount=React.memo(()=> {
 //     ):<Navigate to="/"/>
 // };
 
-export default ViewLedgerAccount
+export default ViewLedgerAccount;

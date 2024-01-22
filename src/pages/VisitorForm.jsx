@@ -279,7 +279,7 @@ const VisitorForm = () => {
       <div className="container">
         <div className="d-flex flex-row-reverse m-4 ">
           {" "}
-          <Button variant="contained" onClick={handleOpen}>
+          <Button variant="contained" style={{backgroundColor:"#78C2AD"}} onClick={handleOpen}>
             Add Visitor
           </Button>
         </div>

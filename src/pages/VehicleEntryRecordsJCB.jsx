@@ -171,6 +171,7 @@ const VehicleEntryRecordsJCB = () => {
           onClick={() => {
             navigate("/vehicle-entry");
           }}
+          style={{backgroundColor:"#78C2AD"}}
         >
           Add New
         </Button>

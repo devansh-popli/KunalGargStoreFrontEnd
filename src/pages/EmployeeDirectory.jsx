@@ -14,6 +14,7 @@ import {
   Container,
   styled,
   tableCellClasses,
+  Stack,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -32,7 +33,7 @@ import { Button } from "react-bootstrap";
 import { Tooltip } from "react-tooltip";
 import EmployeeEnrollmentForm from "./EmployeeEnrollmentForm";
 import { UserContext } from "../context/UserContext";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import SortIcon from "@mui/icons-material/Sort";
@@ -161,201 +162,238 @@ const EmployeeDirectory = React.memo(() => {
   const jetChecker = useJwtChecker();
   return userContext.isLogin ? (
     <Container className="mt-3">
-      <h4 className="fw-bold">Employee Directory</h4>
-      <TableContainer className="position-relative" component={Paper} style={{ borderRadius: "10px" }}>
-        <Table size="small" aria-label="a dense table"  style={sortedEmployees()?.length<=0?{minHeight:'380px'}:{}}>
-          <TableHead>
-            <TextField
-              label="Search"
-              className="mx-4 w-100"
-              variant="outlined"
-              margin="normal"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TableRow>
-              <StyledTableCell style={{ width: "8%" }} className="text-center">
-                Profile Image
-              </StyledTableCell>
-              <StyledTableCell
-                onClick={() => handleSort("empCode")}
-                style={{ width: "15%", cursor: "pointer" }}
-              >
-                Emp Code {getSortIcon("empCode")}
-              </StyledTableCell>
-              <StyledTableCell
-                onClick={() => handleSort("firstName")}
-                style={{ width: "15%", cursor: "pointer" }}
-              >
-                Emp Name {getSortIcon("firstName")}
-              </StyledTableCell>
-              <StyledTableCell
-                onClick={() => handleSort("department")}
-                style={{ width: "15%", cursor: "pointer" }}
-              >
-                Department {getSortIcon("department")}
-              </StyledTableCell>
-              <StyledTableCell
-                onClick={() => handleSort("designation")}
-                style={{ width: "15%", cursor: "pointer" }}
-              >
-                Designation {getSortIcon("designation")}
-              </StyledTableCell>
-              <StyledTableCell
-                onClick={() => handleSort("phoneNumber")}
-                style={{ width: "15%", cursor: "pointer" }}
-              >
-                Mobile No {getSortIcon("phoneNumber")}
-              </StyledTableCell>
-              <StyledTableCell
-                onClick={() => handleSort("cityTehsil")}
-                style={{ width: "15%", cursor: "pointer" }}
-              >
-                Location {getSortIcon("cityTehsil")}
-              </StyledTableCell>
-              <StyledTableCell style={{ width: "15%" }}>
-                Actions
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortedEmployees()
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((employee, index) => (
-                <TableRow key={employee.id}>
-                  <TableCell className="text-center">
-                    <img
-                      height={30}
-                      width={30}
-                      className="rounded-circle"
-                      style={{ backgroundPosition: "contain" }}
-                      src={
-                        imageSrc && imageSrc[employee.id]
-                          ? imageSrc[employee.id]
-                          : getEmployeeImageByTypeURl(
-                              employee?.id,
-                              "profileImage"
-                            )
-                      }
-                      onError={() => {
-                        setImageSrc((prevMap) => ({
-                          ...prevMap,
-                          [employee.id]: "../../user.jpg",
-                        }));
-                      }}
-                      alt=""
-                    />
-                  </TableCell>
-                  <TableCell>{employee.empCode}</TableCell>
-                  <TableCell>
-                    {employee.firstName + " " + employee.lastName}
-                  </TableCell>
-                  <TableCell>{employee.department}</TableCell>
-                  <TableCell>{employee.designation}</TableCell>
-                  <TableCell>{employee.phoneNumber}</TableCell>
-                  <TableCell>{employee.cityTehsil}</TableCell>
-                  <TableCell>
-                    <div className="d-flex">
-                      <Button
-                        onClick={() => handleOpen(employee)}
-                        variant="outlined"
-                        data-tooltip-id="my-tooltip"
-                        data-tooltip-content="Edit Employee"
-                      >
-                        <EditIcon />
-                      </Button>
-                      <Tooltip
-                        id="my-tooltip"
-                        place="bottom"
-                        type="info"
-                        effect="solid"
-                      />
-                      <Button
-                        onClick={() => handleOpen(employee, true)}
-                        variant="outlined"
-                        data-tooltip-id="my-tooltip2"
-                        data-tooltip-content="View Employee"
-                      >
-                        <Preview />
-                      </Button>
-                      <Tooltip
-                        id="my-tooltip2"
-                        place="bottom"
-                        type="info"
-                        effect="solid"
-                      />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-          {sortedEmployees().length <= 0 && (
-            <Container>
-              <img
-                src="../../noData.svg"
-                width={250}
-                height={250}
-                alt=""
-                className="position-absolute"
-                style={{
-                  top: "60%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                }}
-              />
-            </Container>
-          )}
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={employees.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </TableContainer>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        className="p-0 m-0"
-      >
-        <Paper
-          className="container-fluid"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 500,
-            height: "70%",
-            bgcolor: "background.paper",
-            overflowY: "auto",
-            borderRadius: "5px",
-            padding: 0,
-          }}
+        <h4 className="fw-bold">Employee Directory</h4>
+      <Paper className="" style={{ borderRadius: "10px" }}>
+        <Stack
+          spacing={2}
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          padding={2}
         >
-          <EmployeeEnrollmentForm
-            readOnly={readOnly}
-            handleClose={handleClose}
-            setSelectedEmployee={setSelectedEmployee}
-            selectedEmployee={selectedEmployee}
-            paper={false}
+          <TextField
+            label="Search"
+            className=""
+            variant="outlined"
+            margin="normal"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{ width: "300px" }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-        </Paper>
-      </Modal>
+
+          <Button
+            as={Link}
+            to="/employee-form"
+            style={{
+              backgroundColor: "#78C2AD",
+              textDecoration: "none",
+              fontSize: "11px",
+              width: "90px",
+              color:"white"
+            }}
+            size="small"
+            variant="contained"
+          >
+            Add New
+          </Button>
+        </Stack>
+        <TableContainer
+          className="position-relative"
+          style={{ borderRadius: "10px" }}
+        >
+          <Table
+            size="small"
+            aria-label="a dense table"
+            style={sortedEmployees()?.length <= 0 ? { minHeight: "380px" } : {}}
+          >
+            <TableHead>
+              <TableRow>
+                <StyledTableCell
+                  style={{ width: "12%" }}
+                  className="text-center "
+                >
+                  Profile Image
+                </StyledTableCell>
+                <StyledTableCell
+                  onClick={() => handleSort("empCode")}
+                  style={{ width: "15%", cursor: "pointer" }}
+                >
+                  Emp Code {getSortIcon("empCode")}
+                </StyledTableCell>
+                <StyledTableCell
+                  onClick={() => handleSort("firstName")}
+                  style={{ width: "15%", cursor: "pointer" }}
+                >
+                  Emp Name {getSortIcon("firstName")}
+                </StyledTableCell>
+                <StyledTableCell
+                  onClick={() => handleSort("department")}
+                  style={{ width: "15%", cursor: "pointer" }}
+                >
+                  Department {getSortIcon("department")}
+                </StyledTableCell>
+                <StyledTableCell
+                  onClick={() => handleSort("designation")}
+                  style={{ width: "15%", cursor: "pointer" }}
+                >
+                  Designation {getSortIcon("designation")}
+                </StyledTableCell>
+                <StyledTableCell
+                  onClick={() => handleSort("phoneNumber")}
+                  style={{ width: "15%", cursor: "pointer" }}
+                >
+                  Mobile No {getSortIcon("phoneNumber")}
+                </StyledTableCell>
+                <StyledTableCell
+                  onClick={() => handleSort("cityTehsil")}
+                  style={{ width: "15%", cursor: "pointer" }}
+                >
+                  Location {getSortIcon("cityTehsil")}
+                </StyledTableCell>
+                <StyledTableCell style={{ width: "15%" }}>
+                  Actions
+                </StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sortedEmployees()
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((employee, index) => (
+                  <TableRow key={employee.id}>
+                    <TableCell className="text-center">
+                      <img
+                        height={30}
+                        width={30}
+                        className="rounded-circle"
+                        style={{ backgroundPosition: "contain" }}
+                        src={
+                          imageSrc && imageSrc[employee.id]
+                            ? imageSrc[employee.id]
+                            : getEmployeeImageByTypeURl(
+                                employee?.id,
+                                "profileImage"
+                              )
+                        }
+                        onError={() => {
+                          setImageSrc((prevMap) => ({
+                            ...prevMap,
+                            [employee.id]: "../../user.jpg",
+                          }));
+                        }}
+                        alt=""
+                      />
+                    </TableCell>
+                    <TableCell>{employee.empCode}</TableCell>
+                    <TableCell>
+                      {employee.firstName + " " + employee.lastName}
+                    </TableCell>
+                    <TableCell>{employee.department}</TableCell>
+                    <TableCell>{employee.designation}</TableCell>
+                    <TableCell>{employee.phoneNumber}</TableCell>
+                    <TableCell>{employee.cityTehsil}</TableCell>
+                    <TableCell>
+                      <div className="d-flex">
+                        <Button
+                          onClick={() => handleOpen(employee)}
+                          variant="outlined"
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content="Edit Employee"
+                        >
+                          <EditIcon />
+                        </Button>
+                        <Tooltip
+                          id="my-tooltip"
+                          place="bottom"
+                          type="info"
+                          effect="solid"
+                        />
+                        <Button
+                          onClick={() => handleOpen(employee, true)}
+                          variant="outlined"
+                          data-tooltip-id="my-tooltip2"
+                          data-tooltip-content="View Employee"
+                        >
+                          <Preview />
+                        </Button>
+                        <Tooltip
+                          id="my-tooltip2"
+                          place="bottom"
+                          type="info"
+                          effect="solid"
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+            {sortedEmployees().length <= 0 && (
+              <Container>
+                <img
+                  src="../../noData.svg"
+                  width={250}
+                  height={250}
+                  alt=""
+                  className="position-absolute"
+                  style={{
+                    top: "60%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              </Container>
+            )}
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={employees.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </TableContainer>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          className="p-0 m-0"
+        >
+          <Paper
+            className="container-fluid"
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 500,
+              height: "70%",
+              bgcolor: "background.paper",
+              overflowY: "auto",
+              borderRadius: "5px",
+              padding: 0,
+            }}
+          >
+            <EmployeeEnrollmentForm
+              readOnly={readOnly}
+              handleClose={handleClose}
+              setSelectedEmployee={setSelectedEmployee}
+              selectedEmployee={selectedEmployee}
+              paper={false}
+            />
+          </Paper>
+        </Modal>
+      </Paper>
     </Container>
   ) : (
     <Navigate to={"/"} />
