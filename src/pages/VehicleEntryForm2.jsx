@@ -266,7 +266,7 @@ const VehicleEntryForm2 = () => {
                 </h5>
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="w-60"
                   label="Vehicle Number"
                   fullWidth
@@ -282,6 +282,7 @@ const VehicleEntryForm2 = () => {
                             data.data.dateOfExit = null;
                             data.data.dayOfExit = null;
                             data.data.timeOfExit = null;
+                            data.data.vendorName = null;
                             setVehicleInfo(data.data);
                           }
                         })
@@ -326,7 +327,7 @@ const VehicleEntryForm2 = () => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="w-60"
                   label="Dated"
                   type="date"
@@ -373,6 +374,17 @@ const VehicleEntryForm2 = () => {
                   </Grid>
                 )}
               </Grid>
+              <Grid item xs={12}>
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                  className="w-60"
+                  label="Document Number"
+                  type="text"
+                  fullWidth
+          
+                  value={vehicleInfo.documentNo}
+                  onChange={handleFieldChange("documentNo")}
+                />
+              </Grid>
               {/* <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel>Document Type</InputLabel>
@@ -386,7 +398,7 @@ const VehicleEntryForm2 = () => {
                 </FormControl>
               </Grid> */}
               {/* <Grid item xs={12}>
-                <TextField className="w-60"
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  className="w-60"
                   label="Document No."
                   fullWidth
                   value={vehicleInfo.documentNo}
@@ -394,7 +406,7 @@ const VehicleEntryForm2 = () => {
                 />
               </Grid> */}
               <Grid item xs={12}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="w-60"
                   label="Vendor Name"
                   fullWidth
@@ -517,7 +529,7 @@ const VehicleEntryForm2 = () => {
                   </Grid>
                   {vehicleInfo.vehicleType === "others" && (
                     <Grid xs={12} item>
-                      <TextField
+                      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                         size="small"
                         label="Others"
                         value={vehicleInfo.vehicleType1}
@@ -550,7 +562,7 @@ const VehicleEntryForm2 = () => {
         return (
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
+              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Date of Entry"
                 type="date"
@@ -570,7 +582,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Day of Entry"
                 fullWidth
@@ -586,7 +598,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Time of Entry"
                 type="time"
@@ -606,7 +618,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             {/* <Grid item xs={12}>
-              <TextField
+              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Date of Exit"
                 type="date"
@@ -626,7 +638,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Day of Exit"
                 fullWidth
@@ -642,7 +654,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Time of Exit"
                 InputLabelProps={{
@@ -775,7 +787,7 @@ const VehicleEntryForm2 = () => {
               <h4 className="fw-bold">Owner Details</h4>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={12}>
-                  <TextField
+                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                     className="w-60"
                     label="Phone No."
                     fullWidth
@@ -792,7 +804,7 @@ const VehicleEntryForm2 = () => {
                   )}
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <TextField
+                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                     className="w-60"
                     label="PAN No."
                     fullWidth
@@ -808,7 +820,7 @@ const VehicleEntryForm2 = () => {
                   )}
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <TextField
+                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                     className="w-60"
                     label="Bank Account No."
                     fullWidth

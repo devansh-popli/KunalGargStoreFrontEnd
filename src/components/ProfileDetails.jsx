@@ -140,7 +140,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
           />
         </RadioGroup>
       </FormControl>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Job Experience in Months/Years"
         name="jobExperienceInMonths"
@@ -151,7 +151,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         helperText={errors.jobExperienceInMonths}
         className="mb-3"
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Job Experience Location"
         name="jobExperienceLocation"

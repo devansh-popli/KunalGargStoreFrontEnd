@@ -38,7 +38,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
           <MenuItem value="Not Applicable">Not Applicable</MenuItem>
         </Select>
       </FormControl>
-      <TextField disabled={readOnly} className="mb-2"
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly} className="mb-2"
         label="Height (Cm)"
         name="height"
         fullWidth
@@ -47,7 +47,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
         error={Boolean(errors.height)}
         helperText={errors.height}
       />
-      <TextField disabled={readOnly} className="mb-2"
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly} className="mb-2"
         label="Weight (Kg)"
         name="weight"
         fullWidth
@@ -56,7 +56,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
         error={Boolean(errors.weight)}
         helperText={errors.weight}
       />
-      <TextField disabled={readOnly} className="mb-2"
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly} className="mb-2"
         label="Blood Group"
         name="bloodGroup"
         fullWidth
@@ -65,7 +65,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
         error={Boolean(errors.bloodGroup)}
         helperText={errors.bloodGroup}
       />
-      <TextField disabled={readOnly} className="mb-2"
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly} className="mb-2"
         label="Disease"
         name="disease"
         fullWidth
@@ -88,7 +88,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
       </FormControl>
       {formData.covidVaccination === 'Double + Booster Vaccinated' && (
         <>
-          <TextField disabled={readOnly} className="mb-2"
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly} className="mb-2"
             label="Doctor's Name"
             name="doctorName"
             fullWidth
@@ -97,7 +97,7 @@ const MedicalDetails = ({ onFormChange, formData, setFormData ,readOnly}) => {
             error={Boolean(errors.doctorName)}
             helperText={errors.doctorName}
           />
-          <TextField disabled={readOnly} className="mb-2"
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly} className="mb-2"
             label="Doctor's Phone No"
             name="doctorPhone"
             fullWidth

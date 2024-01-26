@@ -887,7 +887,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
   return (
     <div>
       <h5 className="fw-bold">Personal Details</h5>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         label="Employee Code"
         variant="outlined"
         name="empCode"
@@ -902,7 +902,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
           shrink: formData.empCode ? true : false, // Set shrink to true if value is present
         }}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="First Name"
         variant="outlined"
@@ -914,7 +914,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
         helperText={errors.firstName}
         className="mb-2"
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Last Name"
         name="lastName"
@@ -925,7 +925,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
         helperText={errors.lastName}
         className="mb-2"
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Email"
         name="email"
@@ -936,7 +936,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
       />
       <div>
         <div className="d-flex align-items-center mb-2">
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             disabled={readOnly}
             label="Phone Number"
             name="phoneNumber"
@@ -963,7 +963,7 @@ const PersonalDetails=React.memo(({ onFormChange, formData, setFormData, readOnl
         {/* Render additional phone number field */}
         {formData.additionalPhoneNumber && (
           <div>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               disabled={readOnly}
               label="Additional Phone Number"
               name="additionalPhoneNumber"
@@ -1137,7 +1137,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
   return (
     <div>
       <h5 className="fw-bold">Residential Address</h5>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="House No"
         name="houseNo"
@@ -1148,7 +1148,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
         helperText={errors.houseNo}
         className="mb-2"
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Street"
         name="street"
@@ -1159,7 +1159,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
         helperText={errors.street}
         className="mb-2"
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Landmark"
         name="landmark"
@@ -1170,7 +1170,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
         helperText={errors.landmark}
         className="mb-2"
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="City / Tehsil"
         name="cityTehsil"
@@ -1197,7 +1197,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
           ))}
         </Select>
       </FormControl>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Postcode"
         name="postcode"
@@ -1225,7 +1225,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
       {/* Current address fields */}
       {!formData.sameAsResidential && (
         <>
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             disabled={readOnly}
             label="House No"
             name="currentHouseNo"
@@ -1235,7 +1235,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
             className="mb-2"
           />
 
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             disabled={readOnly}
             label="Street"
             name="currentStreet"
@@ -1245,7 +1245,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
             className="mb-2"
           />
 
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             disabled={readOnly}
             label="Landmark"
             name="currentLandmark"
@@ -1255,7 +1255,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
             className="mb-2"
           />
 
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             disabled={readOnly}
             label="City / Tehsil"
             name="currentCityTehsil"
@@ -1280,7 +1280,7 @@ const Address=React.memo(({ onFormChange, formData, setFormData, readOnly }) =>{
               ))}
             </Select>
           </FormControl>
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             disabled={readOnly}
             label="Postcode"
             type="number"

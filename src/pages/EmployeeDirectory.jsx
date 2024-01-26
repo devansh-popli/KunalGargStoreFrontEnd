@@ -171,7 +171,7 @@ const EmployeeDirectory = React.memo(() => {
           justifyContent="space-between"
           padding={2}
         >
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             label="Search"
             className=""
             variant="outlined"

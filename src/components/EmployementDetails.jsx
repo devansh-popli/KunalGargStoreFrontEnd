@@ -289,7 +289,7 @@ const EmployementDetails = ({
       </Container>
      
       <div className="d-flex my-2 align-items-center">
-        <TextField
+        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="Aadhar Card"
@@ -335,7 +335,7 @@ const EmployementDetails = ({
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField
+        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="PAN Card"
@@ -381,7 +381,7 @@ const EmployementDetails = ({
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField
+        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="Driving License No"
@@ -429,7 +429,7 @@ const EmployementDetails = ({
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField
+        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="Passport No"
@@ -476,7 +476,7 @@ const EmployementDetails = ({
           type="file"
         />
       </div>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Police Verification Station"
@@ -487,7 +487,7 @@ const EmployementDetails = ({
         error={Boolean(errors.policeVerificationStation)}
         helperText={errors.policeVerificationStation}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Certificate No"
@@ -498,7 +498,7 @@ const EmployementDetails = ({
         error={Boolean(errors.policeVerificationCertificateNo)}
         helperText={errors.policeVerificationCertificateNo}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Date of Issue"
@@ -519,7 +519,7 @@ const EmployementDetails = ({
         }}
         helperText={errors.dateOfIssue}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Date of Expiry"
@@ -540,7 +540,7 @@ const EmployementDetails = ({
           },
         }}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Issued By"

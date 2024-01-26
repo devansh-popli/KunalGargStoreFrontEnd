@@ -26,7 +26,7 @@ const EmployeeSearchBar = ({
     }
   }, [selectedEmployeeName]);
   return (
-    <TextField
+    <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
       label="Search Employees"
       variant="outlined"
       fullWidth

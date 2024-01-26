@@ -378,7 +378,7 @@ const NewLedgerAccountForm = React.memo(() => {
               alignItems={"center"}
             >
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="A/c Code"
                   name="accountCode"
                   disabled
@@ -426,7 +426,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 )}
               </Grid>
               <Grid className="myGridItem mx-1" item xs={8} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="GST No."
                   name="gstNo"
                   value={formData.gstNo}
@@ -473,7 +473,7 @@ const NewLedgerAccountForm = React.memo(() => {
             justifyContent={"center"}
           >
             <Grid className="myGridItem" item xs={8} className="mx-1" sm={6}>
-              <TextField
+              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                 label="GST No."
                 
                 name="gstNo"
@@ -511,7 +511,7 @@ const NewLedgerAccountForm = React.memo(() => {
             </Grid>
           </Grid> */}
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="A/c Name"
                   name="accountName"
                   value={formData.accountName}
@@ -561,7 +561,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 </FormControl>
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Opening Balance"
                   name="openingBalance"
                   value={formData.openingBalance}
@@ -571,7 +571,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={12}>
-                  <TextField
+                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                     label="Address"
                     // Set the desired variant here
                     name="address"
@@ -584,7 +584,7 @@ const NewLedgerAccountForm = React.memo(() => {
                   />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="City"
                   name="city"
                   value={formData.city}
@@ -625,7 +625,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Pincode"
                   name="pincode"
                   value={formData.pincode}
@@ -636,7 +636,7 @@ const NewLedgerAccountForm = React.memo(() => {
               </Grid>
 
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Contact No."
                   name="contactNo"
                   type="number"
@@ -655,7 +655,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 )}
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Email Id/Area"
                   name="email"
                   value={formData.email}
@@ -664,7 +664,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="PAN"
                   name="pan"
                   value={formData.pan}
@@ -707,7 +707,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 </FormControl>
               </Grid> */}
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Account Num"
                   name="accountNum"
                   value={formData.accountNum}
@@ -716,7 +716,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Account Name"
                   name="accountNameBank"
                   value={formData.accountNameBank}
@@ -725,7 +725,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="IFSC"
                   name="ifsc"
                   value={formData.ifsc}
@@ -734,7 +734,7 @@ const NewLedgerAccountForm = React.memo(() => {
                 />
               </Grid>
               <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Branch"
                   name="branch"
                   value={formData.branch}

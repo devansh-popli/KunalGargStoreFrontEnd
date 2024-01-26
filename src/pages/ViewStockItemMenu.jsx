@@ -321,7 +321,7 @@ const ViewStockItemMenu = React.memo(() => {
           paddingLeft={2}
           paddingRight={2}
         >
-          <TextField
+          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
             style={{ width: "300px" }}
             className=""
             label={

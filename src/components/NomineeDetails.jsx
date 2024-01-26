@@ -23,7 +23,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
       <h6 variant="h6" className="">
         Enter Nominee 1 Details
       </h6>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Name"
@@ -34,7 +34,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee1Name)}
         helperText={errors.nominee1Name}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Relationship"
@@ -45,7 +45,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee1Relationship)}
         helperText={errors.nominee1Relationship}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Mobile"
@@ -54,7 +54,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         value={formData?.nominees[0]?.mobile}
         onChange={(e) => handleInputChange(e, "0")}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Aadhar Card"
@@ -65,7 +65,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
       />
 
       <h6 variant="h6">Enter Nominee 2 Details</h6>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Name"
@@ -76,7 +76,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee2Name)}
         helperText={errors.nominee2Name}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Relationship"
@@ -87,7 +87,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee2Relationship)}
         helperText={errors.nominee2Relationship}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Mobile"
@@ -96,7 +96,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         value={formData?.nominees[1]?.mobile}
         onChange={(e) => handleInputChange(e, "1")}
       />
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Aadhar Card"

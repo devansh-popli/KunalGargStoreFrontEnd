@@ -246,7 +246,7 @@ const [searchTerm,setSearchTerm]=useState("")
             ))}
           </List>
         </div>
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         id="date"
         label="Date"
         type="date"
@@ -259,7 +259,7 @@ const [searchTerm,setSearchTerm]=useState("")
         style={{ marginBottom: "20px" }}
       />
 
-      <TextField
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         id="time-in"
         label="Time"
         type="time"
@@ -275,7 +275,7 @@ const [searchTerm,setSearchTerm]=useState("")
         style={{ marginBottom: "20px" }}
       />
 
-      {/* <TextField
+      {/* <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
         id="time-out"
         label="Time Out"
         type="time"

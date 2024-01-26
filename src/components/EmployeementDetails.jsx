@@ -24,7 +24,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
     <div>
       <h5 className="fw-bold">Employment Details</h5>
       {" "}
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2 mt-3"
         label="Date of Joining"
         name="dateOfJoining"
@@ -68,7 +68,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
           <MenuItem value="Casual">Casual</MenuItem>
         </Select>
       </FormControl>
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Monthly Salary"
         name="monthlySalary"
@@ -79,7 +79,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
         helperText={errors.salary}
       />
       {formData.employmentHours === "Part Time" && (
-        <TextField disabled={readOnly}
+        <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
           className="mb-2"
           label="Hourly Rate"
           name="hourlyRate"
@@ -90,7 +90,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
           helperText={errors.hourlyRate}
         />
       )}
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Weekly Off Day"
         name="weeklyOffDay"

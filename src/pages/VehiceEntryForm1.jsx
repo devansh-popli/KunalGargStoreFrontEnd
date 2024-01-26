@@ -27,9 +27,9 @@ const VehicleEntryForm1 = () => {
     gatePassNo: "",
     site: "Thuhi Plant",
     inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
-    outTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
+    outTime: '',
     inDate: new Date().toISOString().split("T")[0],
-    outDate: new Date().toISOString().split("T")[0],
+    outDate: '',
     selectedOption: "Jcb",
     hydraCapacity: "",
     photos: [],
@@ -45,9 +45,9 @@ const VehicleEntryForm1 = () => {
       setFormData((prev) => ({
         ...prev,
         inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
-        outTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
+        outTime: '',
         inDate: new Date().toISOString().split("T")[0],
-        outDate: new Date().toISOString().split("T")[0],
+        outDate: '',
       }));
     }, 1000);
     return () => clearInterval(interval);
@@ -177,7 +177,7 @@ const VehicleEntryForm1 = () => {
       <div className="d-flex">
         <Grid container spacing={2} className="w-60">
           <Grid item xs={6}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Gate Pass No."
               fullWidth
               size="small"
@@ -190,7 +190,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Vehicle Number"
               fullWidth
               size="small"
@@ -202,7 +202,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Site"
               fullWidth
               value={formData.site}
@@ -218,7 +218,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="In Time"
               type="time"
               value={formData.inTime}
@@ -238,7 +238,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           {/* <Grid item xs={6}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Out Time"
               type="time"
               value={formData.outTime}
@@ -258,7 +258,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid> */}
           <Grid item xs={4}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="In Date"
               type="date"
               value={formData.inDate}
@@ -271,7 +271,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           {/* <Grid item xs={6}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Out Date"
               type="date"
               value={formData.outDate}
@@ -363,7 +363,7 @@ const VehicleEntryForm1 = () => {
                 </Grid>
                 {formData.hydraCapacity == "manual" && (
                   <Grid xs={12} item md={6}>
-                    <TextField
+                    <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                       label="Hydra Capacity"
                       fullWidth
                       size="small"
@@ -390,7 +390,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Owner Bank Account No."
               fullWidth
               size="small"
@@ -402,7 +402,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Owner Phone No."
               fullWidth
               size="small"
@@ -438,7 +438,7 @@ const VehicleEntryForm1 = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Entered by (username of gatepass generator)"
               fullWidth
               size="small"

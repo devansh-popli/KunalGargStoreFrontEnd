@@ -12,7 +12,9 @@ body {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
-
+.hover:hover{
+  text-decoration: underline;
+}
 .spinner-overlay {
   position: fixed;
   top: 0;

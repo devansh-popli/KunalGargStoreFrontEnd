@@ -11,9 +11,11 @@ import {
   TextField,
   TablePagination,
   TableSortLabel,
+  Modal,
 } from "@mui/material";
 import { Container } from "react-bootstrap";
 import { getVisitorImageByTypeURl } from "../services/VisitorService";
+import { Cancel } from "@mui/icons-material";
 
 const VisitorTable = ({ visitors, handleTimeout, title }) => {
   const [page, setPage] = useState(0);
@@ -47,36 +49,99 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
       visitor.aadharNumber.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const sortedVisitors = filteredVisitors.sort((a, b) => {
-    const isAsc = order === "asc";
-    if (orderBy === "timeIn") {
-      // Convert time strings to Date objects
-      const timeInA = new Date(a[orderBy]);
-      const timeInB = new Date(b[orderBy]);
+  const sortedVisitors = filteredVisitors
+    .sort((a, b) => {
+      const isAsc = order === "asc";
+      if (orderBy === "timeIn") {
+        // Convert time strings to Date objects
+        const timeInA = new Date(a[orderBy]);
+        const timeInB = new Date(b[orderBy]);
 
-      // Compare the Date objects
-      return isAsc ? timeInA - timeInB : timeInB - timeInA;
-    } else {
-      // Default comparison for other columns
-      return isAsc
-        ? a[orderBy].localeCompare(b[orderBy])
-        : b[orderBy].localeCompare(a[orderBy]);
-    }
-  }).filter((visitor) =>
-  title === "Current Visitors"
-    ? visitor.timeOut.length <= 0
-    : visitor.timeOut.length > 0
-);
+        // Compare the Date objects
+        return isAsc ? timeInA - timeInB : timeInB - timeInA;
+      } else {
+        // Default comparison for other columns
+        return isAsc
+          ? a[orderBy].localeCompare(b[orderBy])
+          : b[orderBy].localeCompare(a[orderBy]);
+      }
+    })
+    .filter((visitor) =>
+      title === "Current Visitors"
+        ? visitor.timeOut.length <= 0
+        : visitor.timeOut.length > 0
+    );
 
   const slicedVisitors = sortedVisitors.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    maxWidth: "350px",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    padding: 5,
+    p: 4,
+  };
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [selectedVisitor, setSelectedVisitor] = useState();
   return (
     <Paper className="mt-3 me-2" style={{ borderRadius: "10px" }}>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Paper elevation={3} style={style} className="ms-3 mt-3 w-50 text-center">
+       <div className="text-end" onClick={handleClose} style={{cursor:"pointer"}}>
+        <Cancel/>
+       </div>
+        <h4>Profile Image</h4>
+          {selectedVisitor?.photo ? (
+            <img
+              className="rounded"
+              src={getVisitorImageByTypeURl(selectedVisitor.id)}
+              alt="Visitor"
+              style={{ maxWidth: "200px", maxHeight: "200px" }}
+            />
+          ) : (
+            <img
+              src="../../user.jpg"
+              className="rounded"
+              height={140}
+              width={140}
+              alt=""
+            />
+          )}
+          <h4>Adhaar Card Image</h4>
+          {selectedVisitor?.photo ? (
+            <img
+              className="rounded"
+              src={getVisitorImageByTypeURl(selectedVisitor.id, "aadhar")}
+              alt="Visitor"
+              style={{ maxWidth: "200px", maxHeight: "200px" }}
+            />
+          ) : (
+            <img
+              src="../../user.jpg"
+              className="rounded"
+              height={140}
+              width={140}
+              alt=""
+            />
+          )}
+        </Paper>
+      </Modal>
       <h4 className="fw-bold pt-3 ms-3">{title}</h4>
       <TextField
+        inputProps={{ style: { textTransform: "uppercase" } }}
         label="Search"
         variant="outlined"
         className="w-30 ms-2 mt-0"
@@ -175,55 +240,70 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {slicedVisitors
-              .map((visitor) => (
-                <TableRow key={visitor.id}>
-                  <TableCell>
-                    {/* Display the photo or a placeholder */}
-                    {visitor.photo ? (
-                      <img
-                        className="rounded-circle"
-                        src={getVisitorImageByTypeURl(visitor.id)}
-                        alt="Visitor"
-                        style={{ width: "40px", height: "40px" }}
-                      />
-                    ) : (
-                      <img
-                        src="../../user.jpg"
-                        className="rounded-circle"
-                        height={40}
-                        width={40}
-                        alt=""
-                      />
-                    )}
-                  </TableCell>
+            {slicedVisitors.map((visitor) => (
+              <TableRow key={visitor.id}>
+                <TableCell
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    handleOpen();
+                    setSelectedVisitor(visitor);
+                  }}
+                >
+                  {/* Display the photo or a placeholder */}
+                  {visitor.photo ? (
+                    <img
+                      className="rounded-circle"
+                      src={getVisitorImageByTypeURl(visitor.id)}
+                      alt="Visitor"
+                      style={{ width: "40px", height: "40px" }}
+                    />
+                  ) : (
+                    <img
+                      src="../../user.jpg"
+                      className="rounded-circle"
+                      height={40}
+                      width={40}
+                      alt=""
+                    />
+                  )}
+                </TableCell>
 
-                  <TableCell>{visitor.name}</TableCell>
-                  {/* <TableCell>{visitor.fatherName}</TableCell> */}
-                  <TableCell>{visitor.phone}</TableCell>
-                  <TableCell>{visitor.address}</TableCell>
-                  <TableCell>{visitor.purpose}</TableCell>
-                  <TableCell>
-                    {new Date(visitor.timeIn).toLocaleString()}
-                  </TableCell>
-                  <TableCell>
-                    {new Date(visitor.timeOut).toLocaleString()}
-                  </TableCell>
-                  {/* <TableCell>{visitor.aadharNumber}</TableCell> */}
-                  <TableCell>
-                    {!visitor.timeOut && (
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        size="small"
-                        onClick={() => handleTimeout(visitor)}
-                      >
-                        Timeout
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
+                <TableCell
+                  onClick={() => {
+                    handleOpen();
+                    setSelectedVisitor(visitor);
+                  }}
+                  className="hover"
+                  style={{ cursor: "pointer" }}
+                >
+                  {visitor.name}
+                </TableCell>
+                {/* <TableCell>{visitor.fatherName}</TableCell> */}
+                <TableCell>{visitor.phone}</TableCell>
+                <TableCell>{visitor.address}</TableCell>
+                <TableCell>{visitor.purpose}</TableCell>
+                <TableCell>
+                  {new Date(visitor.timeIn).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  {visitor.timeOut &&
+                    new Date(visitor.timeOut).toLocaleString()}
+                </TableCell>
+                {/* <TableCell>{visitor.aadharNumber}</TableCell> */}
+                <TableCell>
+                  {!visitor.timeOut && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      size="small"
+                      onClick={() => handleTimeout(visitor)}
+                    >
+                      Timeout
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
           {slicedVisitors.length <= 0 && (
             <Container>

@@ -294,7 +294,7 @@ const VisitorForm = () => {
             <h4 className="fw-bold">Visitor Entry Form</h4>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Name"
                   fullWidth
                   value={formData.name}
@@ -302,7 +302,7 @@ const VisitorForm = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Father's Name"
                   fullWidth
                   value={formData.fatherName}
@@ -312,7 +312,7 @@ const VisitorForm = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Phone Number"
                   fullWidth
                   type="number"
@@ -321,7 +321,7 @@ const VisitorForm = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                   label="Address"
                   fullWidth
                   value={formData.address}
@@ -526,7 +526,7 @@ const VisitorForm = () => {
                   ))}
                 </Select>
                 {formData.purpose == "Other" && (
-                  <TextField
+                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
                     label="Other"
                     fullWidth
                     className="ms-2 my-0"

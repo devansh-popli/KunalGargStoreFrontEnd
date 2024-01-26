@@ -167,7 +167,6 @@ const VehicleEntryRecords = () => {
       });
   };
   const excludedFields = [
-    "documentNo",
     "vehicleDocument",
     "id",
     "driverDocument",
@@ -183,7 +182,7 @@ const VehicleEntryRecords = () => {
         justifyContent="space-between"
         p={2}
       >
-        <TextField label="Search" variant="outlined" onChange={handleSearch} />
+        <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  label="Search" variant="outlined" onChange={handleSearch} />
         <Button
           variant="contained"
           color="primary"

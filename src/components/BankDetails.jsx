@@ -57,7 +57,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   return (
     <div>
       <h5 className="fw-bold">Bank Details</h5>
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Name of Bank"
         name="nameOfBank"
@@ -68,7 +68,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         helperText={errors.nameOfBank}
       />
 
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Branch"
         name="branch"
@@ -78,7 +78,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         error={Boolean(errors.branch)}
         helperText={errors.branch}
       />
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Account Holder Name"
         name="accountHolderName"
@@ -88,7 +88,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         error={Boolean(errors.accountHolderName)}
         helperText={errors.accountHolderName}
       />
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Account Number"
         name="accountNo"
@@ -98,7 +98,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         error={Boolean(errors.accountNo)}
         helperText={errors.accountNo}
       />
-      <TextField disabled={readOnly}
+      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="IFSC Number"
         name="ifscNo"
