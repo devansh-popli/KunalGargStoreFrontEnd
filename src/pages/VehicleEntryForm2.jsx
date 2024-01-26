@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Paper,
   Stepper,
@@ -44,6 +44,8 @@ const VehicleEntryForm2 = () => {
     if (activeStep === steps.length - 1 && isValid) {
       if (activeStep === steps.length - 1) {
         console.log(vehicleInfo);
+        if (vehicleInfo.vehicleType == "others")
+          vehicleInfo.vehicleType = vehicleInfo.vehicleType1;
         saveVehicleEntry2(vehicleInfo)
           .then(async (data) => {
             if (selectedFiles.driverDocuments.length > 0) {
@@ -82,10 +84,11 @@ const VehicleEntryForm2 = () => {
       toast.error("Please fill in all required fields");
     }
   };
-
+  
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   const [vehicleInfo, setVehicleInfo] = useState({
     purpose: "",
@@ -95,34 +98,31 @@ const VehicleEntryForm2 = () => {
     vendorName: "",
     vehicleType: "",
     tuuAbo: "",
-    dateOfEntry: "",
-    dayOfEntry: "",
-    timeOfEntry: "",
-    vehicleDocument:[],
-    driverDocument:[],
+    dayOfEntry: daysOfWeek[new Date().getDay()],
+    vehicleDocument: [],
+    driverDocument: [],
     dateOfExit: "",
     dayOfExit: "",
+    timeOfEntry: new Date().toLocaleTimeString("en-US", { hour12: false }),
+    dateOfEntry: new Date().toISOString().split("T")[0],
     timeOfExit: "",
     phoneNo: "",
     panNo: "",
     bankAccountNo: "",
     briefDescription: "",
   });
-
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVehicleInfo((prev) => ({
+        ...prev,
+        timeOfEntry: new Date().toLocaleTimeString("en-US", { hour12: false }),
+        dayOfEntry: daysOfWeek[new Date().getDay()],
+        dateOfEntry: new Date().toISOString().split("T")[0],
+      }));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
   const handleFieldChange = (fieldName) => (event) => {
-    if (fieldName == "vehicleNumber") {
-      privateAxios
-        .get(`/api/v2/vehicle-entries/vehicleNumber/${event.target.value}`)
-        .then((data) => {
-          if (data.data.id != null) {
-            data.data.id = null;
-            setVehicleInfo(data.data);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
     setVehicleInfo((prevData) => ({
       ...prevData,
       [fieldName]: event.target.value,
@@ -206,10 +206,16 @@ const VehicleEntryForm2 = () => {
         break;
       case 2:
         // Validate Documents
-        if (selectedFiles.vehicleDocuments.length === 0 && vehicleInfo?.vehicleDocument?.length<=0) {
+        if (
+          selectedFiles.vehicleDocuments.length === 0 &&
+          vehicleInfo?.vehicleDocument?.length <= 0
+        ) {
           newErrors.vehicleDocuments = "Vehicle Documents are required";
         }
-        if (selectedFiles.driverDocuments.length === 0 && vehicleInfo?.driverDocument?.length<=0) {
+        if (
+          selectedFiles.driverDocuments.length === 0 &&
+          vehicleInfo?.driverDocument?.length <= 0
+        ) {
           newErrors.driverDocuments = "Driver Documents are required";
         }
         break;
@@ -267,6 +273,22 @@ const VehicleEntryForm2 = () => {
                   value={vehicleInfo.vehicleNumber}
                   onChange={handleFieldChange("vehicleNumber")}
                 />
+                <Button variant="contained" className="mt-2 ms-2" size="small" onClick={()=>{
+                        privateAxios
+                        .get(`/api/v2/vehicle-entries/vehicleNumber/${vehicleInfo.vehicleNumber}`)
+                        .then((data) => {
+                          if (data.data.id != null) {
+                            data.data.id = null;
+                            data.data.dateOfExit = null;
+                            data.data.dayOfExit = null;
+                            data.data.timeOfExit = null;
+                            setVehicleInfo(data.data);
+                          }
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                }}>Fetch Last Details</Button>
                 {errors.vehicleNumber && (
                   <Grid item xs={12}>
                     <Typography variant="caption" color="error">
@@ -467,6 +489,48 @@ const VehicleEntryForm2 = () => {
                       Motorcycle
                     </Button>
                   </Grid>
+                  <Grid item>
+                    <Button
+                      variant={
+                        vehicleInfo.vehicleType.includes("others")
+                          ? "contained"
+                          : "outlined"
+                      }
+                      color="primary"
+                      size={"small"}
+                      onClick={handleVehicleTypeToggle("others")}
+                      style={{
+                        borderColor: "#78C2AD",
+                        color: vehicleInfo.vehicleType.includes("others")
+                          ? "white"
+                          : "#78C2AD",
+                        borderRadius: "30px",
+                        backgroundColor: vehicleInfo.vehicleType.includes(
+                          "others"
+                        )
+                          ? "#78C2AD"
+                          : "inherit",
+                      }}
+                    >
+                      Others
+                    </Button>
+                  </Grid>
+                  {vehicleInfo.vehicleType === "others" && (
+                    <Grid xs={12} item>
+                      <TextField
+                        size="small"
+                        label="Others"
+                        value={vehicleInfo.vehicleType1}
+                        onChange={(e) =>
+                          setVehicleInfo((prev) => ({
+                            ...prev,
+                            vehicleType1: e.target.value,
+                          }))
+                        }
+                      />
+                    </Grid>
+                  )}
+
                   {/* Add more vehicle types as needed */}
                   {errors.vehicleType && (
                     <Grid item xs={12}>
@@ -607,7 +671,7 @@ const VehicleEntryForm2 = () => {
             <Container>
               <div className="mt-3">
                 <h4 className="fw-bold">Document Upload Form</h4>
-                {vehicleInfo?.vehicleDocument.length>0 && (
+                {vehicleInfo?.vehicleDocument.length > 0 && (
                   <>
                     <h5 className="fw-bold">Vehicle Document</h5>
                     <Carousel
