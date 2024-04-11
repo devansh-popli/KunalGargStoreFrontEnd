@@ -1,21 +1,10 @@
-import React, { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  TextField,
-  TablePagination,
-  TableSortLabel,
-  Modal,
-} from "@mui/material";
-import { Container } from "react-bootstrap";
-import { getVisitorImageByTypeURl } from "../services/VisitorService";
 import { Cancel } from "@mui/icons-material";
+import { Button, TableSortLabel, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Card, Container, Modal, Pagination, Table } from "react-bootstrap";
+import { getVisitorImageByTypeURl } from "../services/VisitorService";
+import { checkAccess } from "../auth/HelperAuth";
+import { getAllUsers } from "../services/UserService";
 
 const VisitorTable = ({ visitors, handleTimeout, title }) => {
   const [page, setPage] = useState(0);
@@ -30,7 +19,7 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
     setOrderBy(property);
   };
 
-  const handleChangePage = (_, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 
@@ -91,19 +80,33 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selectedVisitor, setSelectedVisitor] = useState();
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    getAllUsers().then((data) => {
+      setUsers(data.content);
+    });
+  }, []);
   return (
-    <Paper className="mt-3 me-2" style={{ borderRadius: "10px" }}>
+    <Card className="mt-3 me-2" style={{ borderRadius: "10px" }}>
       <Modal
-        open={open}
-        onClose={handleClose}
+        show={open}
+        onHide={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Paper elevation={3} style={style} className="ms-3 mt-3 w-50 text-center">
-       <div className="text-end" onClick={handleClose} style={{cursor:"pointer"}}>
-        <Cancel/>
-       </div>
-        <h4>Profile Image</h4>
+        <Card
+          elevation={3}
+          // style={style}
+          className="ms-3 mt-3 w-50 text-center"
+        >
+          <div
+            className="text-end"
+            onClick={handleClose}
+            style={{ cursor: "pointer" }}
+          >
+            <Cancel />
+          </div>
+          <h4>Profile Image</h4>
           {selectedVisitor?.photo ? (
             <img
               className="rounded"
@@ -137,7 +140,7 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
               alt=""
             />
           )}
-        </Paper>
+        </Card>
       </Modal>
       <h4 className="fw-bold pt-3 ms-3">{title}</h4>
       <TextField
@@ -149,17 +152,17 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
         fullWidth
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <TableContainer className="position-relative">
-        <Table
+      <div className="position-relative">
+        <Table responsive 
           stickyHeader
           size="small"
           aria-label="a dense table"
           style={slicedVisitors.length == 0 ? { minHeight: "380px" } : {}}
         >
-          <TableHead>
-            <TableRow>
-              <TableCell>Photo</TableCell>
-              <TableCell>
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>
                 <TableSortLabel
                   active={orderBy === "name"}
                   direction={orderBy === "name" ? order : "asc"}
@@ -168,8 +171,8 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Name
                 </TableSortLabel>
-              </TableCell>
-              {/* <TableCell>
+              </th>
+              {/* <td>
                 <TableSortLabel
                   active={orderBy === 'fatherName'}
                   direction={orderBy === 'fatherName' ? order : 'asc'}
@@ -177,8 +180,8 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Father's Name
                 </TableSortLabel>
-              </TableCell> */}
-              <TableCell>
+              </td> */}
+              <th>
                 <TableSortLabel
                   active={orderBy === "phone"}
                   direction={orderBy === "phone" ? order : "asc"}
@@ -187,8 +190,8 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Phone Number
                 </TableSortLabel>
-              </TableCell>
-              <TableCell>
+              </th>
+              <th>
                 <TableSortLabel
                   active={orderBy === "address"}
                   direction={orderBy === "address" ? order : "asc"}
@@ -197,8 +200,8 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Address
                 </TableSortLabel>
-              </TableCell>
-              <TableCell>
+              </th>
+              <th>
                 <TableSortLabel
                   active={orderBy === "purpose"}
                   direction={orderBy === "purpose" ? order : "asc"}
@@ -206,8 +209,17 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Purpose
                 </TableSortLabel>
-              </TableCell>
-              <TableCell>
+              </th>
+              <th>
+                <TableSortLabel
+                  active={orderBy === "purpose"}
+                  direction={orderBy === "purpose" ? order : "asc"}
+                  onClick={() => handleSort("purpose")}
+                >
+                  Concern Person
+                </TableSortLabel>
+              </th>
+              <th>
                 <TableSortLabel
                   active={orderBy === "timeIn"}
                   direction={orderBy === "timeIn" ? order : "asc"}
@@ -216,8 +228,8 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Time In
                 </TableSortLabel>
-              </TableCell>
-              <TableCell>
+              </th>
+              <th>
                 <TableSortLabel
                   active={orderBy === "timeOut"}
                   direction={orderBy === "timeOut" ? order : "asc"}
@@ -226,8 +238,8 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Time Out
                 </TableSortLabel>
-              </TableCell>
-              {/* <TableCell>
+              </th>
+              {/* <td>
                 <TableSortLabel
                   active={orderBy === 'aadharNumber'}
                   direction={orderBy === 'aadharNumber' ? order : 'asc'}
@@ -235,14 +247,14 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                 >
                   Aadhar Card Number
                 </TableSortLabel>
-              </TableCell> */}
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+              </td> */}
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
             {slicedVisitors.map((visitor) => (
-              <TableRow key={visitor.id}>
-                <TableCell
+              <tr key={visitor.id}>
+                <td
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     handleOpen();
@@ -266,9 +278,9 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                       alt=""
                     />
                   )}
-                </TableCell>
+                </td>
 
-                <TableCell
+                <td
                   onClick={() => {
                     handleOpen();
                     setSelectedVisitor(visitor);
@@ -277,34 +289,40 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
                   style={{ cursor: "pointer" }}
                 >
                   {visitor.name}
-                </TableCell>
-                {/* <TableCell>{visitor.fatherName}</TableCell> */}
-                <TableCell>{visitor.phone}</TableCell>
-                <TableCell>{visitor.address}</TableCell>
-                <TableCell>{visitor.purpose}</TableCell>
-                <TableCell>
-                  {new Date(visitor.timeIn).toLocaleString()}
-                </TableCell>
-                <TableCell>
+                </td>
+                {/* <td>{visitor.fatherName}</td> */}
+                <td>{visitor.phone}</td>
+                <td>{visitor.address}</td>
+                <td>{visitor.purpose}</td>
+                <td>
+                  {users &&
+                    visitor &&
+                    users
+                      .filter((user) => visitor.concernPerson === user.userId)
+                      .map((data) => data.name)}
+                </td>
+                <td>{new Date(visitor.timeIn).toLocaleString()}</td>
+                <td>
                   {visitor.timeOut &&
                     new Date(visitor.timeOut).toLocaleString()}
-                </TableCell>
-                {/* <TableCell>{visitor.aadharNumber}</TableCell> */}
-                <TableCell>
-                  {!visitor.timeOut && (
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                      onClick={() => handleTimeout(visitor)}
-                    >
-                      Timeout
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
+                </td>
+                {/* <td>{visitor.aadharNumber}</td> */}
+                <td>
+                  {!visitor.timeOut &&
+                    checkAccess("Visitor Form", "canUpdate") && (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={() => handleTimeout(visitor)}
+                      >
+                        Timeout
+                      </Button>
+                    )}
+                </td>
+              </tr>
             ))}
-          </TableBody>
+          </tbody>
           {slicedVisitors.length <= 0 && (
             <Container>
               <img
@@ -323,18 +341,36 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
             </Container>
           )}
         </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={sortedVisitors.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+      </div>
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => handleChangePage(page - 1)}
+          disabled={page === 0}
+        />
+
+        {/* Assuming sortedVisitors is an array and rowsPerPage is the number of items per page */}
+        {Array.from({
+          length: Math.ceil(sortedVisitors.length / rowsPerPage),
+        }).map((_, index) => (
+          <Pagination.Item
+            key={index}
+            active={page === index}
+            onClick={() => handleChangePage(index)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+
+        <Pagination.Next
+          onClick={() => handleChangePage(page + 1)}
+          disabled={
+            page === Math.floor(sortedVisitors.length / rowsPerPage) ||
+            sortedVisitors.length <= rowsPerPage
+          }
+        />
+      </Pagination>
+    </Card>
   );
 };
 
-export default VisitorTable;
+export default React.memo(VisitorTable);

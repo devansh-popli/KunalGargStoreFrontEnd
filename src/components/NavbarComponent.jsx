@@ -1,28 +1,25 @@
-import { useContext, useEffect } from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { Link, NavLink } from "react-router-dom";
+import { Badge } from "@mui/material";
+import cns from "classnames";
+import clsx from "clsx";
+import React, { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import s from "./Navbar.module.scss";
-import clsx from "clsx";
-import { doLogoutFromLocalStorage } from "../auth/HelperAuth";
-function NavbarComponent({ setToggle }) {
+import Sidebar from "./Sidebar";
+const NavbarComponent = React.memo(({ toggle,setToggle }) => {
   const userContext = useContext(UserContext);
   useEffect(() => {
     if (userContext.isLogin) {
       setToggle(true);
-    }
-    else{
+    } else {
       setToggle(false);
     }
   }, [userContext.isLogin]);
   return userContext.isLogin && (
     <div className={s.navWrapper}>
+       <Sidebar toggle={toggle} setToggle={setToggle} />
       <div className={s.navbar}>
         <ul className={s.navbarWrapper}>
-          
           <img
             width={20}
             height={20}
@@ -31,8 +28,18 @@ function NavbarComponent({ setToggle }) {
             className={s.menuIcon}
             onClick={() => setToggle((prev) => !prev)}
           />
-       
+
           <li className={clsx(s.marginLeftAuto, "nav-item")}>
+            {userContext?.userData?.roles[0].roleName === "ROLE_ADMIN" && (
+              <Link
+                to={"/admin-dashboard"}
+                as={Link}
+                style={{ textDecoration: "none" }}
+                className={cns(s.adminD, "text-secondary fw-bold")}
+              >
+                Admin Dashboard
+              </Link>
+            )}
             <div className={clsx(s.dropdown, s.profileButton, "nav-link")}>
               <img
                 src={"../../user.jpg"}
@@ -62,11 +69,33 @@ function NavbarComponent({ setToggle }) {
                         height={40}
                         alt="profile-img"
                       />
-                      <div className="pl-2">
-                        <p className={s.name}>
+
+                      <div className="pl-2 d-flex flex-column justify-content-center">
+                        <p className={cns(s.name)}>
                           <b>{userContext?.userData?.name}</b>
                         </p>
                         {/* <p className={s.designation}>{details.designation}</p> */}
+                        <div>
+                          <Badge
+                            className={cns(s.name, "ms-4 text-center")}
+                            color={
+                              userContext?.userData?.roles[0].roleName ===
+                              "ROLE_ADMIN"
+                                ? "success"
+                                : "secondary"
+                            }
+                            badgeContent={
+                              <small>
+                                {userContext?.userData?.roles[0].roleName ===
+                                "ROLE_ADMIN"
+                                  ? "Admin"
+                                  : userContext?.userData?.roles[0].roleName.slice(
+                                      5
+                                    )}
+                              </small>
+                            }
+                          ></Badge>
+                        </div>
                       </div>
                     </div>
                     {/* <div
@@ -100,9 +129,9 @@ function NavbarComponent({ setToggle }) {
           </li>
         </ul>
       </div>
+     
     </div>
-
   );
-}
+});
 
-export default NavbarComponent;
+export default React.memo(NavbarComponent);

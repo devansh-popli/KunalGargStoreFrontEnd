@@ -1,20 +1,19 @@
-import React, { useContext, useEffect } from "react";
-import { getJwtToken } from "../auth/HelperAuth";
 import isJwtTokenExpired from "jwt-check-expiry";
-import { toast } from "react-toastify";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getJwtToken } from "../auth/HelperAuth";
 import { UserContext } from "../context/UserContext";
 
 const useJwtChecker = () => {
   const navigate = useNavigate();
   const context = useContext(UserContext);
-  const token =getJwtToken()
+  const token = getJwtToken();
   useEffect(() => {
     const token = getJwtToken();
-    console.log(token,"tken")
-    if (token!=undefined && token && token!='') {
-      try{
+//    console.log(token, "tken");
+    if (token) {
+      try {
         // isJwtTokenExpired(token)
         if (isJwtTokenExpired(token)) {
           Swal.fire({
@@ -24,21 +23,18 @@ const useJwtChecker = () => {
             confirmButtonColor: "#78C2AD",
           });
           context.doLogout();
-          navigate("/")
+          navigate("/login");
         }
-      }
-      catch(ex){
-        context.doLogout()
-        navigate("/")
+      } catch (ex) {
+        context.doLogout();
+        navigate("/login");
       }
     }
     else{
-      navigate("/")
+      context.doLogout();
+      navigate("/login");
     }
   }, []);
-  if (token!=undefined && token && token!='') {
-  return isJwtTokenExpired(token);
-  }
 };
 
 export default useJwtChecker;

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  Paper,
   Grid,
   TextField,
   FormControl,
@@ -11,7 +10,7 @@ import {
   Typography,
   InputAdornment,
 } from "@mui/material";
-import { FormLabel } from "react-bootstrap";
+import { Card, FormLabel } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
   saveVehicleDocumentToBackend,
@@ -27,9 +26,9 @@ const VehicleEntryForm1 = () => {
     gatePassNo: "",
     site: "Thuhi Plant",
     inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
-    outTime: '',
+    outTime: "",
     inDate: new Date().toISOString().split("T")[0],
-    outDate: '',
+    outDate: "",
     selectedOption: "Jcb",
     hydraCapacity: "",
     photos: [],
@@ -38,31 +37,37 @@ const VehicleEntryForm1 = () => {
     justification: "",
     enteredBy: "",
   });
-
+  const [isManualEdit, setIsManualEdit] = useState(false);
   useEffect(() => {
     fetchLastAccountCode();
     const interval = setInterval(() => {
-      setFormData((prev) => ({
-        ...prev,
-        inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
-        outTime: '',
-        inDate: new Date().toISOString().split("T")[0],
-        outDate: '',
-      }));
+      if (!isManualEdit) {
+        setFormData((prev) => ({
+          ...prev,
+          inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
+          outTime: "",
+          inDate: new Date().toISOString().split("T")[0],
+          outDate: "",
+        }));
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isManualEdit]);
   const [errors, setErrors] = useState({});
 
   const handleFieldChange = (fieldName, value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [fieldName]: value,
-    }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [fieldName]: null,
-    }));
+    if (fieldName == "ownerPhone" && (!/^[0-9]*$/.test(value) || value.length > 10)) {
+      return;
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [fieldName]: value,
+      }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: null,
+      }));
+    }
   };
 
   const handleOptionChange = (event) => {
@@ -70,7 +75,6 @@ const VehicleEntryForm1 = () => {
   };
 
   const handleHydraCapacityChange = (event) => {
-    
     handleFieldChange("hydraCapacity", event.target.value);
   };
 
@@ -131,8 +135,8 @@ const VehicleEntryForm1 = () => {
   };
 
   const saveData = () => {
-    if(formData.hydraCapacity=="manual")
-    formData.hydraCapacity=formData.hydraCapacity2
+    if (formData.hydraCapacity == "manual")
+      formData.hydraCapacity = formData.hydraCapacity2;
     saveVehicleEntry(formData)
       .then((res) => {
         if (formData.photos) {
@@ -172,12 +176,18 @@ const VehicleEntryForm1 = () => {
   const userContext = useContext(UserContext);
 
   return userContext.isLogin ? (
-    <Paper elevation={1} className="w-90" style={{ padding: 20, margin: 20 }}>
+    <Card
+      elevation={1}
+      className="w-90 shadow rounded border-0"
+      style={{ padding: 20, margin: 20 }}
+    >
       <h4 className="fw-bold mb-3">Vehicle Entry Form</h4>
       <div className="d-flex">
         <Grid container spacing={2} className="w-60">
           <Grid item xs={6}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="Gate Pass No."
               fullWidth
               size="small"
@@ -190,7 +200,9 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="Vehicle Number"
               fullWidth
               size="small"
@@ -198,11 +210,15 @@ const VehicleEntryForm1 = () => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={(e) => handleFieldChange("vehicleNumber", e.target.value)}
+              onChange={(e) =>
+                handleFieldChange("vehicleNumber", e.target.value)
+              }
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="Site"
               fullWidth
               value={formData.site}
@@ -218,11 +234,16 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="In Time"
               type="time"
               value={formData.inTime}
-              onChange={(e) => handleFieldChange("inTime", e.target.value)}
+              onChange={(e) => {
+                setIsManualEdit(true);
+                handleFieldChange("inTime", e.target.value);
+              }}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -238,7 +259,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           {/* <Grid item xs={6}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Out Time"
               type="time"
               value={formData.outTime}
@@ -258,11 +279,16 @@ const VehicleEntryForm1 = () => {
             />
           </Grid> */}
           <Grid item xs={4}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="In Date"
               type="date"
               value={formData.inDate}
-              onChange={(e) => handleFieldChange("inDate", e.target.value)}
+              onChange={(e) => {
+                setIsManualEdit(true);
+                handleFieldChange("inDate", e.target.value);
+              }}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -271,7 +297,7 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           {/* <Grid item xs={6}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
               label="Out Date"
               type="date"
               value={formData.outDate}
@@ -338,7 +364,12 @@ const VehicleEntryForm1 = () => {
           </Grid>
           {formData?.selectedOption === "Hydra" && (
             <>
-              <Grid container spacing={2} className="my-2" style={{marginLeft:"3px"}}>
+              <Grid
+                container
+                spacing={2}
+                className="my-2"
+                style={{ marginLeft: "3px" }}
+              >
                 <Grid item xs={12} md={6}>
                   <FormControl fullWidth size="small">
                     <InputLabel>Hydra Capacity</InputLabel>
@@ -363,7 +394,9 @@ const VehicleEntryForm1 = () => {
                 </Grid>
                 {formData.hydraCapacity == "manual" && (
                   <Grid xs={12} item md={6}>
-                    <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                    <TextField
+                      autoComplete="off"
+                      inputProps={{ style: { textTransform: "uppercase" } }}
                       label="Hydra Capacity"
                       fullWidth
                       size="small"
@@ -381,7 +414,7 @@ const VehicleEntryForm1 = () => {
           <Grid item xs={12}>
             <label htmlFor="vehicle">Driver Documents</label>
             <input
-            id="vehicle"
+              id="vehicle"
               type="file"
               accept="image/*"
               multiple
@@ -390,7 +423,9 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="Owner Bank Account No."
               fullWidth
               size="small"
@@ -402,11 +437,14 @@ const VehicleEntryForm1 = () => {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="Owner Phone No."
               fullWidth
               size="small"
-              type="number"
+              type="text"
+              value={formData.ownerPhone}
               onChange={(e) => handleFieldChange("ownerPhone", e.target.value)}
               error={!!errors.ownerPhone}
               helperText={errors.ownerPhone}
@@ -438,7 +476,9 @@ const VehicleEntryForm1 = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField
+              autoComplete="off"
+              inputProps={{ style: { textTransform: "uppercase" } }}
               label="Entered by (username of gatepass generator)"
               fullWidth
               size="small"
@@ -460,10 +500,10 @@ const VehicleEntryForm1 = () => {
       >
         Submit
       </Button>
-    </Paper>
+    </Card>
   ) : (
-    <Navigate to={"/"} />
+    <Navigate to={"/login"} />
   );
 };
 
-export default VehicleEntryForm1;
+export default React.memo(VehicleEntryForm1);

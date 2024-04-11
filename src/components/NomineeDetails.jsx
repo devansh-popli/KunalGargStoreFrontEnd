@@ -1,5 +1,5 @@
+import { TextField } from "@mui/material";
 import React, { useState } from "react";
-import { Container, Paper, Typography, TextField, Button } from "@mui/material";
 
 const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
   const [errors, setErrors] = useState({});
@@ -23,7 +23,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
       <h6 variant="h6" className="">
         Enter Nominee 1 Details
       </h6>
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Name"
@@ -34,7 +34,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee1Name)}
         helperText={errors.nominee1Name}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Relationship"
@@ -45,7 +45,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee1Relationship)}
         helperText={errors.nominee1Relationship}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Mobile"
@@ -54,7 +54,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         value={formData?.nominees[0]?.mobile}
         onChange={(e) => handleInputChange(e, "0")}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Aadhar Card"
@@ -65,7 +65,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
       />
 
       <h6 variant="h6">Enter Nominee 2 Details</h6>
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Name"
@@ -76,7 +76,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee2Name)}
         helperText={errors.nominee2Name}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Relationship"
@@ -87,7 +87,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         error={Boolean(errors.nominee2Relationship)}
         helperText={errors.nominee2Relationship}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Mobile"
@@ -96,7 +96,7 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         value={formData?.nominees[1]?.mobile}
         onChange={(e) => handleInputChange(e, "1")}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         className="mb-2"
         label="Aadhar Card"
@@ -109,4 +109,4 @@ const NomineeDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
   );
 };
 
-export default NomineeDetails;
+export default React.memo(NomineeDetails);

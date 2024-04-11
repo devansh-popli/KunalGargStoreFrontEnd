@@ -1,33 +1,31 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  TextField,
-  Button,
-  Paper,
-  Grid,
-  Typography,
-  FormControl,
-  InputLabel,
-  Input,
-  Tooltip,
-  Container,
-  TableContainer,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import Webcam from "react-webcam";
-import { Form, InputGroup } from "react-bootstrap";
 import { CameraAlt } from "@mui/icons-material";
+import {
+  Autocomplete,
+  Button,
+  Container,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Card, Form, InputGroup, Modal } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Webcam from "react-webcam";
 import VisitorTable from "../components/VisitorTable";
 import { UserContext } from "../context/UserContext";
-import { Navigate } from "react-router-dom";
 import {
   getVisitorData,
   saveVisitorDocumentToBackend,
   submitVisitorData,
 } from "../services/VisitorService";
+import { checkAccess } from "../auth/HelperAuth";
+import { getAllUsers } from "../services/UserService";
 
 const VisitorForm = () => {
   const [formData, setFormData] = useState({
@@ -45,6 +43,12 @@ const VisitorForm = () => {
   const [mandatoryFieldsError, setMandatoryFieldsError] = useState(false);
 
   const handleInputChange = (field, value) => {
+    if (
+      field == "phone" &&
+      (!/^[0-9]*$/.test(event.target.value) || value.length > 10)
+    ) {
+      return;
+    }
     setFormData({
       ...formData,
       [field]: value,
@@ -274,27 +278,46 @@ const VisitorForm = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    getAllUsers().then((data) => {
+      setUsers(data.content);
+    });
+  }, []);
+  const filterOptions = (options, { inputValue }) => {
+    // Customize this function based on your search logic
+    return options.filter((option) =>
+      option.name.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
   return userContext.isLogin ? (
     <>
       <div className="container">
-        <div className="d-flex flex-row-reverse m-4 ">
-          {" "}
-          <Button variant="contained" style={{backgroundColor:"#78C2AD"}} onClick={handleOpen}>
-            Add Visitor
-          </Button>
-        </div>
-
+        {checkAccess("Visitor Form", "canWrite") && (
+          <div className="d-flex flex-row-reverse m-4 ">
+            {" "}
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "#78C2AD" }}
+              onClick={handleOpen}
+            >
+              Add Visitor
+            </Button>
+          </div>
+        )}
         <Modal
-          open={open}
-          onClose={handleClose}
+          show={open}
+          onHide={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Paper elevation={3} style={style} className="ms-3 mt-3 w-50">
+          <Card elevation={3} className=" p-3 shadow rounded border-0">
             <h4 className="fw-bold">Visitor Entry Form</h4>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
                   label="Name"
                   fullWidth
                   value={formData.name}
@@ -302,7 +325,9 @@ const VisitorForm = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
                   label="Father's Name"
                   fullWidth
                   value={formData.fatherName}
@@ -312,16 +337,20 @@ const VisitorForm = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
                   label="Phone Number"
                   fullWidth
-                  type="number"
+                  type="text"
                   value={formData.phone}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
                   label="Address"
                   fullWidth
                   value={formData.address}
@@ -335,7 +364,7 @@ const VisitorForm = () => {
                     style={{ borderRadius: "10px" }}
                     fluid
                   >
-                    <p className="text-muted m-0 p-0">Profile Image Preview</p>
+                    <p className="text-muted m-0 p-0">Profile Preview</p>
                     {!showCamera && (
                       <img
                         className="img-fluid rounded"
@@ -365,27 +394,23 @@ const VisitorForm = () => {
                     <Form.Label>Select Profile Image</Form.Label>
                     <div className="d-flex align-items-center">
                       <div>
-                        <Button
-                          data-for="happyFace"
-                          onClick={(event) =>
-                            handleFileChangeProfile(event, "cam")
-                          }
-                          variant="outlined"
-                          type="error"
-                          data-tooltip-id="my-tooltip"
-                          data-tooltip-content="Take Photo"
-                        >
-                          <CameraAlt />
-                        </Button>
-                        <Tooltip
-                          id="my-tooltip"
-                          place="bottom"
-                          type="info"
-                          effect="solid"
-                        />
+                        <Tooltip title="Click Profile Image">
+                          <Button
+                            data-for="happyFace"
+                            onClick={(event) =>
+                              handleFileChangeProfile(event, "cam")
+                            }
+                            variant="outlined"
+                            type="error"
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Take Photo"
+                          >
+                            <CameraAlt />
+                          </Button>
+                        </Tooltip>
                       </div>
 
-                      <span className="mx-2">or</span>
+                      {/* <span className="mx-2">or</span>
                       <InputGroup>
                         <Form.Control
                           onChange={(event) => handleFileChangeProfile(event)}
@@ -403,7 +428,7 @@ const VisitorForm = () => {
                         >
                           Clear
                         </Button>
-                      </InputGroup>
+                      </InputGroup> */}
                     </div>
                   </div>
                 </Form.Group>
@@ -445,27 +470,23 @@ const VisitorForm = () => {
                     <Form.Label>Select Aadhar Image</Form.Label>
                     <div className="d-flex align-items-center">
                       <div>
-                        <Button
-                          data-for="happyFace"
-                          onClick={(event) =>
-                            handleFileChangeAadhar(event, "cam")
-                          }
-                          variant="outlined"
-                          type="error"
-                          data-tooltip-id="my-tooltip"
-                          data-tooltip-content="Take Photo"
-                        >
-                          <CameraAlt />
-                        </Button>
-                        <Tooltip
-                          id="my-tooltip"
-                          place="bottom"
-                          type="info"
-                          effect="solid"
-                        />
+                        <Tooltip title="Click Aadhar Image">
+                          <Button
+                            data-for="happyFace"
+                            onClick={(event) =>
+                              handleFileChangeAadhar(event, "cam")
+                            }
+                            variant="outlined"
+                            type="error"
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Take Photo"
+                          >
+                            <CameraAlt />
+                          </Button>
+                        </Tooltip>
                       </div>
 
-                      <span className="mx-2">or</span>
+                      {/* <span className="mx-2">or</span>
                       <InputGroup>
                         <Form.Control
                           onChange={(event) => handleFileChangeAadhar(event)}
@@ -483,7 +504,7 @@ const VisitorForm = () => {
                         >
                           Clear
                         </Button>
-                      </InputGroup>
+                      </InputGroup> */}
                     </div>
                   </div>
                 </Form.Group>
@@ -512,22 +533,30 @@ const VisitorForm = () => {
                 justifyContent={"space-between"}
                 alignItems={"center"}
               >
-                <Select
-                  label="Purpose"
-                  className="mt-1"
-                  fullWidth
-                  value={formData.purpose}
-                  onChange={(e) => handleInputChange("purpose", e.target.value)}
-                >
-                  {purposeList.map((data) => (
-                    <MenuItem key={data.id} value={data.name}>
-                      {data.name}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <FormControl className="w-100">
+                  <InputLabel id="select-label">Purpose</InputLabel>
+                  <Select
+                    label="Purpose"
+                    className="mt-1"
+                    fullWidth
+                    value={formData.purpose}
+                    onChange={(e) =>
+                      handleInputChange("purpose", e.target.value)
+                    }
+                  >
+                    {purposeList.map((data) => (
+                      <MenuItem key={data.id} value={data.name}>
+                        {data.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 {formData.purpose == "Other" && (
-                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
                     label="Other"
+                    filterOptions={filterOptions}
                     fullWidth
                     className="ms-2 my-0"
                     value={formData.purpose1}
@@ -536,6 +565,22 @@ const VisitorForm = () => {
                     }
                   />
                 )}
+              </Grid>
+              <Grid item xs={6}>
+                <Autocomplete
+                  options={users}
+                  getOptionLabel={(user) => user.name}
+                  onChange={(e, val) => handleInputChange("concernPerson", val.userId)}
+                  value={formData.concernPerson}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Concern Person"
+                      variant="outlined"
+                      fullWidth
+                    />
+                  )}
+                />
               </Grid>
               <Grid item xs={12} className="d-flex">
                 <Button
@@ -558,7 +603,7 @@ const VisitorForm = () => {
                 )}
               </Grid>
             </Grid>
-          </Paper>
+          </Card>
         </Modal>
         <Grid item xs={12} md={12} className="px-2">
           <VisitorTable
@@ -599,8 +644,8 @@ const VisitorForm = () => {
       </div>
     </>
   ) : (
-    <Navigate to={"/"} />
+    <Navigate to={"/login"} />
   );
 };
 
-export default VisitorForm;
+export default React.memo(VisitorForm);

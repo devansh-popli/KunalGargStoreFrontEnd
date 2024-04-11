@@ -1,31 +1,16 @@
-// import * as React from 'react';
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
 import React, { useState, useEffect, useContext } from "react";
 import { privateAxios } from "../services/AxiosService";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-// import { Container } from "react-bootstrap";
-import {
-  Button,
-  Container,
-  IconButton,
-  Stack,
-  TextField,
-  Tooltip,
-  styled,
-} from "@mui/material";
+import { Container, Pagination } from "react-bootstrap";
+import { Button, IconButton, TextField, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { deleteStockItemMenuById } from "../services/StockItemMenuService";
 import { toast } from "react-toastify";
-import { Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import useJwtChecker from "../helper/useJwtChecker";
+import { Card, Table } from "react-bootstrap";
+import { checkAccess } from "../auth/HelperAuth";
 const columns = [
   {
     id: "accountCode",
@@ -225,34 +210,11 @@ const columns = [
   // },
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-const rows = [
-  createData("India", "IN", 1324171354, 3287263, 1),
-  createData("China", "CN", 1403500365, 9596961, 2),
-  createData("Italy", "IT", 60483973, 301340, 3),
-  createData("United States", "US", 327167434, 9833520, 4),
-  createData("Canada", "CA", 37602103, 9984670, 5),
-  createData("Australia", "AU", 25475400, 7692024, 6),
-  createData("Germany", "DE", 83019200, 357578),
-  createData("Ireland", "IE", 4857000, 70273),
-  createData("Mexico", "MX", 126577691, 1972550),
-  createData("Japan", "JP", 126310000, 377973),
-  createData("France", "FR", 67022000, 640679),
-  createData("United Kingdom", "GB", 67545757, 242495),
-  createData("Russia", "RU", 146793744, 10098246),
-  createData("Nigeria", "NG", 200962417, 923768),
-  createData("Brazil", "BR", 210147125, 8515767),
-];
-
 const ViewStockItemMenu = React.memo(() => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 
@@ -297,31 +259,15 @@ const ViewStockItemMenu = React.memo(() => {
         console.error("Error fetching stock items:", error);
       });
   };
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#205072",
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
   const jetChecker = useJwtChecker();
   const userContext = React.useContext(UserContext);
   return userContext.isLogin ? (
     <Container className="mt-3">
       <h4 className="fw-bold">View Stock Item Menu Details</h4>
-      <Paper className="w-100" style={{ borderRadius: "10px" }}>
-      <Stack 
-          spacing={2}
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          paddingTop={2}
-          paddingLeft={2}
-          paddingRight={2}
-        >
-          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <Card className="w-100 border-0 shadow" style={{ borderRadius: "10px" }}>
+        <div className="d-flex align-items-center justify-content-between p-2">
+          <TextField
+            inputProps={{ style: { textTransform: "uppercase" } }}
             style={{ width: "300px" }}
             className=""
             label={
@@ -334,54 +280,67 @@ const ViewStockItemMenu = React.memo(() => {
             // value={searchTerm}
             // onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <Button
-            as={Link}
-            to="/stock-item-menu"
-            style={{
-              backgroundColor: "#78C2AD",
-              textDecoration: "none",
-              fontSize:"11px",
-              width:"90px"
-            }}
+          {checkAccess("View Stock Item Menu", "canWrite") && (
+            <Button
+              as={Link}
+              to="/stock-item-menu"
+              style={{
+                backgroundColor: "#78C2AD",
+                textDecoration: "none",
+                fontSize: "11px",
+                width: "90px",
+              }}
+              size="small"
+              variant="contained"
+            >
+              Add New
+            </Button>
+          )}
+        </div>
+        <div
+          className="position-relative"
+          style={stockItems?.content?.length <= 0 ? { minHeight: "380px" } : {}}
+        >
+          <div className="mt-2"></div>
+          <Table responsive 
+            hover
+            stickyHeader
             size="small"
-            variant="contained"
+            aria-label="a dense table"
+            style={
+              stockItems?.content?.length <= 0 ? { minHeight: "340px" } : {}
+            }
           >
-            Add New
-          </Button>
-        </Stack>
-        <TableContainer sx={{ maxHeight: 440 }} className="position-relative" style={stockItems?.content?.length<=0?{minHeight:'380px'}:{}}>
-       <div className="mt-2"></div>
-          <Table stickyHeader size="small" aria-label="a dense table"  style={stockItems?.content?.length <= 0 ?{minHeight:"340px"}:{}}>
-            <TableHead className="position-relative">
-              {/* <TableRow>
-              <TableCell align="center" colSpan={3}>
+            <thead className="position-relative">
+              {/* <Table responsive Row>
+              <Table responsive Cell align="center" colSpan={3}>
                 
-              </TableCell>
-              <TableCell align="center" colSpan={3}>
+              </Table>
+              <Table responsive Cell align="center" colSpan={3}>
               Stock Item Menu
-              </TableCell>
-              <TableCell align="center" colSpan={3}>
+              </Table>
+              <Table responsive Cell align="center" colSpan={3}>
                 
-              </TableCell>
+              </Table>
             </TableRow> */}
-              <TableRow>
+              <tr>
                 {columns.map((column) => (
-                  <StyledTableCell
+                  <th
                     key={column.id}
                     align={column.align}
-                    style={{  minWidth: column.minWidth }}
+                    style={{ minWidth: column.minWidth }}
                   >
                     {column.label}
-                  </StyledTableCell>
+                  </th>
                 ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
+              </tr>
+            </thead>
+            <tbody>
               {stockItems?.content
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow
+                    <tr
                       hover
                       role="checkbox"
                       tabIndex={-1}
@@ -391,57 +350,77 @@ const ViewStockItemMenu = React.memo(() => {
                         const value = row[column.id];
                         return index == columns.length - 1 ? (
                           <>
-                            <TableCell key={column.id} align={column.align}>
-                              <Tooltip title="Delete" color="dark">
-                                <IconButton
-                                  onClick={() => {
-                                    deleteStockItemMenuById(row.stockItemId)
-                                      .then((data) => {
-                                        toast.success(
-                                          "Record Deleted Successfully!!"
-                                        );
-                                        let newStockItems =
-                                          stockItems.content.filter(
-                                            (item) =>
-                                              item.stockItemId !=
-                                              row.stockItemId
+                            <td
+                              key={column.id}
+                              align={column.align}
+                              className="d-flex"
+                            >
+                               <div style={{marginTop:"42px"}}></div>
+                              {checkAccess(
+                                "View Stock Item Menu",
+                                "canUpdate"
+                              ) && (
+                                <Tooltip title="Edit" color="primary">
+                                  <IconButton
+                                    className="mx-1"
+                                    onClick={() =>
+                                      navigateToEdit(row.accountCode)
+                                    }
+                                  >
+                                    <Edit color="error" />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                              {checkAccess(
+                                "View Stock Item Menu",
+                                "canDelete"
+                              ) && (
+                                <Tooltip title="Delete" color="dark">
+                                  <IconButton
+                                    onClick={() => {
+                                      deleteStockItemMenuById(row.stockItemId)
+                                        .then((data) => {
+                                          toast.success(
+                                            "Record Deleted Successfully!!"
                                           );
-                                        setStockItems({
-                                          ...stockItems,
-                                          content: newStockItems,
-                                          totalElements:
-                                            stockItems.totalElements - 1,
+                                          let newStockItems =
+                                            stockItems.content.filter(
+                                              (item) =>
+                                                item.stockItemId !=
+                                                row.stockItemId
+                                            );
+                                          setStockItems({
+                                            ...stockItems,
+                                            content: newStockItems,
+                                            totalElements:
+                                              stockItems.totalElements - 1,
+                                          });
+                                        })
+                                        .catch((error) => {
+                                          toast.error(
+                                            "Error while deleted Record"
+                                          );
                                         });
-                                      })
-                                      .catch((error) => {
-                                        toast.error(
-                                          "Error while deleted Record"
-                                        );
-                                      });
-                                  }}
-                                >
-                                  <Delete color="error" />
-                                </IconButton>
-                              </Tooltip>
-                            </TableCell>
+                                    }}
+                                  >
+                                    <Delete color="error" />
+                                  </IconButton>
+                                </Tooltip>
+                              )}
+                            </td>
                           </>
                         ) : (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{ cursor: "pointer" }}
-                            onClick={() => navigateToEdit(row.accountCode)}
-                          >
+                          <td key={column.id} align={column.align}>
                             {column.format && typeof value === "number"
                               ? column.format(value)
                               : value}
-                          </TableCell>
+                          </td>
                         );
                       })}
-                    </TableRow>
+                    </tr>
                   );
                 })}
-            </TableBody>
+            </tbody>
             {stockItems?.content?.length <= 0 && (
               <Container>
                 <img
@@ -459,20 +438,36 @@ const ViewStockItemMenu = React.memo(() => {
               </Container>
             )}
           </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={stockItems?.content?.length || 0}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+        </div>
+
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => handleChangePage(page - 1)}
+            disabled={page === 0}
+          />
+
+          {/* Assuming stockItems?.content is an array and rowsPerPage is the number of items per page */}
+          {Array.from({
+            length: Math.ceil(stockItems?.content?.length / rowsPerPage),
+          }).map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={page === index + 1}
+              onClick={() => handleChangePage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+
+          <Pagination.Next
+            onClick={() => handleChangePage(page + 1)}
+            disabled={stockItems.lastPage}
+          />
+        </Pagination>
+      </Card>
     </Container>
   ) : (
-    <Navigate to={"/"} />
+    <Navigate to={"/login"} />
   );
 });
 
@@ -539,7 +534,7 @@ const ViewStockItemMenu = React.memo(() => {
 //                     Search
 //                 </Button>
 //             </InputGroup>
-//             <Table striped responsive bordered hover size='sm'>
+//             <Table responsive  striped responsive bordered hover size='sm'>
 //                 <thead>
 //                     <tr>
 //                         <th>ID</th>
@@ -619,4 +614,4 @@ const ViewStockItemMenu = React.memo(() => {
 //     ):<Navigate to="/"/>
 // };
 
-export default ViewStockItemMenu;
+export default React.memo(ViewStockItemMenu);

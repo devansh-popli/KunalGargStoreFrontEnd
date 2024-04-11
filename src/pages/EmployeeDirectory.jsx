@@ -1,43 +1,30 @@
+import { IconButton, InputAdornment, TextField, Tooltip } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TablePagination,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Container,
-  styled,
-  tableCellClasses,
-  Stack,
-} from "@mui/material";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 
+import { Preview } from "@mui/icons-material";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import EditIcon from "@mui/icons-material/Edit";
-import PreviewIcon from "@mui/icons-material/Preview";
 import SearchIcon from "@mui/icons-material/Search";
+import SortIcon from "@mui/icons-material/Sort";
+import {
+  Button,
+  Card,
+  Container,
+  Modal,
+  Pagination,
+  Table,
+} from "react-bootstrap";
+import { Link, Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { UserContext } from "../context/UserContext";
+import useJwtChecker from "../helper/useJwtChecker";
 import {
   getEmployeeDataFromBackend,
   getEmployeeImageByTypeURl,
 } from "../services/EmployeeDataService";
-import { toast } from "react-toastify";
-import { Preview } from "@mui/icons-material";
-import { Button } from "react-bootstrap";
-import { Tooltip } from "react-tooltip";
 import EmployeeEnrollmentForm from "./EmployeeEnrollmentForm";
-import { UserContext } from "../context/UserContext";
-import { Link, Navigate } from "react-router-dom";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import SortIcon from "@mui/icons-material/Sort";
-import useJwtChecker from "../helper/useJwtChecker";
+import { checkAccess } from "../auth/HelperAuth";
 const EmployeeDirectory = React.memo(() => {
   const [searchTerm, setSearchTerm] = useState("");
   const [employees, setEmployees] = useState([]);
@@ -82,7 +69,7 @@ const EmployeeDirectory = React.memo(() => {
       });
   }, [page, rowsPerPage]);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
   const getSortIcon = (column) => {
@@ -150,28 +137,14 @@ const EmployeeDirectory = React.memo(() => {
   const [imageSrc, setImageSrc] = useState(null);
   const userContext = useContext(UserContext);
   const imageRef = useRef(null);
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#205072",
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
   const jetChecker = useJwtChecker();
   return userContext.isLogin ? (
     <Container className="mt-3">
-        <h4 className="fw-bold">Employee Directory</h4>
-      <Paper className="" style={{ borderRadius: "10px" }}>
-        <Stack
-          spacing={2}
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          padding={2}
-        >
-          <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <h4 className="fw-bold">Employee Directory</h4>
+      <Card className="" style={{ borderRadius: "10px" }}>
+        <div className="d-flex justify-content-between align-items-center p-2">
+          <TextField
+            inputProps={{ style: { textTransform: "uppercase" } }}
             label="Search"
             className=""
             variant="outlined"
@@ -189,87 +162,80 @@ const EmployeeDirectory = React.memo(() => {
               ),
             }}
           />
-
-          <Button
-            as={Link}
-            to="/employee-form"
-            style={{
-              backgroundColor: "#78C2AD",
-              textDecoration: "none",
-              fontSize: "11px",
-              width: "90px",
-              color:"white"
-            }}
-            size="small"
-            variant="contained"
-          >
-            Add New
-          </Button>
-        </Stack>
-        <TableContainer
-          className="position-relative"
-          style={{ borderRadius: "10px" }}
-        >
-          <Table
+          {checkAccess("Employee Directory", "canWrite") && (
+            <Button
+              as={Link}
+              to="/employee-form"
+              style={{
+                backgroundColor: "#78C2AD",
+                textDecoration: "none",
+                fontSize: "11px",
+                width: "90px",
+                color: "white",
+              }}
+              size="small"
+              variant="contained"
+            >
+              Add New
+            </Button>
+          )}
+        </div>
+        <div className="position-relative" style={{ borderRadius: "10px" }}>
+          <Table responsive 
             size="small"
             aria-label="a dense table"
             style={sortedEmployees()?.length <= 0 ? { minHeight: "380px" } : {}}
           >
-            <TableHead>
-              <TableRow>
-                <StyledTableCell
-                  style={{ width: "12%" }}
-                  className="text-center "
-                >
+            <thead>
+              <tr>
+                <th style={{ width: "12%" }} className="text-center ">
                   Profile Image
-                </StyledTableCell>
-                <StyledTableCell
+                </th>
+                <th
                   onClick={() => handleSort("empCode")}
                   style={{ width: "15%", cursor: "pointer" }}
                 >
                   Emp Code {getSortIcon("empCode")}
-                </StyledTableCell>
-                <StyledTableCell
+                </th>
+                <th
                   onClick={() => handleSort("firstName")}
                   style={{ width: "15%", cursor: "pointer" }}
                 >
                   Emp Name {getSortIcon("firstName")}
-                </StyledTableCell>
-                <StyledTableCell
+                </th>
+                <th
                   onClick={() => handleSort("department")}
                   style={{ width: "15%", cursor: "pointer" }}
                 >
                   Department {getSortIcon("department")}
-                </StyledTableCell>
-                <StyledTableCell
+                </th>
+                <th
                   onClick={() => handleSort("designation")}
                   style={{ width: "15%", cursor: "pointer" }}
                 >
                   Designation {getSortIcon("designation")}
-                </StyledTableCell>
-                <StyledTableCell
+                </th>
+                <th
                   onClick={() => handleSort("phoneNumber")}
                   style={{ width: "15%", cursor: "pointer" }}
                 >
                   Mobile No {getSortIcon("phoneNumber")}
-                </StyledTableCell>
-                <StyledTableCell
+                </th>
+                <th
                   onClick={() => handleSort("cityTehsil")}
                   style={{ width: "15%", cursor: "pointer" }}
                 >
                   Location {getSortIcon("cityTehsil")}
-                </StyledTableCell>
-                <StyledTableCell style={{ width: "15%" }}>
-                  Actions
-                </StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+                </th>
+                <th style={{ width: "15%" }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
               {sortedEmployees()
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((employee, index) => (
-                  <TableRow key={employee.id}>
-                    <TableCell className="text-center">
+                  <tr key={employee.id}>
+                    <td className="text-center">
                       <img
                         height={30}
                         width={30}
@@ -291,50 +257,42 @@ const EmployeeDirectory = React.memo(() => {
                         }}
                         alt=""
                       />
-                    </TableCell>
-                    <TableCell>{employee.empCode}</TableCell>
-                    <TableCell>
-                      {employee.firstName + " " + employee.lastName}
-                    </TableCell>
-                    <TableCell>{employee.department}</TableCell>
-                    <TableCell>{employee.designation}</TableCell>
-                    <TableCell>{employee.phoneNumber}</TableCell>
-                    <TableCell>{employee.cityTehsil}</TableCell>
-                    <TableCell>
+                    </td>
+                    <td>{employee.empCode}</td>
+                    <td>{employee.firstName + " " + employee.lastName}</td>
+                    <td>{employee.department}</td>
+                    <td>{employee.designation}</td>
+                    <td>{employee.phoneNumber}</td>
+                    <td>{employee.cityTehsil}</td>
+                    <td>
                       <div className="d-flex">
-                        <Button
-                          onClick={() => handleOpen(employee)}
-                          variant="outlined"
-                          data-tooltip-id="my-tooltip"
-                          data-tooltip-content="Edit Employee"
-                        >
-                          <EditIcon />
-                        </Button>
-                        <Tooltip
-                          id="my-tooltip"
-                          place="bottom"
-                          type="info"
-                          effect="solid"
-                        />
-                        <Button
-                          onClick={() => handleOpen(employee, true)}
-                          variant="outlined"
-                          data-tooltip-id="my-tooltip2"
-                          data-tooltip-content="View Employee"
-                        >
-                          <Preview />
-                        </Button>
-                        <Tooltip
-                          id="my-tooltip2"
-                          place="bottom"
-                          type="info"
-                          effect="solid"
-                        />
+                        {checkAccess("Employee Directory", "canUpdate") && (
+                          <Tooltip title="Edit employee">
+                            <Button
+                              onClick={() => handleOpen(employee)}
+                              variant="outlined"
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
+                        )}
+                        {checkAccess("Employee Directory", "canDelete") && (
+                          <Tooltip title="View">
+                            <Button
+                              onClick={() => handleOpen(employee, true)}
+                              variant="outlined"
+                              data-tooltip-id="my-tooltip2"
+                              data-tooltip-content="View Employee"
+                            >
+                              <Preview />
+                            </Button>
+                          </Tooltip>
+                        )}
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 ))}
-            </TableBody>
+            </tbody>
             {sortedEmployees().length <= 0 && (
               <Container>
                 <img
@@ -352,37 +310,53 @@ const EmployeeDirectory = React.memo(() => {
               </Container>
             )}
           </Table>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={employees.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-        </TableContainer>
+
+          <Pagination>
+            <Pagination.Prev
+              onClick={() => handleChangePage(page - 1)}
+              disabled={page === 0}
+            />
+
+            {/* Assuming employees is an array and rowsPerPage is the number of items per page */}
+            {Array.from({
+              length: Math.ceil(employees.length / rowsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={page === index + 1}
+                onClick={() => handleChangePage(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+
+            <Pagination.Next
+              onClick={() => handleChangePage(page + 1)}
+              disabled={page === Math.floor(employees.length / rowsPerPage)}
+            />
+          </Pagination>
+        </div>
         <Modal
-          open={open}
-          onClose={handleClose}
+          show={open}
+          onHide={handleClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
           className="p-0 m-0"
         >
-          <Paper
+          <Card
             className="container-fluid"
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 500,
-              height: "70%",
-              bgcolor: "background.paper",
-              overflowY: "auto",
-              borderRadius: "5px",
-              padding: 0,
-            }}
+            // style={{
+            //   position: "absolute",
+            //   top: "50%",
+            //   left: "50%",
+            //   transform: "translate(-50%, -50%)",
+            //   width: 500,
+            //   height: "70%",
+            //   bgcolor: "background.paper",
+            //   overflowY: "auto",
+            //   borderRadius: "5px",
+            //   padding: 0,
+            // }}
           >
             <EmployeeEnrollmentForm
               readOnly={readOnly}
@@ -391,13 +365,13 @@ const EmployeeDirectory = React.memo(() => {
               selectedEmployee={selectedEmployee}
               paper={false}
             />
-          </Paper>
+          </Card>
         </Modal>
-      </Paper>
+      </Card>
     </Container>
   ) : (
-    <Navigate to={"/"} />
+    <Navigate to={"/login"} />
   );
 });
 
-export default EmployeeDirectory;
+export default React.memo(EmployeeDirectory);

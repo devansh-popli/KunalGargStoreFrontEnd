@@ -1,41 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
+import { Delete } from "@mui/icons-material";
 import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TablePagination,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextField,
-  Button,
   IconButton,
-  Menu,
-  Tooltip,
   List,
   ListItem,
   ListItemText,
-  styled,
-  tableCellClasses,
-  Container,
+  TablePagination,
+  Tooltip,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { UserContext } from "../context/UserContext";
 import {
   deleteAttendanceDataByDateFromBackend,
-  getAttendanceDataFromBackend,
   getAttendanceDataOfTodayFromBackend,
 } from "../services/EmployeeDataService";
-import { UserContext } from "../context/UserContext";
-import { toast } from "react-toastify";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { Delete, TrySharp } from "@mui/icons-material";
 import EmployeeSearchBar from "./EmployeeSearchBar";
+import { Card, Container, Pagination, Table } from "react-bootstrap";
+import { checkAccess } from "../auth/HelperAuth";
 const AttendanceTableOfToday = ({ employeeList }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -91,12 +72,16 @@ const AttendanceTableOfToday = ({ employeeList }) => {
       let filteredEmployees = [];
       let filteredAttendanceData = [];
 
-      if (searchTermN.toLowerCase().includes("emp") || !isNaN(searchTermN) || searchTermN.includes("EMP")) {
+      if (
+        searchTermN.toLowerCase().includes("emp") ||
+        !isNaN(searchTermN) ||
+        searchTermN.includes("EMP")
+      ) {
         // If the searchTerm starts with "EMP"
         filteredEmployees = employeeList.filter((employee) =>
           employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
         );
-        console.log(filteredEmployees);
+        //        console.log(filteredEmployees);
         // Filter attendanceData based on empCode from filteredEmployees
         filteredAttendanceData = oldAttendance.filter((data) =>
           filteredEmployees.some((employee) =>
@@ -111,7 +96,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
         );
       } else {
         // If the searchTerm doesn't start with "EMP"
-        console.log(searchTermN);
+        //        console.log(searchTermN);
         filteredAttendanceData = oldAttendance.filter((data) =>
           data.employeeName.toLowerCase().includes(searchTermN.toLowerCase())
         );
@@ -190,7 +175,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
   //   return employeeMatch && monthMatch && searchMatch;
   // });
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 
@@ -219,33 +204,23 @@ const AttendanceTableOfToday = ({ employeeList }) => {
   }
   const [selectedEmployeeName, setSelectedEmployeeName] = useState("");
   useEffect(() => {
-    console.log("search ress");
+    //    console.log("search ress");
     setSearchResults([]);
   }, [selectedEmployeeName]);
   const selectEmployee = (e, employee) => {
     try {
       e.preventDefault();
-      console.log(employee);
+      //      console.log(employee);
       setSelectedEmployeeName(employee.firstName + " " + employee.lastName);
       setSelectedEmployee(employee.empCode);
     } catch (e) {
-      console.log(e);
+      //      console.log(e);
     }
   };
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#205072",
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
   return (
-    <Paper
-      elevation={3}
+    <Card
       style={{ padding: "10px", borderRadius: "10px" }}
-      className="mt-1"
+      className="mt-1 border-0 shadow"
     >
       <h5 className="fw-bold">Attendance Records</h5>
       <div
@@ -277,7 +252,7 @@ const AttendanceTableOfToday = ({ employeeList }) => {
           />
           {/* Render your search results or other components based on the search */}
 
-          <List             
+          <List
             class={"bg-white border-1 shadow p-0"}
             style={{
               width: "216px",
@@ -377,80 +352,114 @@ const AttendanceTableOfToday = ({ employeeList }) => {
         )}
       </div>
 
-      <TableContainer className="position-relative" style={attendanceData?.length<=0?{minHeight:'380px'}:{}}>
-        <Table size="small" aria-label="a dense table" style={attendanceData?.length<=0?{minHeight:"360px"}:{}}>
-          <TableHead  className="position-relative" >
-            <TableRow>
-              <StyledTableCell>Date</StyledTableCell>
-              <StyledTableCell>Employee Name</StyledTableCell>
-              <StyledTableCell>Time In</StyledTableCell>
-              <StyledTableCell>Time Out</StyledTableCell>
-              <StyledTableCell>Actions</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      <div
+        className="position-relative"
+        style={attendanceData?.length <= 0 ? { minHeight: "380px" } : {}}
+      >
+        <Table responsive 
+          size="small"
+          aria-label="a dense table"
+          style={attendanceData?.length <= 0 ? { minHeight: "360px" } : {}}
+        >
+          <thead className="position-relative">
+            <tr>
+              <th>Date</th>
+              <th>Employee Name</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {attendanceData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((entry, index) => (
-                <TableRow key={index}>
-                  <TableCell>{entry?.attendanceDate}</TableCell>
-                  <TableCell>{entry?.employeeName}</TableCell>
-                  <TableCell>{entry?.inTime}</TableCell>
-                  <TableCell>{entry?.outTime}</TableCell>
-                  <TableCell>
-                    <Tooltip title="Delete">
-                      <IconButton
-                        onClick={() => {
-                          deleteAttendanceDataByDateFromBackend(entry.id).then(res=>{
-                            setAttendanceData(
-                              attendanceData.filter((data) => data.id != entry.id)
-                            );
-                            setOldAttendance(
-                              attendanceData.filter((data) => data.id != entry.id)
-                            );
-                          }).catch(error=>{
-                            toast.error("Access Denied or Internal Server error")
-                          });
-                        
-                        }}
-                      >
-                        <Delete color="error" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
+                <tr key={index}>
+                  <td>{entry?.attendanceDate}</td>
+                  <td>{entry?.employeeName}</td>
+                  <td>{entry?.inTime}</td>
+                  <td>{entry?.outTime}</td>
+                  <td>
+                    {checkAccess("Attendance Tracker", "canDelete") && (
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={() => {
+                            deleteAttendanceDataByDateFromBackend(entry.id)
+                              .then((res) => {
+                                setAttendanceData(
+                                  attendanceData.filter(
+                                    (data) => data.id != entry.id
+                                  )
+                                );
+                                setOldAttendance(
+                                  attendanceData.filter(
+                                    (data) => data.id != entry.id
+                                  )
+                                );
+                              })
+                              .catch((error) => {
+                                toast.error(
+                                  "Access Denied or Internal Server error"
+                                );
+                              });
+                          }}
+                        >
+                          <Delete color="error" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </td>
+                </tr>
               ))}
-          </TableBody>
+          </tbody>
           {attendanceData.length <= 0 && (
-          <Container>
-            <img
-              src="../../noData.svg"
-              width={250}
-              height={250}
-              alt=""
-              className="position-absolute"
-              style={{
-                top: "60%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            />
-          </Container>
-)}
+            <Container>
+              <img
+                src="../../noData.svg"
+                width={250}
+                height={250}
+                alt=""
+                className="position-absolute"
+                style={{
+                  top: "60%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </Container>
+          )}
         </Table>
-      </TableContainer>
+      </div>
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={attendanceData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => handleChangePage(page - 1)}
+          disabled={page === 0}
+        />
+
+        {/* Assuming attendanceData is an array and rowsPerPage is the number of items per page */}
+        {Array.from({
+          length: Math.ceil(attendanceData.length / rowsPerPage),
+        }).map((_, index) => (
+          <Pagination.Item
+            key={index}
+            active={page === index}
+            onClick={() => handleChangePage(index)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+
+        <Pagination.Next
+          onClick={() => handleChangePage(page + 1)}
+          disabled={
+            page === Math.floor(attendanceData.length / rowsPerPage) ||
+            attendanceData.length <= rowsPerPage
+          }
+        />
+      </Pagination>
+    </Card>
   );
 };
 
-export default AttendanceTableOfToday;
+export default React.memo(AttendanceTableOfToday);

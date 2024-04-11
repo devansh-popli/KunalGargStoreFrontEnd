@@ -6,4 +6,4 @@ const EditEmployee = () => {
   )
 }
 
-export default EditEmployee
+export default React.memo(EditEmployee)

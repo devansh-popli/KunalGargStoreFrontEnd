@@ -1,28 +1,13 @@
-import React, { useRef, useState } from "react";
-import { styled } from "@mui/material/styles";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Carousel from "react-bootstrap/Carousel";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { Tooltip as ReactTooltip } from "react-tooltip";
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import {
-  Container,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Grid,
-} from "@mui/material";
-import { toast } from "react-toastify";
-import { Form, InputGroup, Spinner } from "react-bootstrap";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import Webcam from "react-webcam";
 import { Delete } from "@mui/icons-material";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Button, Container, TextField, Tooltip } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import React, { useRef, useState } from "react";
+import { Form } from "react-bootstrap";
+import Carousel from "react-bootstrap/Carousel";
+import { toast } from "react-toastify";
+import Webcam from "react-webcam";
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -86,25 +71,45 @@ const EmployementDetails = ({
           ...(type === "passport" && {
             passportDocumentFiles: [
               ...(formData?.passportDocumentFiles || []),
-              dataURLtoFile(imageSrc, `captured_imagep${formData?.passportDocumentFiles?.length+1 || 0}.jpg`),
+              dataURLtoFile(
+                imageSrc,
+                `captured_imagep${
+                  formData?.passportDocumentFiles?.length + 1 || 0
+                }.jpg`
+              ),
             ],
           }),
           ...(type === "pan" && {
             panDocumentFiles: [
               ...(formData?.panDocumentFiles || []),
-              dataURLtoFile(imageSrc, `captured_imagepan${formData?.panDocumentFiles?.length+1 || 0}.jpg`),
+              dataURLtoFile(
+                imageSrc,
+                `captured_imagepan${
+                  formData?.panDocumentFiles?.length + 1 || 0
+                }.jpg`
+              ),
             ],
           }),
           ...(type === "driving" && {
             drivingDocumentFiles: [
               ...(formData?.drivingDocumentFiles || []),
-              dataURLtoFile(imageSrc, `captured_imagedr${formData?.drivingDocumentFiles?.length+1 || 0}.jpg`),
+              dataURLtoFile(
+                imageSrc,
+                `captured_imagedr${
+                  formData?.drivingDocumentFiles?.length + 1 || 0
+                }.jpg`
+              ),
             ],
           }),
           ...(type === "adhar" && {
             aadharDocumentFiles: [
               ...(formData?.aadharDocumentFiles || []),
-              dataURLtoFile(imageSrc, `captured_imageadhar${formData?.aadharDocumentFiles?.length+1 || 0}.jpg`),
+              dataURLtoFile(
+                imageSrc,
+                `captured_imageadhar${
+                  formData?.aadharDocumentFiles?.length + 1 || 0
+                }.jpg`
+              ),
             ],
           }),
         }));
@@ -185,7 +190,7 @@ const EmployementDetails = ({
   //     setImageFiles([...imageFiles, ...imageFilesArray]);
   //     const previewArray = imageFilesArray.map((file) => URL.createObjectURL(file));
   //     setImagePreviews([...imagePreviews, ...previewArray]);
-  //     console.log(imagePreviews.length)
+//  //     console.log(imagePreviews.length)
   //     setIsLoading(false);
   //   }
   // };
@@ -236,60 +241,71 @@ const EmployementDetails = ({
       {/* <label htmlFor="selectedDocument" className="mt-3"></label> */}
       <Container className="text-center py-3 border">
         <p className="text-muted">Image Preview</p>
-        {!showCamera && formData.placeholder && formData.placeholder.length > 0 && (
-         <div className="container">
-         <Carousel
-            data-bs-theme="dark"
-            indicators={false}
-            controls={formData.placeholder.length > 0}
-          >
-            {formData.placeholder.map(
-              (file, index) =>
-                file && (
-                  <Carousel.Item key={index}>
-                    <img
-                      className="img-fluid mx-2"
-                      style={{
-                        objectFit: "contain",
-                        maxHeight: "150px",
-                        width: "100%",
-                      }}
-                      src={file}
-                      alt=""
-                      onClick={() => openImageInNewTab(file)}
-                    />
-                  </Carousel.Item>
-                )
-            )}
-         
-          </Carousel>
-           <Button onClick={()=>{
-            setFormData({
-              ...formData,
-              placeholder: undefined,
-              passportDocumentFiles: null,
-              aadharDocumentFiles: null,
-              panDocumentFiles: null,
-              drivingDocumentFiles: null,
-            });
-          }} variant="contained" size="small"  className="your-button-class"startIcon={<Delete />} color="error">Clear All</Button>
+        {!showCamera &&
+          formData.placeholder &&
+          formData.placeholder.length > 0 && (
+            <div className="container">
+              <Carousel
+                data-bs-theme="dark"
+                indicators={false}
+                controls={formData.placeholder.length > 0}
+              >
+                {formData.placeholder.map(
+                  (file, index) =>
+                    file && (
+                      <Carousel.Item key={index}>
+                        <img
+                          className="img-fluid mx-2"
+                          style={{
+                            objectFit: "contain",
+                            maxHeight: "150px",
+                            width: "100%",
+                          }}
+                          src={file}
+                          alt=""
+                          onClick={() => openImageInNewTab(file)}
+                        />
+                      </Carousel.Item>
+                    )
+                )}
+              </Carousel>
+              <Button
+                onClick={() => {
+                  setFormData({
+                    ...formData,
+                    placeholder: undefined,
+                    passportDocumentFiles: null,
+                    aadharDocumentFiles: null,
+                    panDocumentFiles: null,
+                    drivingDocumentFiles: null,
+                  });
+                }}
+                variant="contained"
+                size="small"
+                className="your-button-class"
+                startIcon={<Delete />}
+                color="error"
+              >
+                Clear All
+              </Button>
+            </div>
+          )}
+        {showCamera && (
+          <div className="text-center">
+            <Webcam
+              width={300}
+              height={200}
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+            />
           </div>
         )}
-         {showCamera && (
-        <div className="text-center">
-          <Webcam
-            width={300}
-            height={200}
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-          />
-        </div>
-      )}
       </Container>
-     
+
       <div className="d-flex my-2 align-items-center">
-        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+        <TextField
+          inputProps={{ style: { textTransform: "uppercase" } }}
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="Aadhar Card"
@@ -301,23 +317,18 @@ const EmployementDetails = ({
           helperText={errors.aadharCard}
         />
         <div>
-          <Button
-            data-for="happyFace"
-            onClick={(event) => handleFileChangeDocument(event, "adhar", "cam")}
-            variant="outlined"
-            type="error"
-            className="ms-2"
-            data-tooltip-id="my-tooltip"
-            data-tooltip-content="Take Photo"
-          >
-            <CameraAltIcon />
-          </Button>
-          <ReactTooltip
-            id="my-tooltip"
-            place="bottom"
-            type="info"
-            effect="solid"
-          />
+          <Tooltip title="Take Photo">
+            <Button
+              onClick={(event) =>
+                handleFileChangeDocument(event, "adhar", "cam")
+              }
+              variant="outlined"
+              type="error"
+              className="ms-2"
+            >
+              <CameraAltIcon />
+            </Button>
+          </Tooltip>
         </div>
         <span className="mx-2">or</span>
         <Button
@@ -335,7 +346,8 @@ const EmployementDetails = ({
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+        <TextField
+          inputProps={{ style: { textTransform: "uppercase" } }}
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="PAN Card"
@@ -347,23 +359,16 @@ const EmployementDetails = ({
           helperText={errors.panCard}
         />
         <div>
-          <Button
-            data-for="happyFace"
-            onClick={(event) => handleFileChangeDocument(event, "pan", "cam")}
-            variant="outlined"
-            type="error"
-            className="ms-2"
-            data-tooltip-id="my-tooltip"
-            data-tooltip-content="Take Photo"
-          >
-            <CameraAltIcon />
-          </Button>
-          <ReactTooltip
-            id="my-tooltip"
-            place="bottom"
-            type="info"
-            effect="solid"
-          />
+          <Tooltip title="Take Photo">
+            <Button
+              onClick={(event) => handleFileChangeDocument(event, "pan", "cam")}
+              variant="outlined"
+              type="error"
+              className="ms-2"
+            >
+              <CameraAltIcon />
+            </Button>
+          </Tooltip>
         </div>
         <span className="mx-2">or</span>
         <Button
@@ -381,7 +386,8 @@ const EmployementDetails = ({
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+        <TextField
+          inputProps={{ style: { textTransform: "uppercase" } }}
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="Driving License No"
@@ -393,25 +399,18 @@ const EmployementDetails = ({
           helperText={errors.drivingLicenseNo}
         />
         <div>
+        <Tooltip title="Take Photo">
           <Button
-            data-for="happyFace"
             onClick={(event) =>
               handleFileChangeDocument(event, "driving", "cam")
             }
             variant="outlined"
             type="error"
             className="ms-2"
-            data-tooltip-id="my-tooltip"
-            data-tooltip-content="Take Photo"
           >
             <CameraAltIcon />
           </Button>
-          <ReactTooltip
-            id="my-tooltip"
-            place="bottom"
-            type="info"
-            effect="solid"
-          />
+          </Tooltip>
         </div>
         <span className="mx-2">or</span>
         <Button
@@ -429,7 +428,8 @@ const EmployementDetails = ({
         />
       </div>
       <div className="d-flex mb-2 align-items-center">
-        <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+        <TextField
+          inputProps={{ style: { textTransform: "uppercase" } }}
           disabled={readOnly}
           className={readOnly ? "w-100" : "w-80"}
           label="Passport No"
@@ -441,25 +441,18 @@ const EmployementDetails = ({
           helperText={errors.passportNo}
         />
         <div>
+        <Tooltip title="Take Photo">
           <Button
-            data-for="happyFace"
             onClick={(event) =>
               handleFileChangeDocument(event, "passport", "cam")
             }
             variant="outlined"
             type="error"
             className="ms-2"
-            data-tooltip-id="my-tooltip"
-            data-tooltip-content="Take Photo"
           >
             <CameraAltIcon />
           </Button>
-          <ReactTooltip
-            id="my-tooltip"
-            place="bottom"
-            type="info"
-            effect="solid"
-          />
+         </Tooltip>
         </div>
         <span className="mx-2">or</span>
         <Button
@@ -476,7 +469,8 @@ const EmployementDetails = ({
           type="file"
         />
       </div>
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField
+        inputProps={{ style: { textTransform: "uppercase" } }}
         disabled={readOnly}
         className="mb-2"
         label="Police Verification Station"
@@ -487,7 +481,8 @@ const EmployementDetails = ({
         error={Boolean(errors.policeVerificationStation)}
         helperText={errors.policeVerificationStation}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField
+        inputProps={{ style: { textTransform: "uppercase" } }}
         disabled={readOnly}
         className="mb-2"
         label="Certificate No"
@@ -498,7 +493,8 @@ const EmployementDetails = ({
         error={Boolean(errors.policeVerificationCertificateNo)}
         helperText={errors.policeVerificationCertificateNo}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField
+        inputProps={{ style: { textTransform: "uppercase" } }}
         disabled={readOnly}
         className="mb-2"
         label="Date of Issue"
@@ -519,7 +515,8 @@ const EmployementDetails = ({
         }}
         helperText={errors.dateOfIssue}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField
+        inputProps={{ style: { textTransform: "uppercase" } }}
         disabled={readOnly}
         className="mb-2"
         label="Date of Expiry"
@@ -540,7 +537,8 @@ const EmployementDetails = ({
           },
         }}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField
+        inputProps={{ style: { textTransform: "uppercase" } }}
         disabled={readOnly}
         className="mb-2"
         label="Issued By"
@@ -555,4 +553,4 @@ const EmployementDetails = ({
   );
 };
 
-export default EmployementDetails;
+export default React.memo(EmployementDetails);

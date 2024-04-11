@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { getAttendanceDataFromBackendByMonth } from "../services/EmployeeDataService";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { getAttendanceDataFromBackendByMonth } from "../services/EmployeeDataService";
 
 const AttendanceChartMonthly = () => {
   const [chartOptions, setChartOptions] = useState(null);
@@ -18,7 +18,7 @@ const AttendanceChartMonthly = () => {
         // setData(res);
         if (data && data.content && data.content.length > 0) {
             const processedData = processData(data.content);
-      console.log(processedData)
+//      console.log(processedData)
       const options = {
         chart: {
           type: "line", // Use area chart for better visibility
@@ -172,4 +172,4 @@ const AttendanceChartMonthly = () => {
   ) 
 };
 
-export default AttendanceChartMonthly;
+export default React.memo(AttendanceChartMonthly);

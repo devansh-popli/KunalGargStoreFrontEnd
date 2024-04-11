@@ -14,19 +14,19 @@ const EmployeeSearchBar = ({
   const handleSearchChange = (event) => {
     // setSelectedEmployee("")
     const newSearchTerm = event.target.value;
-    console.log(newSearchTerm)
+//    console.log(newSearchTerm)
     setSearchTerm(newSearchTerm);
     onSearch(newSearchTerm);
   };
   useEffect(() => {
-    console.log(selectedEmployeeName)
+//    console.log(selectedEmployeeName)
     if (selectedEmployeeName && selectedEmployeeName.length > 0) {
       setSearchTerm(selectedEmployeeName);
       setSelectedEmployeeName("")
     }
   }, [selectedEmployeeName]);
   return (
-    <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+    <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
       label="Search Employees"
       variant="outlined"
       fullWidth
@@ -36,4 +36,4 @@ const EmployeeSearchBar = ({
   );
 };
 
-export default EmployeeSearchBar;
+export default React.memo(EmployeeSearchBar);

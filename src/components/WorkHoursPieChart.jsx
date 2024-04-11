@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import React, { useEffect, useState } from 'react';
 
 const WorkHoursPieChart = ({ data }) => {
   const [chartOptions, setChartOptions] = useState(null);
@@ -85,4 +85,4 @@ const WorkHoursPieChart = ({ data }) => {
   ) : null;
 };
 
-export default WorkHoursPieChart;
+export default React.memo(WorkHoursPieChart);

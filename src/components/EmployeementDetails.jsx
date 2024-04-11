@@ -1,15 +1,11 @@
-import React, { useState } from "react";
 import {
-  Container,
-  Paper,
-  Typography,
-  TextField,
-  Button,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
+  TextField
 } from "@mui/material";
+import React, { useState } from "react";
 const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) => {
   const [errors, setErrors] = useState({});
 
@@ -24,7 +20,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
     <div>
       <h5 className="fw-bold">Employment Details</h5>
       {" "}
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2 mt-3"
         label="Date of Joining"
         name="dateOfJoining"
@@ -68,7 +64,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
           <MenuItem value="Casual">Casual</MenuItem>
         </Select>
       </FormControl>
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Monthly Salary"
         name="monthlySalary"
@@ -79,7 +75,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
         helperText={errors.salary}
       />
       {formData.employmentHours === "Part Time" && (
-        <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+        <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
           className="mb-2"
           label="Hourly Rate"
           name="hourlyRate"
@@ -90,7 +86,7 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
           helperText={errors.hourlyRate}
         />
       )}
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Weekly Off Day"
         name="weeklyOffDay"
@@ -104,4 +100,4 @@ const EmployeementDetails = ({ onFormChange, formData, setFormData ,readOnly }) 
   );
 };
 
-export default EmployeementDetails;
+export default React.memo(EmployeementDetails);

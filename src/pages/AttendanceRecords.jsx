@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import AttendanceTable from "../components/AttendanceTable";
-import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
-import { toast } from "react-toastify";
 import { Col, Container, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
 import AttendanceChart from "../components/AttendanceChart";
-import WorkHoursPieChart from "../components/WorkHoursPieChart";
-import { UserContext } from "../context/UserContext";
-import AttendanceChartMonthly from "../components/AttendanceChartMonthly";
 import AttendanceChart1 from "../components/AttendanceChart1";
-import { Navigate } from "react-router-dom";
+import AttendanceTable from "../components/AttendanceTable";
+import { UserContext } from "../context/UserContext";
 import useJwtChecker from "../helper/useJwtChecker";
+import { getEmployeeDataFromBackend } from "../services/EmployeeDataService";
 
 const AttendanceRecords = React.memo(() => {
   const [employees, setEmployees] = useState([]);
@@ -24,7 +21,7 @@ const AttendanceRecords = React.memo(() => {
   }, []);
   const jetChecker=useJwtChecker()
   const userContext = useContext(UserContext);
-  return userContext.isLogin?(
+  return (
     <Container>
       <Row>
         {
@@ -43,7 +40,7 @@ userContext.monthlyAttendance &&
         </Col>
       </Row>
     </Container>
-  ):<Navigate to="/"/>;
+  )
 });
 
-export default AttendanceRecords;
+export default React.memo(AttendanceRecords);

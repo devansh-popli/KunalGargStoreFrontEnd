@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
+import { TextField } from "@mui/material";
+import { Container, Form } from "react-bootstrap";
 import { useDropzone } from "react-dropzone";
-import { Container, Paper, Typography, TextField, Button } from "@mui/material";
 import { toast } from "react-toastify";
-import { Form } from "react-bootstrap";
 
 const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   const [errors, setErrors] = useState({});
@@ -57,7 +57,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   return (
     <div>
       <h5 className="fw-bold">Bank Details</h5>
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Name of Bank"
         name="nameOfBank"
@@ -68,7 +68,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         helperText={errors.nameOfBank}
       />
 
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Branch"
         name="branch"
@@ -78,7 +78,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         error={Boolean(errors.branch)}
         helperText={errors.branch}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Account Holder Name"
         name="accountHolderName"
@@ -88,7 +88,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         error={Boolean(errors.accountHolderName)}
         helperText={errors.accountHolderName}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="Account Number"
         name="accountNo"
@@ -98,7 +98,7 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
         error={Boolean(errors.accountNo)}
         helperText={errors.accountNo}
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  disabled={readOnly}
         className="mb-2"
         label="IFSC Number"
         name="ifscNo"
@@ -135,4 +135,4 @@ const BankDetails = ({ onFormChange, formData, setFormData,readOnly }) => {
   );
 };
 
-export default BankDetails;
+export default React.memo(BankDetails);

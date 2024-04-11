@@ -1,38 +1,26 @@
-import React, { useEffect, useState } from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TablePagination from "@mui/material/TablePagination";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
+import { AccessTime, Cancel, Visibility } from "@mui/icons-material";
+import { Skeleton, Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Card,
+  Carousel,
+  Container,
+  Modal,
+  Pagination,
+  Table,
+} from "react-bootstrap";
+import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { UserContext } from "../context/UserContext";
 import {
   getVehicle2Entry,
-  getVehicleEntry,
   getVehicleImageByNameURl,
-  saveVehicleEntry,
   saveVehicleEntry2,
 } from "../services/VehicleEntryService";
-import { error } from "highcharts";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Modal,
-  Skeleton,
-  Tooltip,
-} from "@mui/material";
-import { AccessTime, Cancel, Visibility } from "@mui/icons-material";
-import { Carousel } from "react-bootstrap";
+import { checkAccess } from "../auth/HelperAuth";
+import VehicleEntryTable from "../components/VehicleEntryTable";
 
 const columns = [
   { id: "purpose", label: "Purpose" },
@@ -53,24 +41,10 @@ const VehicleEntryRecords = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm1, setSearchTerm1] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [data, setData] = useState([]);
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth:400,
-    maxWidth: 700,
-    maxHeight: 650,
-    overflowX:"hidden",
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    padding: 10,
-    borderRadius: 10,
-    p: 4,
-  };
   useEffect(() => {
     getVehicle2Entry()
       .then((data) => {
@@ -80,10 +54,6 @@ const VehicleEntryRecords = () => {
         toast.error("Internal Server Error");
       });
   }, []);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -102,9 +72,17 @@ const VehicleEntryRecords = () => {
   };
   const [imgLoading, setImgLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedImageIndex1, setSelectedImageIndex1] = useState(0);
+  const [selectedImageIndex2, setSelectedImageIndex2] = useState(0);
 
   const handleSelect = (selectedIndex, e) => {
     setSelectedImageIndex(selectedIndex);
+  };
+  const handleSelect1 = (selectedIndex, e) => {
+    setSelectedImageIndex1(selectedIndex);
+  };
+  const handleSelect2 = (selectedIndex, e) => {
+    setSelectedImageIndex2(selectedIndex);
   };
   const handleImageLoad = () => {
     setImgLoading(false); // Set loading state to false when the image is loaded
@@ -112,6 +90,9 @@ const VehicleEntryRecords = () => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
+  };
+  const handleSearch1 = (e) => {
+    setSearchTerm1(e.target.value.toLowerCase());
   };
 
   const handleSort = (columnId) => {
@@ -129,6 +110,11 @@ const VehicleEntryRecords = () => {
   const filteredRows = sortedRows.filter((row) =>
     Object.values(row).some((value) =>
       value?.toString()?.toLowerCase()?.includes(searchTerm)
+    )
+  );
+  const filteredRows1 = sortedRows.filter((row) =>
+    Object.values(row).some((value) =>
+      value?.toString()?.toLowerCase()?.includes(searchTerm1)
     )
   );
   const timeOut = (formData) => {
@@ -166,231 +152,116 @@ const VehicleEntryRecords = () => {
         toast.error("Internal Server Error While Saving");
       });
   };
-  const excludedFields = [
-    "vehicleDocument",
-    "id",
-    "driverDocument",
-    "tuuAbo",
-  ];
+
   const navigate = useNavigate();
-  return (
-    <Paper className="m-3">
-      <Stack
-        spacing={2}
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        p={2}
-      >
-        <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  label="Search" variant="outlined" onChange={handleSearch} />
-        <Button
-          variant="contained"
-          color="primary"
-          style={{backgroundColor:"#78C2AD"}}
-          onClick={() => {
-            navigate("/vehicle-entry-form");
-          }}
-        >
-          Add New
-        </Button>
-      </Stack>
-      <TableContainer className="position-relative">
-        <Table
-        aria-label="a dense table"
-          size="small"
+  const userContext = useContext(UserContext);
+  return userContext.isLogin ? (
+    <>
+      <Card className="m-3">
+        <h5 className="ms-4 mt-1 fw-bold">Live Vehicle</h5>
+        <div className="d-flex justify-content-between align-items-center p-2">
+          <TextField
+            inputProps={{ style: { textTransform: "uppercase" } }}
+            label="Search"
+            variant="outlined"
+            onChange={handleSearch1}
+          />
+          {checkAccess("Vehicle Entry Records", "canWrite") && (
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ backgroundColor: "#78C2AD" }}
+              onClick={() => {
+                navigate("/vehicle-entry-form");
+              }}
+            >
+              Add New
+            </Button>
+          )}
+        </div>
+        <div
+          className="position-relative"
           style={filteredRows.length == 0 ? { minHeight: "380px" } : {}}
         >
-          <TableHead style={{backgroundColor:"#205072",color:"white"}}>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                align="start"
-                  key={column.id}
-                  onClick={() => handleSort(column.id)}
-                  style={{ cursor: "pointer",minWidth:"150px",color:"white"}}
-                >
-                  {column.label}
-                  
-                </TableCell>
-              ))}
-              <TableCell   style={{minWidth:"150px",color:"white"}} className="px-5">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? filteredRows.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage
-                )
-              : filteredRows
-            ).map((row, index) => (
-              <TableRow key={index}>
-                {columns.map((column) => (
-                  <TableCell  key={column.id}>{row[column.id]}</TableCell>
-                ))}
-                <TableCell className="w-100">
-                  <Tooltip title="View" className="">
-                    <Button onClick={() => handleOpen(row)}>
-                      <Visibility />
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title="Time Out" className="">
-                    <Button size="small" onClick={() => timeOut(row)}>
-                      <small>
-                        <AccessTime />
-                      </small>
-                    </Button>
-                  </Tooltip>
-                </TableCell>
-                <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Paper style={style}>
-                    <div className="d-flex justify-content-between">
-                      <DialogTitle className="fw-bold">
-                        Vehicle Details
-                      </DialogTitle>
-                      <Cancel
-                        onClick={handleClose}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                    <DialogContentText>
-                      <strong>Vehicle Document:</strong>
-                    </DialogContentText>
-                    <Carousel
-                      data-bs-theme="dark"
-                      indicators={false}
-                      activeIndex={selectedImageIndex}
-                      onSelect={handleSelect}
-                      interval={null} // Disable automatic sliding
-                    >
-                      {imgLoading && (
-                        <Skeleton variant="rect" width="100%" height={200} />
-                      )}
-                      {driverData?.vehicleDocument?.map((image, index) => (
-                        <Carousel.Item key={index}>
-                          <img
-                            style={{ height: "150px", objectFit: "contain" }}
-                            className={`w-100  d-block ${
-                              imgLoading ? "d-none" : ""
-                            }`}
-                            src={getVehicleImageByNameURl(image)}
-                            alt={`Vehicle Document ${index + 1}`}
-                            onLoad={handleImageLoad}
-                          />
-                        </Carousel.Item>
-                      ))}
-                    </Carousel>
-
-                    {/* Driver Document Image Slider */}
-                    <DialogContentText>
-                      <strong>Driver Document:</strong>
-                    </DialogContentText>
-                    <Carousel
-                      data-bs-theme="dark"
-                      indicators={false}
-                      activeIndex={selectedImageIndex}
-                      onSelect={handleSelect}
-                      interval={null} // Disable automatic sliding
-                    >
-                      {imgLoading && (
-                        <Skeleton variant="rect" width="100%" height={200} />
-                      )}
-                      {driverData?.driverDocument?.map((image, index) => (
-                        <Carousel.Item key={index}>
-                          <img
-                            style={{ height: "150px", objectFit: "contain" }}
-                            className={`w-100 d-block ${
-                              imgLoading ? "d-none" : ""
-                            }`}
-                            src={getVehicleImageByNameURl(image)}
-                            alt={`Driver Document ${index + 1}`}
-                            onLoad={handleImageLoad}
-                          />
-                        </Carousel.Item>
-                      ))}
-                    </Carousel>
-                    <DialogContent>
-                      <div className="d-flex flex-wrap">
-                        <div style={{ flex: 1, marginRight: "20px" }}>
-                          {Object.entries(driverData)
-                            .slice(0, 9)
-                            .filter(([key]) => !excludedFields.includes(key))
-                            .map(([key, value], index) => (
-                              <div key={index} style={{ marginBottom: "10px" }}>
-                                <strong>{key}:</strong>{" "}
-                                {typeof value === "string"
-                                  ? value
-                                  : JSON.stringify(value)}
-                              </div>
-                            ))}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          {Object.entries(driverData)
-                            .slice(9, 15)
-                            .filter(([key]) => !excludedFields.includes(key))
-                            .map(([key, value], index) => (
-                              <div key={index} style={{ marginBottom: "10px" }}>
-                                <strong>{key}:</strong>{" "}
-                                {typeof value === "string"
-                                  ? value
-                                  : JSON.stringify(value)}
-                              </div>
-                            ))}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          {Object.entries(driverData)
-                            .slice(15)
-                            .filter(([key]) => !excludedFields.includes(key))
-                            .map(([key, value], index) => (
-                              <div key={index} style={{ marginBottom: "10px" }}>
-                                <strong>{key}:</strong>{" "}
-                                {typeof value === "string"
-                                  ? value
-                                  : JSON.stringify(value)}
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Paper>
-                </Modal>
-              </TableRow>
-            ))}
-            {filteredRows.length <= 0 && (
-              <Container>
-                <img
-                  src="../../noData.svg"
-                  width={250}
-                  height={250}
-                  alt=""
-                  className="position-absolute"
-                  style={{
-                    top: "60%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                />
-              </Container>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={filteredRows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+          <div>
+            <VehicleEntryTable
+              columns={columns}
+              filteredRows={filteredRows1.filter((data) => {
+                if (!data.dateOfExit) {
+                  return data;
+                }
+              })}
+              rowsPerPage={rowsPerPage}
+              handleClose={handleClose}
+              selectedImageIndex={selectedImageIndex}
+              handleSelect={handleSelect}
+              imgLoading={imgLoading}
+              driverData={driverData}
+              open={open}
+              handleOpen={handleOpen}
+              timeOut={timeOut}
+              handleImageLoad={handleImageLoad}
+              handleSort={handleSort}
+              setData={setData}
+            />
+          </div>
+        </div>
+      </Card>
+      <Card className="m-3">
+        <h5 className="ms-4 mt-1 fw-bold">Past Vehicle</h5>
+        <div className="d-flex justify-content-between align-items-center p-2">
+          <TextField
+            inputProps={{ style: { textTransform: "uppercase" } }}
+            label="Search"
+            variant="outlined"
+            onChange={handleSearch}
+          />
+          {checkAccess("Vehicle Entry Records", "canWrite") && (
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ backgroundColor: "#78C2AD" }}
+              onClick={() => {
+                navigate("/vehicle-entry-form");
+              }}
+            >
+              Add New
+            </Button>
+          )}
+        </div>
+        <div
+          className="position-relative mt-5"
+          style={filteredRows.length == 0 ? { minHeight: "380px" } : {}}
+        >
+          <div>
+            <VehicleEntryTable
+              columns={columns}
+              filteredRows={filteredRows.filter((data) => {
+                if (data.dateOfExit) {
+                  return data;
+                }
+              })}
+              rowsPerPage={rowsPerPage}
+              handleClose={handleClose}
+              selectedImageIndex={selectedImageIndex}
+              handleSelect={handleSelect}
+              imgLoading={imgLoading}
+              driverData={driverData}
+              open={open}
+              handleOpen={handleOpen}
+              timeOut={timeOut}
+              handleImageLoad={handleImageLoad}
+              handleSort={handleSort}
+              setData={setData}
+            />
+          </div>
+        </div>
+        
+      </Card>
+    </>
+  ) : (
+    <Navigate to="/login" />
   );
 };
 
-export default VehicleEntryRecords;
+export default React.memo(VehicleEntryRecords);

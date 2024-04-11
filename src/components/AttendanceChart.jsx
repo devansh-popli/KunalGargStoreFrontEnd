@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import React, { useEffect, useState } from 'react';
 
 const AttendanceChart = ({ data }) => {
   const [chartOptions, setChartOptions] = useState(null);
@@ -147,4 +147,4 @@ const AttendanceChart = ({ data }) => {
   ) : null;
 };
 
-export default AttendanceChart;
+export default React.memo(AttendanceChart);

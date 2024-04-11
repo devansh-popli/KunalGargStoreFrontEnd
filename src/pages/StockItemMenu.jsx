@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Row, Col, Form, Dropdown } from "react-bootstrap";
+import { Row, Col, Form, Dropdown, Card } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { isUserLoggedIn, uomList } from "../auth/HelperAuth";
 import { UserContext } from "../context/UserContext";
 import { privateAxios } from "../services/AxiosService";
 import {
@@ -24,7 +23,6 @@ import {
   Grid,
   InputLabel,
   MenuItem,
-  Paper,
   Radio,
   RadioGroup,
   Select,
@@ -317,7 +315,7 @@ const StockItemMenu = React.memo(() => {
       })
       .catch((error) => {
         toast.error("error occured");
-        console.log(error);
+//        console.log(error);
       });
   };
 
@@ -330,7 +328,7 @@ const StockItemMenu = React.memo(() => {
 
   const handleNext = () => {
     if (activeStep == 0) {
-      console.log("here");
+//      console.log("here");
       const nameError = validateName(formData?.name || "");
       const accountCodeError = validateAccountCode(formData?.accountCode || "");
       const totalGstError = validateTotalGst(formData?.totalGST || "");
@@ -374,7 +372,7 @@ const StockItemMenu = React.memo(() => {
         return (
           <Container fluid>
             <h5 className="fw-bold">Inventory Details </h5>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
               className="mb-2"
               label="A/c Code"
               variant="standard"
@@ -385,7 +383,7 @@ const StockItemMenu = React.memo(() => {
               fullWidth
               error={Boolean(formData.accountCodeError)}
             />
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
               className="mb-2"
               label="Name"
               variant="standard"
@@ -401,7 +399,7 @@ const StockItemMenu = React.memo(() => {
             )}
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="Op. Stock in Qty"
                   variant="standard"
@@ -413,7 +411,7 @@ const StockItemMenu = React.memo(() => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="Op. Stock in Rs"
                   variant="standard"
@@ -470,7 +468,7 @@ const StockItemMenu = React.memo(() => {
             </FormControl>
             <Grid container spacing={2}>
               <Grid item xs={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="Purchase Rate"
                   variant="standard"
@@ -482,7 +480,7 @@ const StockItemMenu = React.memo(() => {
                 />
               </Grid>
               <Grid item xs={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="MRP"
                   variant="standard"
@@ -494,7 +492,7 @@ const StockItemMenu = React.memo(() => {
                 />
               </Grid>
               <Grid item xs={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="Margin %"
                   variant="standard"
@@ -615,7 +613,7 @@ const StockItemMenu = React.memo(() => {
                 </FormControl>
               </Grid>
               <Grid item xs={4} sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="CGST @"
                   variant="standard"
@@ -628,7 +626,7 @@ const StockItemMenu = React.memo(() => {
                 />
               </Grid>
               <Grid item xs={4} sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="S.GST @"
                   variant="standard"
@@ -649,7 +647,7 @@ const StockItemMenu = React.memo(() => {
             <h5 className="fw-bold">Product Details</h5>
             <Grid container spacing={2} className="">
               <Grid item xs={6} className="mt-0">
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2 mt-0"
                   label="Purchase A/C"
                   variant="standard"
@@ -661,7 +659,7 @@ const StockItemMenu = React.memo(() => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="Sale A/C"
                   variant="standard"
@@ -675,7 +673,7 @@ const StockItemMenu = React.memo(() => {
             </Grid>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="Size"
                   variant="standard"
@@ -687,7 +685,7 @@ const StockItemMenu = React.memo(() => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2"
                   label="HSN Code"
                   variant="standard"
@@ -876,7 +874,7 @@ const StockItemMenu = React.memo(() => {
                 ))}
               </Select>
             </FormControl>
-            <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+            <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
               className="mb-2"
               label="Qty Per PC/Case"
               variant="standard"
@@ -888,7 +886,7 @@ const StockItemMenu = React.memo(() => {
             />
             <Grid container>
               <Grid item sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2 me-2"
                   label="Min Stock Level"
                   variant="standard"
@@ -900,7 +898,7 @@ const StockItemMenu = React.memo(() => {
                 />
               </Grid>
               <Grid item sm={6}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                   className="mb-2 ms-2"
                   label="Max Stock Level"
                   variant="standard"
@@ -966,7 +964,7 @@ const StockItemMenu = React.memo(() => {
           ))}
         </Stepper>
         <div className="d-flex justify-content-center mt-3">
-          <Paper elevation={3} style={{ padding: "20px" ,borderRadius: '10px' }} className="w-custom">
+          <Card elevation={3} style={{ padding: "20px" ,borderRadius: '10px' }} className="w-custom shadow rounded border-0">
             <Typography>{getStepContent(activeStep)}</Typography>
             <Container className="mt-3">
               <Grid container spacing={2}>
@@ -1056,13 +1054,13 @@ const StockItemMenu = React.memo(() => {
                 )}
               </Grid>
             </Container>
-          </Paper>
+          </Card>
         </div>
       </div>
     </Container>
   ) : (
-    <Navigate to="/" />
+    <Navigate to="/login" />
   );
 });
 
-export default StockItemMenu;
+export default React.memo(StockItemMenu);

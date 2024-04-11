@@ -1,19 +1,15 @@
-import React, { useState } from "react";
 import {
-  Container,
-  Paper,
-  Typography,
-  TextField,
-  Button,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   FormControlLabel,
+  FormLabel,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
-  FormLabel,
+  Select,
+  TextField
 } from "@mui/material";
+import React, { useState } from "react";
 const ProfileDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
   const [errors, setErrors] = useState({});
 
@@ -140,7 +136,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
           />
         </RadioGroup>
       </FormControl>
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Job Experience in Months/Years"
         name="jobExperienceInMonths"
@@ -151,7 +147,7 @@ const ProfileDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
         helperText={errors.jobExperienceInMonths}
         className="mb-3"
       />
-      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+      <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
         disabled={readOnly}
         label="Job Experience Location"
         name="jobExperienceLocation"
@@ -166,4 +162,4 @@ const ProfileDetails = ({ onFormChange, formData, setFormData, readOnly }) => {
   );
 };
 
-export default ProfileDetails;
+export default React.memo(ProfileDetails);

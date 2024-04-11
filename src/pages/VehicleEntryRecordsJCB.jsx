@@ -1,36 +1,23 @@
-import React, { useEffect, useState } from "react";
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TablePagination from "@mui/material/TablePagination";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
+import { AccessTime, Cancel, Visibility } from "@mui/icons-material";
+import { Skeleton, TextField, Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
+import React, { useEffect, useState } from "react";
 import {
-  getVehicle2Entry,
+  Card,
+  Carousel,
+  Container,
+  Modal,
+  Pagination,
+  Table,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import {
   getVehicleEntry,
   getVehicleImageByTypeURl,
   saveVehicleEntry,
 } from "../services/VehicleEntryService";
-import { error } from "highcharts";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Modal,
-  Skeleton,
-  Tooltip,
-} from "@mui/material";
-import { AccessTime, Cancel, Visibility } from "@mui/icons-material";
-import { Carousel } from "react-bootstrap";
+import { checkAccess } from "../auth/HelperAuth";
 
 const style = {
   position: "absolute",
@@ -61,13 +48,12 @@ const columns = [
   // { id: "enteredBy", label: "Entered By" },
 ];
 
-const VehicleEntryRecordsJCB = () => {
+const VehicleEntryRecordsJCB = ({searchTerm,setSearchTerm,filteredRows,sortColumn,setSortColumn,setSortDirection,sortDirection}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortColumn, setSortColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [data, setData] = useState([]);
+  
+
+
   const [driverData, setDriverData] = useState([]);
   const timeOut = (formData) => {
     const currentDate = new Date();
@@ -95,17 +81,9 @@ const VehicleEntryRecordsJCB = () => {
         toast.error("Internal Server Error While Saving");
       });
   };
-  useEffect(() => {
-    getVehicleEntry()
-      .then((data) => {
-        setData(data);
-      })
-      .catch((error) => {
-        toast.error("Internal Server Error");
-      });
-  }, []);
 
-  const handleChangePage = (event, newPage) => {
+
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 
@@ -124,17 +102,7 @@ const VehicleEntryRecordsJCB = () => {
     setSortDirection(isAsc ? "desc" : "asc");
   };
 
-  const sortedRows = [...data].sort((a, b) => {
-    const aValue = a[sortColumn];
-    const bValue = b[sortColumn];
-    return (sortDirection === "asc" ? 1 : -1) * aValue?.localeCompare(bValue);
-  });
 
-  const filteredRows = sortedRows.filter((row) =>
-    Object.values(row).some((value) =>
-      value?.toString()?.toLowerCase()?.includes(searchTerm)
-    )
-  );
   const [open, setOpen] = React.useState(false);
   const handleOpen = (ddata) => {
     setDriverData(ddata);
@@ -156,49 +124,50 @@ const VehicleEntryRecordsJCB = () => {
   };
   const navigate = useNavigate();
   return (
-    <Paper className="m-3">
-      <Stack
-        spacing={2}
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        p={2}
-      >
-        <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  label="Search" variant="outlined" onChange={handleSearch} />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            navigate("/vehicle-entry");
-          }}
-          style={{backgroundColor:"#78C2AD"}}
-        >
-          Add New
-        </Button>
-      </Stack>
-      <TableContainer
+    <Card className="m-3">
+      <div className="d-flex justify-content-between align-items-center p-2">
+        <TextField
+          inputProps={{ style: { textTransform: "uppercase" } }}
+          label="Search"
+          variant="outlined"
+          onChange={handleSearch}
+        />
+        {checkAccess("JCB or HYDRA", "canWrite") && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              navigate("/vehicle-entry");
+            }}
+            style={{ backgroundColor: "#78C2AD" }}
+          >
+            Add New
+          </Button>
+        )}
+      </div>
+      <div
         className="position-relative"
         style={filteredRows.length == 0 ? { minHeight: "380px" } : {}}
       >
-        <Table size="small">
-          <TableHead style={{ backgroundColor: "#205072", color: "white" }}>
-            <TableRow>
+        <Table responsive  size="small">
+          <thead style={{ backgroundColor: "#205072", color: "white" }}>
+            <tr>
               {columns.map((column) => (
-                <TableCell
+                <th
                   align="center"
                   key={column.id}
                   onClick={() => handleSort(column.id)}
-                  style={{ cursor: "pointer", color: "white" }}
+                  style={{ cursor: "pointer" }}
                 >
                   {column.label}
-                </TableCell>
+                </th>
               ))}
-              <TableCell style={{ color: "white" }} align="center">
+              <th style={{}} align="center">
                 Actions
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
             {(rowsPerPage > 0
               ? filteredRows.slice(
                   page * rowsPerPage,
@@ -206,11 +175,11 @@ const VehicleEntryRecordsJCB = () => {
                 )
               : filteredRows
             ).map((row, index) => (
-              <TableRow key={index}>
+              <tr key={index}>
                 {columns.map((column) => (
-                  <TableCell key={column.id}>{row[column.id]}</TableCell>
+                  <td key={column.id}>{row[column.id]}</td>
                 ))}
-                <TableCell className="">
+                <td className="">
                   <Tooltip title="View">
                     <Button onClick={() => handleOpen(row)}>
                       <Visibility />
@@ -218,31 +187,31 @@ const VehicleEntryRecordsJCB = () => {
                   </Tooltip>
 
                   {/* Tooltip for AccessTime button */}
-                  <Tooltip title="Time Out">
-                    <Button size="small" onClick={() => timeOut(row)}>
-                      <small>
-                        <AccessTime />
-                      </small>
-                    </Button>
-                  </Tooltip>
-                </TableCell>
+                  {checkAccess("JCB or HYDRA", "canUpdate") && !row.outDate  &&(
+                    <Tooltip title="Time Out">
+                      <Button size="small" onClick={() => timeOut(row)}>
+                        <small>
+                          <AccessTime />
+                        </small>
+                      </Button>
+                    </Tooltip>
+                  )}
+                </td>
                 <Modal
-                  open={open}
-                  onClose={handleClose}
+                  show={open}
+                  onHide={handleClose}
                   aria-labelledby="modal-modal-title"
                   aria-describedby="modal-modal-description"
                 >
-                  <Paper style={style}>
+                  <Card className="p-2">
                     <div className="d-flex justify-content-between">
-                      <DialogTitle className="fw-bold">
-                        JCB or HYDRA Details
-                      </DialogTitle>
+                      <h5 className="fw-bold">JCB or HYDRA Details</h5>
                       <Cancel
                         onClick={handleClose}
                         style={{ cursor: "pointer" }}
                       />
                     </div>
-                    <DialogContent>
+                    <h6>
                       <Carousel
                         activeIndex={selectedImageIndex}
                         onSelect={handleSelect}
@@ -271,51 +240,51 @@ const VehicleEntryRecordsJCB = () => {
 
                         {/* Add more items as needed */}
                       </Carousel>
-                      <DialogContentText>
+                      <h6>
                         <strong>Gate Pass No:</strong> {driverData.gatePassNo}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Site:</strong> {driverData.site}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Out Time:</strong> {driverData.outTime}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Out Date:</strong> {driverData.outDate}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Selected Option:</strong>{" "}
                         {driverData.selectedOption}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Hydra Capacity:</strong>{" "}
                         {driverData.hydraCapacity}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Owner Bank Account:</strong>{" "}
                         {driverData.ownerBankAccount}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Owner Phone:</strong> {driverData.ownerPhone}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Justification:</strong>{" "}
                         {driverData.justification}
-                      </DialogContentText>
-                      <DialogContentText>
+                      </h6>
+                      <h6>
                         <strong>Entered By:</strong> {driverData.enteredBy}
-                      </DialogContentText>
+                      </h6>
 
                       {/* React Bootstrap Carousel */}
-                    </DialogContent>
-                    <DialogActions>
+                    </h6>
+                    <div>
                       <Button onClick={handleClose} color="primary">
                         Close
                       </Button>
-                    </DialogActions>
-                  </Paper>
+                    </div>
+                  </Card>
                 </Modal>
-              </TableRow>
+              </tr>
             ))}
             {filteredRows.length <= 0 && (
               <Container>
@@ -333,20 +302,38 @@ const VehicleEntryRecordsJCB = () => {
                 />
               </Container>
             )}
-          </TableBody>
+          </tbody>
         </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={filteredRows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+      </div>
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => handleChangePage(page - 1)}
+          disabled={page === 0}
+        />
+
+        {/* Assuming filteredRows is an array and rowsPerPage is the number of items per page */}
+        {Array.from({
+          length: Math.ceil(filteredRows.length / rowsPerPage),
+        }).map((_, index) => (
+          <Pagination.Item
+            key={index}
+            active={page === index}
+            onClick={() => handleChangePage(index)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+
+        <Pagination.Next
+          onClick={() => handleChangePage(page + 1)}
+          disabled={
+            page === Math.floor(filteredRows.length / rowsPerPage) ||
+            filteredRows.length <= rowsPerPage
+          }
+        />
+      </Pagination>
+    </Card>
   );
 };
 
-export default VehicleEntryRecordsJCB;
+export default React.memo(VehicleEntryRecordsJCB);

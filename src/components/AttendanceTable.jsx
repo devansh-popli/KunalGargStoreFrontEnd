@@ -1,28 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TablePagination,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  TextField,
   Button,
   IconButton,
-  Menu,
   Tooltip,
   List,
   ListItem,
   ListItemText,
-  styled,
-  tableCellClasses,
-  Container,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -36,10 +26,12 @@ import { toast } from "react-toastify";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { Delete, TrySharp } from "@mui/icons-material";
 import EmployeeSearchBar from "./EmployeeSearchBar";
+import { Card, Container, Pagination, Table } from "react-bootstrap";
+import { checkAccess } from "../auth/HelperAuth";
 const AttendanceTable = React.memo(({ employeeList }) => {
-  const [selectedEmployee, setSelectedEmployee] = useState("");
-  const currmonth=new Date().getMonth()
-  const [selectedMonth, setSelectedMonth] = useState(currmonth+1);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const currmonth = new Date().getMonth();
+  const [selectedMonth, setSelectedMonth] = useState(currmonth + 1);
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -54,7 +46,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
     .join("-");
   const userContext = useContext(UserContext);
   useEffect(() => {
-    if (selectedEmployee == "" && selectedMonth == "") {
+    if (selectedEmployee == null && selectedMonth == "") {
       // getAttendanceDataOfTodayFromBackend(currentIndianDate)
       //   .then((data) => {
       //     setShowTotalHrs(false);
@@ -66,8 +58,8 @@ const AttendanceTable = React.memo(({ employeeList }) => {
       //     toast.error("Internal Server Error While fetching todays record");
       //   });
     } else {
-      setSelectedEmployee("");
-      setSelectedMonth(currmonth+1)
+      setSelectedEmployee(null);
+      setSelectedMonth(currmonth + 1);
       // getAttendanceDataOfTodayFromBackend(currentIndianDate)
       //   .then((data) => {
       //     setShowTotalHrs(false);
@@ -87,7 +79,11 @@ const AttendanceTable = React.memo(({ employeeList }) => {
     // Replace this with your actual employee data and search logic
     if (searchTermN != "") {
       let filteredEmployees = "";
-      if (searchTermN.includes("EMP") || !isNaN(searchTermN) || searchTermN.includes("emp")) {
+      if (
+        searchTermN.includes("EMP") ||
+        !isNaN(searchTermN) ||
+        searchTermN.includes("emp")
+      ) {
         filteredEmployees = employeeList.filter((employee) =>
           employee.empCode.toLowerCase().includes(searchTermN.toLowerCase())
         );
@@ -163,7 +159,7 @@ const AttendanceTable = React.memo(({ employeeList }) => {
   //   return employeeMatch && monthMatch && searchMatch;
   // });
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 
@@ -172,16 +168,18 @@ const AttendanceTable = React.memo(({ employeeList }) => {
     setPage(0);
   };
   const searchAttendanceData = () => {
-    if (selectedMonth != "" && selectedEmployee != "") {
+    if (selectedMonth != "" && selectedEmployee) {
       let year = new Date().getFullYear();
-      getAttendanceDataFromBackend(selectedMonth, year, selectedEmployee).then(
-        (data) => {
-          userContext.setMonthlyAttendance(data);
-          userContext.setDailyData(null);
-          setShowTotalHrs(true);
-          setAttendanceData(data.content);
-        }
-      );
+      getAttendanceDataFromBackend(
+        selectedMonth,
+        year,
+        selectedEmployee.empCode
+      ).then((data) => {
+        userContext.setMonthlyAttendance(data);
+        userContext.setDailyData(null);
+        setShowTotalHrs(true);
+        setAttendanceData(data.content);
+      });
     } else {
       toast.warn("Please select month and employee name!");
     }
@@ -202,27 +200,26 @@ const AttendanceTable = React.memo(({ employeeList }) => {
   const selectEmployee = (e, employee) => {
     try {
       e.preventDefault();
-      console.log(employee);
+      //      console.log(employee);
       setSelectedEmployeeName(employee.firstName + " " + employee.lastName);
       setSelectedEmployee(employee.empCode);
     } catch (e) {
-      console.log(e);
+      //      console.log(e);
     }
   };
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#205072",
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
+  const filterOptions = (options, { inputValue }) => {
+    // Customize this function based on your search logic
+    return options.filter(
+      (option) =>
+        option.empCode.toLowerCase().includes(inputValue.toLowerCase()) ||
+        option.firstName.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
   return (
-    <Paper
+    <Card
       // elevation={3}
       style={{ padding: "7px", borderRadius: "10px" }}
-      className="mt-1"
+      className="mt-1 border-0 shadow"
     >
       <h5 className="fw-bold">Attendance Records</h5>
       <div
@@ -245,16 +242,16 @@ const AttendanceTable = React.memo(({ employeeList }) => {
           </Select>
         </FormControl> */}
         <div className="d-flex flex-column me-2">
-          <EmployeeSearchBar
+          {/* <EmployeeSearchBar
             onSearch={handleEmployeeChange}
             selectedEmployeeName={selectedEmployeeName}
             setSelectedEmployeeName={setSelectedEmployeeName}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-          />
+          /> */}
           {/* Render your search results or other components based on the search */}
 
-          <List
+          {/* <List
             class={"bg-white border-1 shadow p-0"}
             style={{
               width: "216px",
@@ -275,8 +272,31 @@ const AttendanceTable = React.memo(({ employeeList }) => {
                 />
               </ListItem>
             ))}
-          </List>
+          </List> */}
         </div>
+        <Autocomplete
+          options={employeeList}
+          getOptionLabel={(employee) =>
+            employee.empCode +
+            " " +
+            employee.firstName +
+            " " +
+            employee.lastName
+          }
+          filterOptions={filterOptions}
+          onChange={(e, val) => setSelectedEmployee(val)}
+          value={selectedEmployee}
+          style={{ width: "230px" }}
+          className="mx-2"
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Search Employees"
+              variant="outlined"
+              fullWidth
+            />
+          )}
+        />
         <FormControl style={{ marginRight: "20px" }} className="w-25">
           <InputLabel id="month-filter-label">Filter by Month</InputLabel>
           <Select
@@ -304,10 +324,10 @@ const AttendanceTable = React.memo(({ employeeList }) => {
           <SearchIcon /> Search
         </Button>
         <Button
-        size="small"
+          size="small"
           onClick={() => {
-            setSelectedEmployee("");
-            setSelectedMonth(currmonth+1);
+            setSelectedEmployee(null);
+            setSelectedMonth(currmonth + 1);
             setShowTotalHrs(false);
             setSearchTerm("");
             userContext.setMonthlyAttendance(null);
@@ -360,73 +380,102 @@ const AttendanceTable = React.memo(({ employeeList }) => {
         )}
       </div>
 
-      <TableContainer className="position-relative" style={attendanceData?.length<=0?{minHeight:'380px'}:{}}>
-        <Table size="small" aria-label="a dense table" style={attendanceData?.length<=0?{minHeight:'380px'}:{}}>
-          <TableHead className="position-relative">
-            <TableRow>
-              <StyledTableCell>Date</StyledTableCell>
-              <StyledTableCell>Employee Name</StyledTableCell>
-              <StyledTableCell>Time In</StyledTableCell>
-              <StyledTableCell>Time Out</StyledTableCell>
-              <StyledTableCell>Actions</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      <div
+        className="position-relative"
+        style={attendanceData?.length <= 0 ? { minHeight: "380px" } : {}}
+      >
+        <Table responsive 
+          size="small"
+          aria-label="a dense table"
+          style={attendanceData?.length <= 0 ? { minHeight: "380px" } : {}}
+        >
+          <thead className="position-relative">
+            <tr>
+              <th>Date</th>
+              <th>Employee Name</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
             {attendanceData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((entry, index) => (
-                <TableRow key={index}>
-                  <TableCell>{entry?.attendanceDate}</TableCell>
-                  <TableCell>{entry?.employeeName}</TableCell>
-                  <TableCell>{entry?.inTime}</TableCell>
-                  <TableCell>{entry?.outTime}</TableCell>
-                  <TableCell>
-                    <Tooltip title="Delete">
-                      <IconButton
-                        onClick={() => {
-                          deleteAttendanceDataByDateFromBackend(entry.id);
-                          setAttendanceData(
-                            attendanceData.filter((data) => data.id != entry.id)
-                          );
-                        }}
-                      >
-                        <Delete color="error" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
+                <tr key={index}>
+                  <td>{entry?.attendanceDate}</td>
+                  <td>{entry?.employeeName}</td>
+                  <td>{entry?.inTime}</td>
+                  <td>{entry?.outTime}</td>
+                  <td>
+                    {checkAccess("Attendance Records", "canDelete") && (
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={() => {
+                            deleteAttendanceDataByDateFromBackend(entry.id);
+                            setAttendanceData(
+                              attendanceData.filter(
+                                (data) => data.id != entry.id
+                              )
+                            );
+                          }}
+                        >
+                          <Delete color="error" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </td>
+                </tr>
               ))}
-          </TableBody>
+          </tbody>
           {attendanceData.length <= 0 && (
-          <Container>
-            <img
-              src="../../noData.svg"
-              width={250}
-              height={250}
-              alt=""
-              className="position-absolute"
-              style={{
-                top: "60%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            />
-          </Container>
-)}
+            <Container>
+              <img
+                src="../../noData.svg"
+                width={250}
+                height={250}
+                alt=""
+                className="position-absolute"
+                style={{
+                  top: "60%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            </Container>
+          )}
         </Table>
-      </TableContainer>
+      </div>
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={attendanceData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => handleChangePage(page - 1)}
+          disabled={page === 0}
+        />
+
+        {/* Assuming attendanceData is an array and rowsPerPage is the number of items per page */}
+        {Array.from({
+          length: Math.ceil(attendanceData.length / rowsPerPage),
+        }).map((_, index) => (
+          <Pagination.Item
+            key={index}
+            active={page === index + 1}
+            onClick={() => handleChangePage(index)}
+          >
+            {index + 1}
+          </Pagination.Item>
+        ))}
+
+        <Pagination.Next
+          onClick={() => handleChangePage(page + 1)}
+          disabled={
+            page === Math.floor(attendanceData.length / rowsPerPage) ||
+            attendanceData.length <= rowsPerPage
+          }
+        />
+      </Pagination>
+    </Card>
   );
 });
 
-export default AttendanceTable;
+export default React.memo(AttendanceTable);

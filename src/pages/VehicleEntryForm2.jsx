@@ -1,36 +1,34 @@
-import React, { useContext, useEffect, useState } from "react";
 import {
-  Paper,
-  Stepper,
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  Skeleton,
   Step,
   StepLabel,
-  Typography,
+  Stepper,
   TextField,
-  Button,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Container,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
-  FormLabel,
-  Input,
-  Skeleton,
+  Typography,
 } from "@mui/material";
-import { Carousel, Form } from "react-bootstrap";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { Card, Carousel, Form } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext";
 import useJwtChecker from "../helper/useJwtChecker";
+import { privateAxios } from "../services/AxiosService";
 import {
   getVehicleImageByNameURl,
   saveVehicleDocument2ToBackend,
   saveVehicleEntry2,
 } from "../services/VehicleEntryService";
-import { toast } from "react-toastify";
-import { privateAxios } from "../services/AxiosService";
 
 const steps = ["Vehicle Information", "Time", "Documents", "Owner Details"];
 
@@ -43,7 +41,7 @@ const VehicleEntryForm2 = () => {
 
     if (activeStep === steps.length - 1 && isValid) {
       if (activeStep === steps.length - 1) {
-        console.log(vehicleInfo);
+        //        console.log(vehicleInfo);
         if (vehicleInfo.vehicleType == "others")
           vehicleInfo.vehicleType = vehicleInfo.vehicleType1;
         saveVehicleEntry2(vehicleInfo)
@@ -84,11 +82,19 @@ const VehicleEntryForm2 = () => {
       toast.error("Please fill in all required fields");
     }
   };
-  
+
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const [vehicleInfo, setVehicleInfo] = useState({
     purpose: "",
@@ -111,18 +117,38 @@ const VehicleEntryForm2 = () => {
     bankAccountNo: "",
     briefDescription: "",
   });
+  const [isManualEdit, setIsManualEdit] = useState(false);
   useEffect(() => {
     const interval = setInterval(() => {
-      setVehicleInfo((prev) => ({
-        ...prev,
-        timeOfEntry: new Date().toLocaleTimeString("en-US", { hour12: false }),
-        dayOfEntry: daysOfWeek[new Date().getDay()],
-        dateOfEntry: new Date().toISOString().split("T")[0],
-      }));
+      if (!isManualEdit) {
+        setVehicleInfo((prev) => ({
+          ...prev,
+          timeOfEntry: new Date().toLocaleTimeString("en-US", {
+            hour12: false,
+          }),
+          dayOfEntry: daysOfWeek[new Date().getDay()],
+          dateOfEntry: new Date().toISOString().split("T")[0],
+        }));
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
-  const handleFieldChange = (fieldName) => (event) => {
+  }, [isManualEdit]);
+  const handleFieldChange = useCallback((fieldName) => (event) => {
+    if (fieldName == "timeOfEntry") {
+      setIsManualEdit(true);
+    }
+    if (fieldName == "dayOfEntry") {
+      setIsManualEdit(true);
+    }
+    if (fieldName == "dateOfEntry") {
+      setIsManualEdit(true);
+    }
+    if (
+      fieldName == "phoneNo" &&
+      (!/^[0-9]*$/.test(event.target.value) || event.target.value.length > 10)
+    ) {
+      return;
+    }
     setVehicleInfo((prevData) => ({
       ...prevData,
       [fieldName]: event.target.value,
@@ -132,7 +158,7 @@ const VehicleEntryForm2 = () => {
       ...prevErrors,
       [fieldName]: undefined,
     }));
-  };
+  });
 
   const handleVehicleTypeToggle = (type) => () => {
     // const updatedVehicleTypes = vehicleInfo.vehicleType.includes(type)
@@ -243,7 +269,19 @@ const VehicleEntryForm2 = () => {
   };
   const [imgLoading, setImgLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
+  const [stockItems, setStockItems] = useState([]);
+  useEffect(() => {
+    privateAxios
+      .get(
+        `/api/ledger-accounts/stock-item-menu/all?pageSize=${10000}&sortBy=${"accountName"}`
+      )
+      .then((response) => {
+        setStockItems(response.data.content);
+      })
+      .catch((error) => {
+        console.error("Error fetching stock items:", error);
+      });
+  }, []);
   const handleSelect = (selectedIndex, e) => {
     setSelectedImageIndex(selectedIndex);
   };
@@ -266,30 +304,43 @@ const VehicleEntryForm2 = () => {
                 </h5>
               </Grid>
               <Grid item xs={12}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
                   className="w-60"
                   label="Vehicle Number"
                   fullWidth
                   value={vehicleInfo.vehicleNumber}
                   onChange={handleFieldChange("vehicleNumber")}
                 />
-                <Button variant="contained" className="mt-2 ms-2" size="small" onClick={()=>{
-                        privateAxios
-                        .get(`/api/v2/vehicle-entries/vehicleNumber/${vehicleInfo.vehicleNumber}`)
-                        .then((data) => {
-                          if (data.data.id != null) {
-                            data.data.id = null;
-                            data.data.dateOfExit = null;
-                            data.data.dayOfExit = null;
-                            data.data.timeOfExit = null;
-                            data.data.vendorName = null;
-                            setVehicleInfo(data.data);
-                          }
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
-                }}>Fetch Last Details</Button>
+                <Button
+                  variant="contained"
+                  className="mt-2 ms-2"
+                  size="small"
+                  onClick={() => {
+                    privateAxios
+                      .get(
+                        `/api/v2/vehicle-entries/vehicleNumber/${vehicleInfo.vehicleNumber}`
+                      )
+                      .then((data) => {
+                        if (data.data.id != null) {
+                          data.data.id = null;
+                          data.data.dateOfExit = null;
+                          data.data.dayOfExit = null;
+                          data.data.timeOfExit = null;
+                          data.data.vendorName = null;
+                          data.data.documentType = null;
+                          data.data.vehicleImages = [];
+                          setVehicleInfo(data.data);
+                        }
+                      })
+                      .catch((error) => {
+                        console.error(error);
+                      });
+                  }}
+                >
+                  Fetch Last Details
+                </Button>
                 {errors.vehicleNumber && (
                   <Grid item xs={12}>
                     <Typography variant="caption" color="error">
@@ -327,7 +378,9 @@ const VehicleEntryForm2 = () => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
                   className="w-60"
                   label="Dated"
                   type="date"
@@ -374,13 +427,14 @@ const VehicleEntryForm2 = () => {
                   </Grid>
                 )}
               </Grid>
-              <Grid item xs={12}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  className="w-60"
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
+                  className=""
                   label="Document Number"
                   type="text"
                   fullWidth
-          
                   value={vehicleInfo.documentNo}
                   onChange={handleFieldChange("documentNo")}
                 />
@@ -398,21 +452,34 @@ const VehicleEntryForm2 = () => {
                 </FormControl>
               </Grid> */}
               {/* <Grid item xs={12}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }}  className="w-60"
+                <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }}  className="w-60"
                   label="Document No."
                   fullWidth
                   value={vehicleInfo.documentNo}
                   onChange={handleFieldChange("documentNo")}
                 />
               </Grid> */}
-              <Grid item xs={12}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <Grid item xs={12} sm={6}>
+                <FormControl className="w-100">
+                  <InputLabel>Select Vendor Name</InputLabel>
+                  <Select
+                    value={vehicleInfo.vendorName}
+                    onChange={handleFieldChange("vendorName")}
+                  >
+                    {stockItems.map((data) => (
+                      <MenuItem value={data.accountName}>{data.accountName}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {/* <TextField
+                  autoComplete="off"
+                  inputProps={{ style: { textTransform: "uppercase" } }}
                   className="w-60"
                   label="Vendor Name"
                   fullWidth
                   value={vehicleInfo.vendorName}
                   onChange={handleFieldChange("vendorName")}
-                />
+                /> */}
                 {errors.vendorName && (
                   <Grid item xs={12}>
                     <Typography variant="caption" color="error">
@@ -529,7 +596,9 @@ const VehicleEntryForm2 = () => {
                   </Grid>
                   {vehicleInfo.vehicleType === "others" && (
                     <Grid xs={12} item>
-                      <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                      <TextField
+                        autoComplete="off"
+                        inputProps={{ style: { textTransform: "uppercase" } }}
                         size="small"
                         label="Others"
                         value={vehicleInfo.vehicleType1}
@@ -562,7 +631,9 @@ const VehicleEntryForm2 = () => {
         return (
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <TextField
+                autoComplete="off"
+                inputProps={{ style: { textTransform: "uppercase" } }}
                 className="w-60"
                 label="Date of Entry"
                 type="date"
@@ -582,7 +653,9 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <TextField
+                autoComplete="off"
+                inputProps={{ style: { textTransform: "uppercase" } }}
                 className="w-60"
                 label="Day of Entry"
                 fullWidth
@@ -598,7 +671,9 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <TextField
+                autoComplete="off"
+                inputProps={{ style: { textTransform: "uppercase" } }}
                 className="w-60"
                 label="Time of Entry"
                 type="time"
@@ -618,7 +693,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             {/* <Grid item xs={12}>
-              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Date of Exit"
                 type="date"
@@ -638,7 +713,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Day of Exit"
                 fullWidth
@@ -654,7 +729,7 @@ const VehicleEntryForm2 = () => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                 className="w-60"
                 label="Time of Exit"
                 InputLabelProps={{
@@ -787,11 +862,13 @@ const VehicleEntryForm2 = () => {
               <h4 className="fw-bold">Owner Details</h4>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={12}>
-                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
                     className="w-60"
                     label="Phone No."
                     fullWidth
-                    type="number"
+                    type="text"
                     value={vehicleInfo.phoneNo}
                     onChange={handleFieldChange("phoneNo")}
                   />
@@ -804,7 +881,9 @@ const VehicleEntryForm2 = () => {
                   )}
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
                     className="w-60"
                     label="PAN No."
                     fullWidth
@@ -820,7 +899,9 @@ const VehicleEntryForm2 = () => {
                   )}
                 </Grid>
                 <Grid item xs={12} md={12}>
-                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
                     className="w-60"
                     label="Bank Account No."
                     fullWidth
@@ -879,8 +960,8 @@ const VehicleEntryForm2 = () => {
   return userContext.isLogin ? (
     <Container className="mt-3">
       <Grid item xs={12} className="isMobile">
-        <Paper
-          className="padding"
+        <Card
+          className="padding shadow rounded border-0"
           elevation={3}
           style={{ marginBottom: 20, marginTop: 37 }}
         >
@@ -893,15 +974,15 @@ const VehicleEntryForm2 = () => {
               </Step>
             ))}
           </Stepper>
-        </Paper>
+        </Card>
       </Grid>
 
       <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
           <h4 className="fw-bold">Vehicle Entry Form</h4>
-          <Paper
+          <Card
             elevation={3}
-            className="padding2"
+            className="padding2 shadow rounded border-0"
             style={{ marginBottom: 20 }}
           >
             {getStepContent(activeStep)}
@@ -913,11 +994,12 @@ const VehicleEntryForm2 = () => {
                 {activeStep === steps.length - 1 ? "Submit" : "Next"}
               </Button>
             </div>
-          </Paper>
+          </Card>
         </Grid>
         <Grid item xs={12} md={4} className="isDesktop">
-          <Paper
+          <Card
             elevation={3}
+            className="shadow rounded border-0"
             style={{ padding: 20, marginBottom: 20, marginTop: 37 }}
           >
             <Stepper activeStep={activeStep} orientation="vertical">
@@ -927,13 +1009,13 @@ const VehicleEntryForm2 = () => {
                 </Step>
               ))}
             </Stepper>
-          </Paper>
+          </Card>
         </Grid>
       </Grid>
     </Container>
   ) : (
-    <Navigate to={"/"} />
+    <Navigate to={"/login"} />
   );
 };
 
-export default VehicleEntryForm2;
+export default React.memo(VehicleEntryForm2);

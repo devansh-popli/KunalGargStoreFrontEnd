@@ -14,11 +14,18 @@ export const getJwtToken = () => {
     return loginData.jwtToken;
   }
 };
+export const checkAccess=(screenName,access)=>{
+  const hasReadAccessToScreen = getLoginData()?.user?.screenPermissions.some(
+    (data) => data.screenName === screenName && data[access]
+  );
+  return hasReadAccessToScreen??false
+}
 export const isUserLoggedIn = () => {
   const jwtToken = getJwtToken();
   if (jwtToken) {
     return true;
   }
+  return false
 };
 export const getUserInfo = () => {
   const data = getLoginData();

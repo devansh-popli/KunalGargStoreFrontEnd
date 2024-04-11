@@ -1,32 +1,32 @@
-import React, { useContext, useEffect, useState } from "react";
+import { Delete } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import SaveIcon from "@mui/icons-material/Save";
 import {
-  Grid,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Button,
-  TextareaAutosize,
   Container,
-  Paper,
-  Tooltip,
-  IconButton,
+  FormControl,
   FormControlLabel,
-  Checkbox,
-  RadioGroup,
-  Radio,
   FormLabel,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+  Tooltip,
 } from "@mui/material";
-import { Col, Row } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, { useContext, useEffect, useState } from "react";
+import { Card, Col, Row } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
-import {
-  deleteStockItemMenuById,
-  getStockItemMenuByAccountId,
-  getStockItemMenuByAction,
-  saveStockItemMenu,
-} from "../services/StockItemMenuService";
+import { toast } from "react-toastify";
+import { states } from "../auth/HelperAuth";
+import useJwtChecker from "../helper/useJwtChecker";
 import { privateAxios } from "../services/AxiosService";
 import {
   deleteLedgerAccountById,
@@ -34,17 +34,7 @@ import {
   getLedgerAccountByAction,
   saveLedgerAccount,
 } from "../services/LedgerAccountService";
-import { states } from "../auth/HelperAuth";
 import { UserContext } from "../context/UserContext";
-import axios from "axios";
-import SaveIcon from "@mui/icons-material/Save";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import AddIcon from "@mui/icons-material/Add";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import LastPageIcon from "@mui/icons-material/LastPage";
-import { Delete } from "@mui/icons-material";
-import useJwtChecker from "../helper/useJwtChecker";
 const NewLedgerAccountForm = React.memo(() => {
   const [nextAccountCode, setNextAccountCode] = useState("");
 
@@ -348,7 +338,7 @@ const NewLedgerAccountForm = React.memo(() => {
       })
       .catch((error) => {
         toast.error("error occured");
-        console.log(error);
+        //        console.log(error);
       });
   };
   const [selectedOption, setSelectedOption] = useState("");
@@ -357,114 +347,118 @@ const NewLedgerAccountForm = React.memo(() => {
     setFormData({ ...formData, approved: event.target.value });
   };
   const stateList = states;
-  const userContext = useContext(UserContext);
   const jetChecker = useJwtChecker();
+  const userContext = useContext(UserContext);
   return userContext.isLogin ? (
     <Container className="mt-3">
       {/* {JSON.stringify(formData)} */}
       <div className="d-flex justify-content-center">
-        <Paper
+        <Card
           elevation={3}
           style={{ padding: "20px", borderRadius: "10px" }}
-          className="w-100"
+          className="w-100 shadow rounded border-0"
         >
           <h4 className="fw-bold mb-3">New Ledger Account Form</h4>
           <div className="d-flex">
-          <form onSubmit={handleSubmit} className="w-60">
-            <Grid
-              className="myGridItem"
-              container
-              spacing={3}
-              alignItems={"center"}
-            >
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="A/c Code"
-                  name="accountCode"
-                  disabled
-                  value={formData.accountCode}
-                  onChange={handleChange}
-                  fullWidth
-                  error={Boolean(formData.accountCodeError)}
-                />
-                {formData.accountCodeError && (
-                  <div
-                    className="error-message"
-                    style={{ position: "absolute" }}
-                  >
-                    {formData.accountCodeError}
-                  </div>
-                )}
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={6}>
-                <RadioGroup
-                  aria-label="supplier-customer"
-                  name="supplier-customer-group"
-                  value={formData.approved}
-                  onChange={handleOptionChange}
-                  style={{ display: "flex", flexDirection: "row" }}
-                  error={Boolean(formData.approvedError)}
-                >
-                  <FormControlLabel
-                    value="supplier"
-                    control={<Radio color="primary" />}
-                    label="Supplier"
+            <form onSubmit={handleSubmit} className="w-60">
+              <Grid
+                className="myGridItem"
+                container
+                spacing={3}
+                alignItems={"center"}
+              >
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="A/c Code"
+                    name="accountCode"
+                    disabled
+                    value={formData.accountCode}
+                    onChange={handleChange}
+                    fullWidth
+                    error={Boolean(formData.accountCodeError)}
                   />
-                  <FormControlLabel
-                    value="customer"
-                    control={<Radio color="primary" />}
-                    label="Customer"
-                  />
-                </RadioGroup>
-                {formData.approvedError && (
-                  <div
-                    className="error-message"
-                    style={{ position: "absolute" }}
+                  {formData.accountCodeError && (
+                    <div
+                      className="error-message"
+                      style={{ position: "absolute" }}
+                    >
+                      {formData.accountCodeError}
+                    </div>
+                  )}
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={6}>
+                  <RadioGroup
+                    aria-label="supplier-customer"
+                    name="supplier-customer-group"
+                    value={formData.approved}
+                    onChange={handleOptionChange}
+                    style={{ display: "flex", flexDirection: "row" }}
+                    error={Boolean(formData.approvedError)}
                   >
-                    {formData.approvedError}
-                  </div>
-                )}
-              </Grid>
-              <Grid className="myGridItem mx-1" item xs={8} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="GST No."
-                  name="gstNo"
-                  value={formData.gstNo}
-                  onChange={(event) => {
-                    const firstTwoDigits = event.target.value.substring(0, 2);
+                    <FormControlLabel
+                      value="supplier"
+                      control={<Radio color="primary" />}
+                      label="Supplier"
+                    />
+                    <FormControlLabel
+                      value="customer"
+                      control={<Radio color="primary" />}
+                      label="Customer"
+                    />
+                  </RadioGroup>
+                  {formData.approvedError && (
+                    <div
+                      className="error-message"
+                      style={{ position: "absolute" }}
+                    >
+                      {formData.approvedError}
+                    </div>
+                  )}
+                </Grid>
+                <Grid className="myGridItem mx-1" item xs={8} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="GST No."
+                    name="gstNo"
+                    value={formData.gstNo}
+                    onChange={(event) => {
+                      const firstTwoDigits = event.target.value.substring(0, 2);
 
-                    // Find the state corresponding to the first two digits
-                    const state = stateList.filter(
-                      (state) => state?.code === firstTwoDigits
-                    )[0];
-                    // if (event.target.value.length == 15) {
+                      // Find the state corresponding to the first two digits
+                      const state = stateList.filter(
+                        (state) => state?.code === firstTwoDigits
+                      )[0];
+                      // if (event.target.value.length == 15) {
 
-                    // }
-                    setFormData({
-                      ...formData,
-                      gstNo: event.target.value.toUpperCase(),
-                      pan: event.target.value.substring(2, 12).toUpperCase(),
-                      state: state?.state.trim(),
-                    });
-                  }}
-                  fullWidth
-                />
-              </Grid>
-              <Grid className="myGridItem" xs={3} sm={4}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  style={{ fontSize: "11px" }}
-                  className="mt-1 mx-2 "
-                  onClick={() => fetchGSTINDetails()}
-                >
-                  fetch gst Details
-                </Button>
-              </Grid>
-              {/* {stateList.filter(state=>state.code=='04')[0].state} */}
-              {/* {formData.state} */}
-              {/* <Grid className="myGridItem"
+                      // }
+                      setFormData({
+                        ...formData,
+                        gstNo: event.target.value.toUpperCase(),
+                        pan: event.target.value.substring(2, 12).toUpperCase(),
+                        state: state?.state.trim(),
+                      });
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid className="myGridItem" xs={3} sm={4}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    style={{ fontSize: "11px" }}
+                    className="mt-1 mx-2 "
+                    onClick={() => fetchGSTINDetails()}
+                  >
+                    fetch gst Details
+                  </Button>
+                </Grid>
+                {/* {stateList.filter(state=>state.code=='04')[0].state} */}
+                {/* {formData.state} */}
+                {/* <Grid className="myGridItem"
             item
             xs={12}
             spacing={2}
@@ -473,7 +467,7 @@ const NewLedgerAccountForm = React.memo(() => {
             justifyContent={"center"}
           >
             <Grid className="myGridItem" item xs={8} className="mx-1" sm={6}>
-              <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+              <TextField autoComplete="off" inputProps={{ style: { textTransform: 'uppercase' } }} 
                 label="GST No."
                 
                 name="gstNo"
@@ -510,68 +504,74 @@ const NewLedgerAccountForm = React.memo(() => {
               </Button>
             </Grid>
           </Grid> */}
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="A/c Name"
-                  name="accountName"
-                  value={formData.accountName}
-                  onChange={(event) => {
-                    // handleChange()
-                    let error = validateAccountName(event.target.value);
-                    setFormData({
-                      ...formData,
-                      accountName: event.target.value,
-                      accountNameBank: event.target.value,
-                      [`accountNameError`]: error,
-                    });
-                  }}
-                  fullWidth
-                  error={Boolean(formData.accountNameError)}
-                />
-                {formData.accountNameError && (
-                  <div
-                    className="error-message"
-                    style={{ position: "absolute" }}
-                  >
-                    {formData.accountNameError}
-                  </div>
-                )}
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <FormControl fullWidth>
-                  <InputLabel>MSMED Status</InputLabel>
-                  <Select
-                    name="msmedStatus"
-                    value={formData.msmedStatus}
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="A/c Name"
+                    name="accountName"
+                    value={formData.accountName}
+                    onChange={(event) => {
+                      // handleChange()
+                      let error = validateAccountName(event.target.value);
+                      setFormData({
+                        ...formData,
+                        accountName: event.target.value,
+                        accountNameBank: event.target.value,
+                        [`accountNameError`]: error,
+                      });
+                    }}
+                    fullWidth
+                    error={Boolean(formData.accountNameError)}
+                  />
+                  {formData.accountNameError && (
+                    <div
+                      className="error-message"
+                      style={{ position: "absolute" }}
+                    >
+                      {formData.accountNameError}
+                    </div>
+                  )}
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel>MSMED Status</InputLabel>
+                    <Select
+                      name="msmedStatus"
+                      value={formData.msmedStatus}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="Micro Enterprises">
+                        Micro Enterprises
+                      </MenuItem>
+                      <MenuItem value="Small Enterprises">
+                        Small Enterprises
+                      </MenuItem>
+                      <MenuItem value="Medium Enterprises">
+                        Medium Enterprises
+                      </MenuItem>
+                      <MenuItem value="Not Covered in MSMED">
+                        Not Covered in MSMED
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="Opening Balance"
+                    name="openingBalance"
+                    value={formData.openingBalance}
                     onChange={handleChange}
-                  >
-                    <MenuItem value="Micro Enterprises">
-                      Micro Enterprises
-                    </MenuItem>
-                    <MenuItem value="Small Enterprises">
-                      Small Enterprises
-                    </MenuItem>
-                    <MenuItem value="Medium Enterprises">
-                      Medium Enterprises
-                    </MenuItem>
-                    <MenuItem value="Not Covered in MSMED">
-                      Not Covered in MSMED
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="Opening Balance"
-                  name="openingBalance"
-                  value={formData.openingBalance}
-                  onChange={handleChange}
-                  fullWidth
-                  type="number"
-                />
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={12}>
-                  <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
+                    fullWidth
+                    type="number"
+                  />
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={12}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
                     label="Address"
                     // Set the desired variant here
                     name="address"
@@ -582,118 +582,128 @@ const NewLedgerAccountForm = React.memo(() => {
                     rows={2}
                     maxRows={4}
                   />
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="City"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleChange}
-                  fullWidth
-                  error={Boolean(formData.cityError)}
-                />
-                {formData.cityError && (
-                  <div
-                    className="error-message"
-                    style={{ position: "absolute" }}
-                  >
-                    {formData.cityError}
-                  </div>
-                )}
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <FormControl fullWidth>
-                  <InputLabel>State</InputLabel>
-                  <Select
-                    name="state"
-                    value={formData.state}
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="City"
+                    name="city"
+                    value={formData.city}
                     onChange={handleChange}
-                    error={Boolean(formData.stateError)}
-                  >
-                    {stateList.map((state) => (
-                      <MenuItem value={state.state}>{state.state}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                {formData.stateError && (
-                  <div
-                    className="error-message"
-                    style={{ position: "absolute" }}
-                  >
-                    {formData.stateError}
-                  </div>
-                )}
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="Pincode"
-                  name="pincode"
-                  value={formData.pincode}
-                  onChange={handleChange}
-                  fullWidth
-                  type="number"
-                />
-              </Grid>
+                    fullWidth
+                    error={Boolean(formData.cityError)}
+                  />
+                  {formData.cityError && (
+                    <div
+                      className="error-message"
+                      style={{ position: "absolute" }}
+                    >
+                      {formData.cityError}
+                    </div>
+                  )}
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <FormControl fullWidth>
+                    <InputLabel>State</InputLabel>
+                    <Select
+                      name="state"
+                      value={formData.state}
+                      onChange={handleChange}
+                      error={Boolean(formData.stateError)}
+                    >
+                      {stateList.map((state) => (
+                        <MenuItem value={state.state}>{state.state}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  {formData.stateError && (
+                    <div
+                      className="error-message"
+                      style={{ position: "absolute" }}
+                    >
+                      {formData.stateError}
+                    </div>
+                  )}
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="Pincode"
+                    name="pincode"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    fullWidth
+                    type="number"
+                  />
+                </Grid>
 
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="Contact No."
-                  name="contactNo"
-                  type="number"
-                  value={formData.contactNo}
-                  onChange={handleChange}
-                  fullWidth
-                  error={Boolean(formData.contactNoError)}
-                />
-                {formData.contactNoError && (
-                  <div
-                    className="error-message"
-                    style={{ position: "absolute" }}
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="Contact No."
+                    name="contactNo"
+                    type="number"
+                    value={formData.contactNo}
+                    onChange={handleChange}
+                    fullWidth
+                    error={Boolean(formData.contactNoError)}
+                  />
+                  {formData.contactNoError && (
+                    <div
+                      className="error-message"
+                      style={{ position: "absolute" }}
+                    >
+                      {formData.contactNoError}
+                    </div>
+                  )}
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="Email Id/Area"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="PAN"
+                    name="pan"
+                    value={formData.pan}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <FormLabel component="legend">Turnover Below 10 Cr</FormLabel>
+                  <RadioGroup
+                    aria-label="turnoverBelow10Cr"
+                    name="turnoverBelow10Cr"
+                    value={formData.turnoverBelow10Cr}
+                    onChange={handleChange}
+                    style={{ display: "flex", flexDirection: "row" }}
                   >
-                    {formData.contactNoError}
-                  </div>
-                )}
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="Email Id/Area"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="PAN"
-                  name="pan"
-                  value={formData.pan}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <FormLabel component="legend">Turnover Below 10 Cr</FormLabel>
-                <RadioGroup
-                  aria-label="turnoverBelow10Cr"
-                  name="turnoverBelow10Cr"
-                  value={formData.turnoverBelow10Cr}
-                  onChange={handleChange}
-                  style={{ display: "flex", flexDirection: "row" }}
-                >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio color="primary" />}
-                    label="Yes"
-                  />
-                  <FormControlLabel
-                    value="no"
-                    control={<Radio color="primary" />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </Grid>
-              {/* <Grid className="myGridItem" item xs={12} sm={6}>
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio color="primary" />}
+                      label="Yes"
+                    />
+                    <FormControlLabel
+                      value="no"
+                      control={<Radio color="primary" />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </Grid>
+                {/* <Grid className="myGridItem" item xs={12} sm={6}>
                 <FormControl fullWidth >
                   <InputLabel>Whether Approved</InputLabel>
                   <Select
@@ -706,47 +716,55 @@ const NewLedgerAccountForm = React.memo(() => {
                   </Select>
                 </FormControl>
               </Grid> */}
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="Account Num"
-                  name="accountNum"
-                  value={formData.accountNum}
-                  onChange={handleChange}
-                  fullWidth
-                />
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="Account Num"
+                    name="accountNum"
+                    value={formData.accountNum}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="Account Name"
+                    name="accountNameBank"
+                    value={formData.accountNameBank}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="IFSC"
+                    name="ifsc"
+                    value={formData.ifsc}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid className="myGridItem" item xs={12} sm={4}>
+                  <TextField
+                    autoComplete="off"
+                    inputProps={{ style: { textTransform: "uppercase" } }}
+                    label="Branch"
+                    name="branch"
+                    value={formData.branch}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </Grid>
               </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="Account Name"
-                  name="accountNameBank"
-                  value={formData.accountNameBank}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="IFSC"
-                  name="ifsc"
-                  value={formData.ifsc}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-              <Grid className="myGridItem" item xs={12} sm={4}>
-                <TextField inputProps={{ style: { textTransform: 'uppercase' } }} 
-                  label="Branch"
-                  name="branch"
-                  value={formData.branch}
-                  onChange={handleChange}
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
-            <Container fluid>
-              <Row className="mt-2">
-                <Col>
-                  {/* <Button
+              <Container fluid>
+                <Row className="mt-2">
+                  <Col>
+                    {/* <Button
                     size="small"
                     variant="contained"
                     
@@ -815,57 +833,57 @@ const NewLedgerAccountForm = React.memo(() => {
                   >
                     Save
                   </Button> */}
-                  <div className="d-flex justify-content-end">
-                    <Tooltip title="Delete">
-                      <IconButton onClick={deleteData}>
-                        <Delete color="error" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="View Previous Data">
-                      <IconButton onClick={() => handleEvent("previous")}>
-                        <ArrowBackIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="View Next Data">
-                      <IconButton onClick={() => handleEvent("next")}>
-                        <ArrowForwardIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Add New Data">
-                      <IconButton onClick={() => addNewData()}>
-                        <AddIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Go to First Page">
-                      <IconButton onClick={() => handleEvent("first")}>
-                        <FirstPageIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Go to Last Page">
-                      <IconButton onClick={() => handleEvent("last")}>
-                        <LastPageIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Save">
-                      <IconButton onClick={handleSubmit}>
-                        <SaveIcon style={{ color: "#78C2AD" }} />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                </Col>
-              </Row>
-            </Container>
-          </form>
-          <div className="w-30 text-center mt-5 ms-5 isDesktop">
-            <img src="../../ledger.jpg" className="w-100" alt="" />
-          </div>      
+                    <div className="d-flex justify-content-end">
+                      <Tooltip title="Delete">
+                        <IconButton onClick={deleteData}>
+                          <Delete color="error" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="View Previous Data">
+                        <IconButton onClick={() => handleEvent("previous")}>
+                          <ArrowBackIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="View Next Data">
+                        <IconButton onClick={() => handleEvent("next")}>
+                          <ArrowForwardIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Add New Data">
+                        <IconButton onClick={() => addNewData()}>
+                          <AddIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Go to First Page">
+                        <IconButton onClick={() => handleEvent("first")}>
+                          <FirstPageIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Go to Last Page">
+                        <IconButton onClick={() => handleEvent("last")}>
+                          <LastPageIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Save">
+                        <IconButton onClick={handleSubmit}>
+                          <SaveIcon style={{ color: "#78C2AD" }} />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
+            </form>
+            <div className="w-30 text-center mt-5 ms-5 isDesktop">
+              <img src="../../ledger.jpg" className="w-100" alt="" />
+            </div>
           </div>
-        </Paper>
+        </Card>
       </div>
     </Container>
   ) : (
-    <Navigate to={"/"} />
+    <Navigate to="/login" />
   );
 });
 
-export default NewLedgerAccountForm;
+export default React.memo(NewLedgerAccountForm);

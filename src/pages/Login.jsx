@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Container, Form, Card, Button } from "react-bootstrap";
+import React, { useContext, useState } from "react";
+import { Button, Container, Form } from "react-bootstrap";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext";
@@ -15,12 +15,12 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // loginUser({email,password}).then((data)=>{
-    //     // console.log(data)
+//    //     // console.log(data)
     //     userContext.doLogin(data);
     //     navigate("/home")
     //     toast.success("Logged In Successfully")
     // }).catch((error)=>{
-    //         // console.log(error)
+//    //         // console.log(error)
     //         if(error && error.response && error.response.data)
     //         toast.error(error.response.data.message)
     //     else
@@ -101,13 +101,13 @@ function Login() {
                   >
                     Login
                   </Button>
-                  <Button
+                  {/* <Button
                     className="my-3 mx-3"
                     variant="secondary"
                     type="submit"
                   >
                     Forget Password
-                  </Button>
+                  </Button> */}
                   {/* <Button className='my-3' variant="contained" color='success' type="submit">
                                 Login
                             </Button>
@@ -127,4 +127,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default React.memo(Login);

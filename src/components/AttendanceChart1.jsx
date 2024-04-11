@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { getAttendanceDataFromBackendByMonth } from "../services/EmployeeDataService";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { getAttendanceDataFromBackendByMonth } from "../services/EmployeeDataService";
 
 const AttendanceChart1 = () => {
   const [chartOptions, setChartOptions] = useState(null);
@@ -159,4 +159,4 @@ const AttendanceChart1 = () => {
   );
 };
 
-export default AttendanceChart1;
+export default React.memo(AttendanceChart1);
