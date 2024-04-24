@@ -16,6 +16,7 @@ const availableScreens = [
   "Visitor Form",
   "Vehicle Entry Records",
   "JCB or HYDRA",
+  "Employee Gate Pass"
 ];
 
 const permissionTypes = ["Read", "Write", "Update", "Delete"];
@@ -32,7 +33,6 @@ const RoleModal = ({ isOpen, onClose, onSave, user }) => {
   );
   const [screenPermissions, setScreenPermissions] = useState([]);
   useEffect(() => {
-    console.log(user)
     setScreenPermissions(user?.screenPermissions);
   }, [user]);
   const handleRoleToggle = (role) => {

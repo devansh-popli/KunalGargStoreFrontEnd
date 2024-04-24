@@ -26,6 +26,7 @@ import VisitorForm from "./pages/VisitorForm";
 import { checkAccess } from "./auth/HelperAuth";
 import AddUserForm from "./components/AddUserForm";
 import JCBorHYDRARecords from "./pages/JCBorHYDRARecords";
+import GatePassForm from "./pages/GatePassForm";
 function App() {
   const [loading, setLoading] = useState(false);
   privateAxios.interceptors.request.use(
@@ -149,6 +150,12 @@ function App() {
                   <Route
                     path="/attendance-records"
                     element={<AttendanceRecords />}
+                  />
+                )}
+                {checkAccess("Employee Gate Pass", "canRead") && (
+                  <Route
+                    path="/gate-pass-form"
+                    element={<GatePassForm />}
                   />
                 )}
                 {checkAccess("Visitor Form", "canRead") && (

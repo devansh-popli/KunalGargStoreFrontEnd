@@ -9,6 +9,7 @@ import {
   Dashboard,
   DriveFolderUpload,
   Event,
+  GarageTwoTone,
   Group,
   ListAlt,
   Person,
@@ -34,7 +35,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
   }, []);
 
   const userContext = useContext(UserContext);
-  const [isActive, setIsActive] = useState(1);
+  
 
   return (
     <div
@@ -59,15 +60,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(1);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/home"}
                 className={
-                  isActive === 1
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                    "d-flex align-content-center"
                 }
               >
                 <Dashboard className="text-white" />
@@ -83,7 +81,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               }}
               as={NavLink}
               to={"/new-ledger-account-form"}
-              className={isActive === 2 ? "active d-flex align-content-center" : "d-flex align-content-center"}
+              className={isActive === 2 ? " d-flex align-content-center" : "d-flex align-content-center"}
             >
               <AccountBalanceWallet className="text-white" />
               <h6 className="text-white mx-2 p-1">New Ledger Account Form</h6>
@@ -93,15 +91,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(3);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/view-ledger-details"}
                 className={
-                  isActive === 3
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                    " d-flex align-content-center"
                 }
               >
                 <AccountBalanceWallet className="text-white" />
@@ -117,7 +112,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               }}
               as={NavLink}
               to={"/stock-item-menu"}
-              className={isActive === 4 ? "active d-flex align-content-center" : "d-flex align-content-center"}
+              className={isActive === 4 ? " d-flex align-content-center" : "d-flex align-content-center"}
             >
               <CarRental className="text-white" />
               <h6 className="text-white mx-2 p-1">Stock Item Menu</h6>
@@ -127,15 +122,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(5);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/view-stock-item-menu"}
                 className={
-                  isActive === 5
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                    "d-flex align-content-center"
                 }
               >
                 <ListAlt className="text-white" />
@@ -147,15 +139,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(6);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/employee-directory"}
                 className={
-                  isActive === 6
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                     "d-flex align-content-center"
                 }
               >
                 <Group className="text-white" />
@@ -167,15 +156,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(7);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/attendance-tracker"}
                 className={
-                  isActive === 7
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                     " d-flex align-content-center"
                 }
               >
                 <AccessTime className="text-white" />
@@ -187,15 +173,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(8);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/attendance-records"}
                 className={
-                  isActive === 8
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                    " d-flex align-content-center"
                 }
               >
                 <Event className="text-white" />
@@ -207,15 +190,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(9);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/visitor-entry"}
                 className={
-                  isActive === 9
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                     "d-flex align-content-center"
                 }
               >
                 <Person className="text-white" />
@@ -223,19 +203,33 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               </Nav.Link>
             </Nav.Item>
           )}
+          {checkAccess("Employee Gate Pass", "canRead") && (
+            <Nav.Item>
+              <Nav.Link
+                onClick={() => {
+                  isMobile && setToggle(!toggle);
+                }}
+                as={NavLink}
+                to={"/gate-pass-form"}
+                className={
+                    "d-flex align-content-center"
+                }
+              >
+                <GarageTwoTone className="text-white" />
+                <h6 className="text-white mx-2 p-1">Gate Pass Form</h6>
+              </Nav.Link>
+            </Nav.Item>
+          )}
           {checkAccess("Vehicle Entry Records", "canRead") && (
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(10);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/vehicle-entry-records"}
                 className={
-                  isActive === 10
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                    "d-flex align-content-center"
                 }
               >
                 <DriveFolderUpload className="text-white" />
@@ -247,15 +241,12 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
             <Nav.Item>
               <Nav.Link
                 onClick={() => {
-                  setIsActive(11);
                   isMobile && setToggle(!toggle);
                 }}
                 as={NavLink}
                 to={"/vehicle-entry-data-jcb-hydra"}
                 className={
-                  isActive === 11
-                    ? "active d-flex align-content-center"
-                    : "d-flex align-content-center"
+                    "d-flex align-content-center"
                 }
               >
                 <CarRental className="text-white" />

@@ -20,6 +20,12 @@ body {
 .active{
   background-color: #323c4a !important;
 }
+.textareaCustom:focus{
+  outline: none !important;
+  border:1.8px solid #e2e2e2 !important;
+  box-shadow: 0 0 10px #719ECE;
+}
+
 .spinner-overlay {
   position: fixed;
   top: 0;
@@ -177,7 +183,9 @@ h6 {
 }
 
 
-
+.w-76{
+  width: 75%;
+}
 .w-80{
   width: 84.95% !important;
 }
@@ -300,6 +308,9 @@ h6 {
   }
   .w-70{
     width: 70%;
+  }
+  .w-76{
+    width: 95%;
   }
   .w-90{
     width: 100%;

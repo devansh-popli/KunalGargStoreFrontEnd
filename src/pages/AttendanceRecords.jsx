@@ -19,28 +19,27 @@ const AttendanceRecords = React.memo(() => {
         toast.error("ERROR occured file fetching employees");
       });
   }, []);
-  const jetChecker=useJwtChecker()
+  const jetChecker = useJwtChecker();
   const userContext = useContext(UserContext);
   return (
     <Container>
       <Row>
-        {
-userContext.monthlyAttendance &&
+        {userContext.monthlyAttendance && (
           <Col sm={12} md={4}>
-        <AttendanceChart1 />
-          <AttendanceChart data={userContext.monthlyAttendance} />
-        </Col>
-        }
-        <Col sm={12} md={userContext.monthlyAttendance?8:12}>
+            <AttendanceChart1 />
+            <AttendanceChart data={userContext.monthlyAttendance} />
+          </Col>
+        )}
+        <Col sm={12} md={userContext.monthlyAttendance ? 8 : 12}>
           <div className="mt-3 w-100">
             <AttendanceTable employeeList={employees} />
-            
+
             {/* <AttendanceChartMonthly /> */}
           </div>
         </Col>
       </Row>
     </Container>
-  )
+  );
 });
 
 export default React.memo(AttendanceRecords);
