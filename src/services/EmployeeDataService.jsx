@@ -5,6 +5,11 @@ export const saveEmployeeDataToBackend = (formData) => {
     .post("/employee/save", formData)
     .then((data) => data.data);
 };
+export const deleteEmployeeFromDirectory = (employee) => {
+  return privateAxios
+    .delete(`/employee/${employee.id}`)
+    .then((data) => data.data);
+};
 export const getEmployeeDataFromBackend = (
   pageNum = 0,
   pageSize = 10000,

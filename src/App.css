@@ -11,8 +11,14 @@
 
   /* height: 100vh; */
 }
-.dashboard-active{
+.dashboard-active2{
   margin-left: 0px;
+  overflow: hidden;
+ 
+  /* height: 100vh; */
+}
+.dashboard-active{
+  margin-left: 40px;
   overflow: hidden;
  
   /* height: 100vh; */
@@ -36,6 +42,12 @@
 @media (max-width: 768px) {
   .dashboard{
     margin-left: 0px;
+  }
+  .dashboard-active{
+    margin-left: 0px;
+    overflow: hidden;
+   
+    /* height: 100vh; */
   }
 }
 @media (prefers-reduced-motion: no-preference) {

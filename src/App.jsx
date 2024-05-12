@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { ToastContainer, Zoom } from "react-toastify";
 import "./App.css";
@@ -27,8 +27,10 @@ import { checkAccess } from "./auth/HelperAuth";
 import AddUserForm from "./components/AddUserForm";
 import JCBorHYDRARecords from "./pages/JCBorHYDRARecords";
 import GatePassForm from "./pages/GatePassForm";
+import { UserContext } from "./context/UserContext";
 function App() {
   const [loading, setLoading] = useState(false);
+ useEffect(()=>{
   privateAxios.interceptors.request.use(
     (config) => {
       setLoading(true);
@@ -49,6 +51,7 @@ function App() {
       return Promise.reject(error);
     }
   );
+ },[])
   useEffect(() => {
     if (window.location.pathname === "/") {
       //      console.log(window.location.pathname + "inside if");
@@ -67,13 +70,13 @@ function App() {
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
-  const [toggle, setToggle] = useState(true);
-
+  const [toggle, setToggle] = useState(false);
+const {isLogin}=useContext(UserContext)
   return (
     <>
-      <UserContextProvider>
+      
         <BrowserRouter>
-          <div className={toggle ? "dashboard" : "dashboard-active"}>
+          <div className={toggle ? "dashboard" :!isLogin? "dashboard-active2":"dashboard-active"}>
             <ToastContainer
               draggable
               transition={Zoom}
@@ -191,7 +194,6 @@ function App() {
           {/* </PersistentDrawerLeft> */}
           {/* <Footer /> */}
         </BrowserRouter>
-      </UserContextProvider>
     </>
   );
 }
