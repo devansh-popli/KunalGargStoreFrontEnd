@@ -85,24 +85,24 @@ const VehicleEntryTable = ({
   const handleImageLoad = () => {
     setImgLoading(false); // Set loading state to false when the image is loaded
   };
-  const timeOut = ({selectedUser,timeoutDate}) => {
+  const timeOut = ({selectedUser,timeoutDate,timeoutTime}) => {
     const formData=selectedData
     const currentDate = new Date();
     // Format the time as "00:31:31"
-    const formattedTime = currentDate.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
+    // const formattedTime = timeoutDate.toLocaleTimeString("en-US", {
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    //   second: "2-digit",
+    // });
     // Format the date as "YYYY-MM-DD"
-    const year = timeoutDate.getUTCFullYear();
-    const month = String(currentDate.getUTCMonth() + 1).padStart(2, "0");
-    const day = String(currentDate.getUTCDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
+    // const year = timeoutDate.getUTCFullYear();
+    // const month = String(currentDate.getUTCMonth() + 1).padStart(2, "0");
+    // const day = String(currentDate.getUTCDate()).padStart(2, "0");
+    // const formattedDate = `${year}-${month}-${day}`;
 
     // Set formData.outTime and formData.outDate
-    formData.timeOfExit = formattedTime;
-    formData.dateOfExit = formattedDate;
+    formData.timeOfExit = timeoutTime;
+    formData.dateOfExit = timeoutDate;
     var days = [
       "Sunday",
       "Monday",
@@ -112,10 +112,11 @@ const VehicleEntryTable = ({
       "Friday",
       "Saturday",
     ];
-    formData.dayOfExit = days[currentDate.getDay()];
+    formData.dayOfExit = days[new Date(timeoutDate).getDay()];
     formData.status = "pending";
     formData.statusUpdatedBy = userContext?.userData?.userId;
-    formData.assignedToRole = selectedUser;
+    formData.assignedToRole = ROLE_SUPERVISOR;
+    formData.assignedToUser = selectedUser;
     saveVehicleEntry2(formData)
       .then((res) => {
         toast.success("outtime updated");
@@ -123,6 +124,7 @@ const VehicleEntryTable = ({
       .catch((error) => {
         toast.error("Internal Server Error While Saving");
       });
+      handleClose4()
   };
   const submitAgain = (formData) => {
     formData.status = "pending";

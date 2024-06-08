@@ -35,6 +35,7 @@ import {
   checkLoggedInRole,
   isAuthorisedVip,
 } from "../constants/constants";
+import UserTimeoutForm from "../components/UserTimeoutForm";
 
 const style = {
   position: "absolute",
@@ -91,27 +92,30 @@ const VehicleEntryRecordsJCB = ({
         toast.error("Internal Server Error While Saving");
       });
   };
-  const timeOut = (formData) => {
+  const timeOut = ({ selectedUser, timeoutDate, timeoutTime }) => {
     const currentDate = new Date();
 
     // Format the time as "00:31:31"
-    const formattedTime = currentDate.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
+    // const formattedTime = currentDate.toLocaleTimeString("en-US", {
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    //   second: "2-digit",
+    // });
     // Format the date as "YYYY-MM-DD"
-    const year = currentDate.getUTCFullYear();
-    const month = String(currentDate.getUTCMonth() + 1).padStart(2, "0");
-    const day = String(currentDate.getUTCDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
+    // const year = currentDate.getUTCFullYear();
+    // const month = String(currentDate.getUTCMonth() + 1).padStart(2, "0");
+    // const day = String(currentDate.getUTCDate()).padStart(2, "0");
+    // const formattedDate = `${year}-${month}-${day}`;
 
     // Set formData.outTime and formData.outDate
-    formData.outTime = formattedTime;
-    formData.outDate = formattedDate;
+    let formData = driverData;
+
+    formData.outTime = timeoutTime;
+    formData.outDate = timeoutDate;
     formData.status = "pending";
     formData.statusUpdatedBy = userContext?.userData?.userId;
     formData.assignedToRole = "ROLE_SUPERVISOR";
+    formData.assignedToUser = selectedUser;
     saveVehicleEntry(formData)
       .then((res) => {
         toast.success("outtime updated");
@@ -119,6 +123,7 @@ const VehicleEntryRecordsJCB = ({
       .catch((error) => {
         toast.error("Internal Server Error While Saving");
       });
+      handleClose4()
   };
 
   const handleChangePage = (newPage) => {
@@ -142,6 +147,7 @@ const VehicleEntryRecordsJCB = ({
   const [changeStatus, setChangeStatus] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
+  const [open4, setOpen4] = React.useState(false);
   const handleOpen = (ddata) => {
     setDriverData(ddata);
     setOpen(true);
@@ -192,6 +198,13 @@ const VehicleEntryRecordsJCB = ({
   };
   const handleClose2 = () => {
     setOpen2(false);
+  };
+  const handleOpen4 = (ddata) => {
+    setDriverData(ddata);
+    setOpen4(true);
+  };
+  const handleClose4 = () => {
+    setOpen4(false);
   };
   const [imgLoading, setImgLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -352,7 +365,7 @@ const VehicleEntryRecordsJCB = ({
                     !row.outDate &&
                     row.paymentType && (
                       <Tooltip title="Time Out">
-                        <Button size="small" onClick={() => timeOut(row)}>
+                        <Button size="small" onClick={() => handleOpen4(row)}>
                           <small>
                             <AccessTime />
                           </small>
@@ -563,6 +576,16 @@ const VehicleEntryRecordsJCB = ({
       >
         <Card className="p-2">
           <PaymentForm savePaymentInfo={savePaymentInfo} />
+        </Card>
+      </Modal>
+      <Modal
+        show={open4}
+        onHide={handleClose4}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Card className="p-2">
+          <UserTimeoutForm timeOut={timeOut} />
         </Card>
       </Modal>
       <Pagination>

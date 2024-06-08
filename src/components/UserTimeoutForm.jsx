@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import { ROLE_SUPERVISOR } from "../constants/constants";
 import { privateAxios } from "../services/AxiosService";
-import { format, utcToZonedTime } from 'date-fns-tz';
+// import { format, utcToZonedTime } from 'date-fns-tz';
 const UserTimeoutForm = ({timeOut}) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
@@ -46,11 +46,11 @@ const UserTimeoutForm = ({timeOut}) => {
     const now = new Date();
     const timeZone = 'Asia/Kolkata';
 
-    const zonedDate = utcToZonedTime(now, timeZone);
-    const currentDate = format(zonedDate, 'yyyy-MM-dd', { timeZone });
-    const currentTime = format(zonedDate, 'HH:mm', { timeZone });
+    // const zonedDate = utcToZonedTime(now, timeZone);
+    const currentDate = new Date().toISOString().split("T")[0]
+    const currentTime = new Date().toLocaleTimeString("en-US", { hour12: false })
 
-    setTimeoutDate(currentDate);
+    // setTimeoutDate(currentDate);
     // const currentTime = now.toTimeString().split(' ')[0].slice(0, 5);
     setTimeoutDate(currentDate);
     setTimeoutTime(currentTime);
@@ -93,7 +93,7 @@ const UserTimeoutForm = ({timeOut}) => {
           shrink: true,
         }}
       />
-      <Button variant="contained" color="primary" onClick={()=>timeOut({selectedUser,timeoutDate})}>
+      <Button variant="contained" color="primary" onClick={()=>timeOut({selectedUser,timeoutDate,timeoutTime})}>
         Set Timeout
       </Button>
     </form>
