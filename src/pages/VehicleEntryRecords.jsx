@@ -33,6 +33,7 @@ const columns = [
   // { id: "dayOfEntry", label: "Day of Entry" },
   // { id: "timeOfEntry", label: "Time of Entry" },
   { id: "dateOfExit", label: "Date of Exit" },
+  { id: "status", label: "Status" },
   // { id: "dayOfExit", label: "Day of Exit" },
   // { id: "timeOfExit", label: "Time of Exit" },
 ];
@@ -58,34 +59,6 @@ const VehicleEntryRecords = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
-  const [open, setOpen] = React.useState(false);
-  const [driverData, setDriverData] = useState([]);
-  const handleOpen = (ddata) => {
-    setDriverData(ddata);
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-    setImgLoading(true);
-    setSelectedImageIndex(0);
-  };
-  const [imgLoading, setImgLoading] = useState(true);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedImageIndex1, setSelectedImageIndex1] = useState(0);
-  const [selectedImageIndex2, setSelectedImageIndex2] = useState(0);
-
-  const handleSelect = (selectedIndex, e) => {
-    setSelectedImageIndex(selectedIndex);
-  };
-  const handleSelect1 = (selectedIndex, e) => {
-    setSelectedImageIndex1(selectedIndex);
-  };
-  const handleSelect2 = (selectedIndex, e) => {
-    setSelectedImageIndex2(selectedIndex);
-  };
-  const handleImageLoad = () => {
-    setImgLoading(false); // Set loading state to false when the image is loaded
   };
 
   const handleSearch = (e) => {
@@ -117,47 +90,13 @@ const VehicleEntryRecords = () => {
       value?.toString()?.toLowerCase()?.includes(searchTerm1)
     )
   );
-  const timeOut = (formData) => {
-    const currentDate = new Date();
-    // Format the time as "00:31:31"
-    const formattedTime = currentDate.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-    // Format the date as "YYYY-MM-DD"
-    const year = currentDate.getUTCFullYear();
-    const month = String(currentDate.getUTCMonth() + 1).padStart(2, "0");
-    const day = String(currentDate.getUTCDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-
-    // Set formData.outTime and formData.outDate
-    formData.timeOfExit = formattedTime;
-    formData.dateOfExit = formattedDate;
-    var days = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    formData.dayOfExit = days[currentDate.getDay()];
-    saveVehicleEntry2(formData)
-      .then((res) => {
-        toast.success("outtime updated");
-      })
-      .catch((error) => {
-        toast.error("Internal Server Error While Saving");
-      });
-  };
+  
 
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   return userContext.isLogin ? (
     <>
-      <Card className="m-3">
+      <Card className="m-3" >
         <h5 className="ms-4 mt-1 fw-bold">Live Vehicle</h5>
         <div className="d-flex justify-content-between align-items-center p-2">
           <TextField
@@ -180,10 +119,10 @@ const VehicleEntryRecords = () => {
           )}
         </div>
         <div
-          className="position-relative"
+          className="position-relative "
           style={filteredRows.length == 0 ? { minHeight: "380px" } : {}}
         >
-          <div>
+          <div >
             <VehicleEntryTable
               columns={columns}
               filteredRows={filteredRows1.filter((data) => {
@@ -192,15 +131,6 @@ const VehicleEntryRecords = () => {
                 }
               })}
               rowsPerPage={rowsPerPage}
-              handleClose={handleClose}
-              selectedImageIndex={selectedImageIndex}
-              handleSelect={handleSelect}
-              imgLoading={imgLoading}
-              driverData={driverData}
-              open={open}
-              handleOpen={handleOpen}
-              timeOut={timeOut}
-              handleImageLoad={handleImageLoad}
               handleSort={handleSort}
               setData={setData}
             />
@@ -242,21 +172,11 @@ const VehicleEntryRecords = () => {
                 }
               })}
               rowsPerPage={rowsPerPage}
-              handleClose={handleClose}
-              selectedImageIndex={selectedImageIndex}
-              handleSelect={handleSelect}
-              imgLoading={imgLoading}
-              driverData={driverData}
-              open={open}
-              handleOpen={handleOpen}
-              timeOut={timeOut}
-              handleImageLoad={handleImageLoad}
               handleSort={handleSort}
               setData={setData}
             />
           </div>
         </div>
-        
       </Card>
     </>
   ) : (

@@ -51,7 +51,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
 
       <div className="d-flex align-content-center mt-4 align-items-center">
         <img className="mx-2 m-0" src="../../download.png" width={40} alt="" />
-        <h6 className="m-0 pe-3 fs">MittalSteelIndustries</h6>
+        <h6 className={`m-0 pe-3 fs ${!toggle && ' d-none '}`}>MittalSteelIndustries</h6>
       </div>
 
       {userContext.isLogin && (
@@ -69,7 +69,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <Dashboard className="text-white" />
-                <h6 className="text-white mx-2 p-1">Dashboard</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Dashboard</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -84,7 +84,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               className={isActive === 2 ? " d-flex align-content-center" : "d-flex align-content-center"}
             >
               <AccountBalanceWallet className="text-white" />
-              <h6 className="text-white mx-2 p-1">New Ledger Account Form</h6>
+              <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>New Ledger Account Form</h6>
             </Nav.Link>
           </Nav.Item> */}
           {checkAccess("Ledger Directory", "canRead") && (
@@ -100,7 +100,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <AccountBalanceWallet className="text-white" />
-                <h6 className="text-white mx-2 p-1">Vendor Directory</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Vendor Directory</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -115,7 +115,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
               className={isActive === 4 ? " d-flex align-content-center" : "d-flex align-content-center"}
             >
               <CarRental className="text-white" />
-              <h6 className="text-white mx-2 p-1">Stock Item Menu</h6>
+              <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Stock Item Menu</h6>
             </Nav.Link>
           </Nav.Item> */}
           {checkAccess("View Stock Item Menu", "canRead") && (
@@ -131,7 +131,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <ListAlt className="text-white" />
-                <h6 className="text-white mx-2 p-1">View Stock Item Menu</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>View Stock Item Menu</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -148,7 +148,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <Group className="text-white" />
-                <h6 className="text-white mx-2 p-1">Employee Directory</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Employee Directory</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -165,7 +165,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <AccessTime className="text-white" />
-                <h6 className="text-white mx-2 p-1">Attendance Tracker</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Attendance Tracker</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -182,7 +182,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <Event className="text-white" />
-                <h6 className="text-white mx-2 p-1">Attendance Records</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Attendance Records</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -199,7 +199,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <Person className="text-white" />
-                <h6 className="text-white mx-2 p-1">Visitor Form</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Visitor Form</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -216,7 +216,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <GarageTwoTone className="text-white" />
-                <h6 className="text-white mx-2 p-1">Gate Pass Form</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Gate Pass Form</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -233,7 +233,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <DriveFolderUpload className="text-white" />
-                <h6 className="text-white mx-2 p-1">Vehicle Entry Records</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>Vehicle Entry Records</h6>
               </Nav.Link>
             </Nav.Item>
           )}
@@ -250,7 +250,7 @@ const Sidebar = React.memo(({ toggle, setToggle }) => {
                 }
               >
                 <CarRental className="text-white" />
-                <h6 className="text-white mx-2 p-1">JCB or HYDRA</h6>
+                <h6 className={`text-white mx-2 p-1 ${!toggle?' d-none ':''}`}>JCB or HYDRA</h6>
               </Nav.Link>
             </Nav.Item>
           )}

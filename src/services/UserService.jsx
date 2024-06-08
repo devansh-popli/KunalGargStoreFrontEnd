@@ -15,6 +15,11 @@ export const getAllUsers=(id)=>{
         return response.data
     })
 }
+export const getAllRoles=(id)=>{
+    return privateAxios.get(`/users/roles`).then(response=>{
+        return response.data
+    })
+}
 export const saveScreenPermissions=(userId,screenPermissions)=>{
    return privateAxios.post(`/users/${userId}/screen-permissions`,screenPermissions).then(data=>{
        return data.data     

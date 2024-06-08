@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Card, Carousel, Form } from "react-bootstrap";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext";
 import useJwtChecker from "../helper/useJwtChecker";
@@ -270,6 +270,7 @@ const VehicleEntryForm2 = () => {
   const [imgLoading, setImgLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [stockItems, setStockItems] = useState([]);
+  const { id } = useParams();
   useEffect(() => {
     privateAxios
       .get(
@@ -281,6 +282,18 @@ const VehicleEntryForm2 = () => {
       .catch((error) => {
         console.error("Error fetching stock items:", error);
       });
+    if (id) {
+      privateAxios
+      .get(
+        `/api/v2/vehicle-entries/${id}`
+      )
+      .then((response) => {
+        setVehicleInfo(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching stock items:", error);
+      });
+    }
   }, []);
   const handleSelect = (selectedIndex, e) => {
     setSelectedImageIndex(selectedIndex);
@@ -330,6 +343,11 @@ const VehicleEntryForm2 = () => {
                           data.data.timeOfExit = null;
                           data.data.vendorName = null;
                           data.data.documentType = null;
+                          data.data.status = null;
+                          data.data.paymentType = null;
+                          data.data.paymentTerms = null;
+                          data.data.assignedToRole = null;
+                          data.data.commercialCost = null;
                           data.data.vehicleImages = [];
                           setVehicleInfo(data.data);
                         }
@@ -467,7 +485,9 @@ const VehicleEntryForm2 = () => {
                     onChange={handleFieldChange("vendorName")}
                   >
                     {stockItems.map((data) => (
-                      <MenuItem value={data.accountName}>{data.accountName}</MenuItem>
+                      <MenuItem value={data.accountName}>
+                        {data.accountName}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>

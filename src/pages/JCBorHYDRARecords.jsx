@@ -35,7 +35,7 @@ const JCBorHYDRARecords = () => {
       );
   return (
     <div>
-      <VehicleEntryRecordsJCB sortDirection={sortDirection} setSortDirection={setSortDirection} setSortColumn={setSortColumn} sortColumn={sortColumn} filteredRows={filteredRows.filter(data=>!data.outDate)} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <VehicleEntryRecordsJCB className="mx-5" sortDirection={sortDirection} setSortDirection={setSortDirection} setSortColumn={setSortColumn} sortColumn={sortColumn} filteredRows={filteredRows.filter(data=>!data.outDate)} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <div className="mt-2">
       <VehicleEntryRecordsJCB sortDirection={sortDirection} setSortDirection={setSortDirection} setSortColumn={setSortColumn} sortColumn={sortColumn} filteredRows={filteredRows1.filter(data=>data.outDate)} searchTerm={searchTerm1} setSearchTerm={setSearchTerm1}/>
       </div>

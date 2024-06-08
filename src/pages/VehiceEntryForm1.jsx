@@ -18,7 +18,7 @@ import {
 } from "../services/VehicleEntryService";
 import { privateAxios } from "../services/AxiosService";
 import { UserContext } from "../context/UserContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import useJwtChecker from "../helper/useJwtChecker";
 
 const VehicleEntryForm1 = () => {
@@ -38,25 +38,43 @@ const VehicleEntryForm1 = () => {
     enteredBy: "",
   });
   const [isManualEdit, setIsManualEdit] = useState(false);
+  const { id } = useParams();
   useEffect(() => {
-    fetchLastAccountCode();
-    const interval = setInterval(() => {
-      if (!isManualEdit) {
-        setFormData((prev) => ({
-          ...prev,
-          inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
-          outTime: "",
-          inDate: new Date().toISOString().split("T")[0],
-          outDate: "",
-        }));
-      }
-    }, 1000);
-    return () => clearInterval(interval);
+    let interval = null;
+    if (!id) {
+      fetchLastAccountCode();
+      interval = setInterval(() => {
+        if (!isManualEdit) {
+          setFormData((prev) => ({
+            ...prev,
+            inTime: new Date().toLocaleTimeString("en-US", { hour12: false }),
+            outTime: "",
+            inDate: new Date().toISOString().split("T")[0],
+            outDate: "",
+          }));
+        }
+      }, 1000);
+    }
+    if (interval) return () => clearInterval(interval);
   }, [isManualEdit]);
   const [errors, setErrors] = useState({});
-
+  useEffect(() => {
+    if (id) {
+      privateAxios
+        .get(`/api/vehicle-entries/${id}`)
+        .then((data) => {
+          setFormData(data.data);
+        })
+        .catch((error) => {
+          toast.error("Error while fetching data");
+        });
+    }
+  }, []);
   const handleFieldChange = (fieldName, value) => {
-    if (fieldName == "ownerPhone" && (!/^[0-9]*$/.test(value) || value.length > 10)) {
+    if (
+      fieldName == "ownerPhone" &&
+      (!/^[0-9]*$/.test(value) || value.length > 10)
+    ) {
       return;
     } else {
       setFormData((prevFormData) => ({
@@ -434,6 +452,7 @@ const VehicleEntryForm1 = () => {
               }
               error={!!errors.ownerBankAccount}
               helperText={errors.ownerBankAccount}
+              value={formData.ownerBankAccount}
             />
           </Grid>
           <Grid item xs={6}>
@@ -464,6 +483,7 @@ const VehicleEntryForm1 = () => {
               }}
               multiline
               rows={4}
+              value={formData.justification}
               size="small"
               onChange={(e) =>
                 handleFieldChange("justification", e.target.value)
@@ -482,6 +502,7 @@ const VehicleEntryForm1 = () => {
               label="Entered by (username of gatepass generator)"
               fullWidth
               size="small"
+              value={formData.enteredBy}
               onChange={(e) => handleFieldChange("enteredBy", e.target.value)}
               error={!!errors.enteredBy}
               helperText={errors.enteredBy}

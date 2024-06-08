@@ -1,5 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import { ToastContainer, Zoom } from "react-toastify";
 import "./App.css";
 import NavbarComponent from "./components/NavbarComponent";
@@ -30,28 +36,28 @@ import GatePassForm from "./pages/GatePassForm";
 import { UserContext } from "./context/UserContext";
 function App() {
   const [loading, setLoading] = useState(false);
- useEffect(()=>{
-  privateAxios.interceptors.request.use(
-    (config) => {
-      setLoading(true);
-      return config;
-    },
-    (error) => {
-      setLoading(false);
-      return Promise.reject(error);
-    }
-  );
-  privateAxios.interceptors.response.use(
-    (config) => {
-      setLoading(false);
-      return config;
-    },
-    (error) => {
-      setLoading(false);
-      return Promise.reject(error);
-    }
-  );
- },[])
+  useEffect(() => {
+    privateAxios.interceptors.request.use(
+      (config) => {
+        setLoading(true);
+        return config;
+      },
+      (error) => {
+        setLoading(false);
+        return Promise.reject(error);
+      }
+    );
+    privateAxios.interceptors.response.use(
+      (config) => {
+        setLoading(false);
+        return config;
+      },
+      (error) => {
+        setLoading(false);
+        return Promise.reject(error);
+      }
+    );
+  }, []);
   useEffect(() => {
     if (window.location.pathname === "/") {
       //      console.log(window.location.pathname + "inside if");
@@ -71,136 +77,155 @@ function App() {
     setIsDrawerOpen(!isDrawerOpen);
   };
   const [toggle, setToggle] = useState(false);
-const {isLogin}=useContext(UserContext)
+  const { isLogin } = useContext(UserContext);
   return (
     <>
-      
-        <BrowserRouter>
-          <div className={toggle ? "dashboard" :!isLogin? "dashboard-active2":"dashboard-active"}>
-            <ToastContainer
-              draggable
-              transition={Zoom}
-              position="top-right"
-              theme="colored"
-            />
-            <section>
-              <NavbarComponent toggle={toggle} setToggle={setToggle} />
-              {loading && <SpinnerComponent />}
-              <Routes>
-                {/* {checkAccess("Dashboard", "canRead") && ( */}
-                  <Route path="/" element={<Home />} />
-                {/* )} */}
-                <Route path="/login" element={<Login />} />
-                {/* {checkAccess("Dashboard", "canRead") && ( */}
-                  <Route path="/home" element={<Home />} />
-                {/* )} */}
-                {checkAccess("Ledger Directory", "canWrite") && (
-                  <Route
-                    path="/new-ledger-account-form"
-                    element={<NewLedgerAccountForm />}
-                  />
-                )}
-                {checkAccess("View Stock Item Menu", "canWrite") && (
-                  <Route path="/stock-item-menu" element={<StockItemMenu />} />
-                )}
-                {checkAccess("View Stock Item Menu", "canUpdate") && (
-                  <Route
-                    path="/stock-item-menu/:id"
-                    element={<StockItemMenu />}
-                  />
-                )}
-                {checkAccess("Ledger Directory", "canUpdate") && (
-                  <Route
-                    path="/new-ledger-account-form/:id"
-                    element={<NewLedgerAccountForm />}
-                  />
-                )}
-                {checkAccess("View Stock Item Menu", "canRead") && (
-                  <Route
-                    path="/view-stock-item-menu"
-                    element={<ViewStockItemMenu />}
-                  />
-                )}
-                {checkAccess("Ledger Directory", "canRead") && (
-                  <Route
-                    path="/view-ledger-details"
-                    element={<ViewLedgerAccount />}
-                  />
-                )}
-                {checkAccess("Employee Directory", "canWrite") && (
-                  <Route
-                    path="/employee-form"
-                    element={<EmployeeEnrollmentForm />}
-                  />
-                )}
+      <BrowserRouter>
+        <div
+          className={
+            toggle
+              ? "dashboard"
+              : !isLogin
+              ? "dashboard-active2"
+              : "dashboard-active"
+          }
+        >
+          <ToastContainer
+            draggable
+            transition={Zoom}
+            position="top-right"
+            theme="colored"
+          />
+          <section>
+            <NavbarComponent toggle={toggle} setToggle={setToggle} />
+            {loading && <SpinnerComponent />}
+            <Routes>
+              {/* {checkAccess("Dashboard", "canRead") && ( */}
+              <Route path="/" element={<Home />} />
+              {/* )} */}
+              <Route path="/login" element={<Login />} />
+              {/* {checkAccess("Dashboard", "canRead") && ( */}
+              <Route path="/home" element={<Home />} />
+              {/* )} */}
+              {checkAccess("Ledger Directory", "canWrite") && (
+                <Route
+                  path="/new-ledger-account-form"
+                  element={<NewLedgerAccountForm />}
+                />
+              )}
+              {checkAccess("View Stock Item Menu", "canWrite") && (
+                <Route path="/stock-item-menu" element={<StockItemMenu />} />
+              )}
+              {checkAccess("View Stock Item Menu", "canUpdate") && (
+                <Route
+                  path="/stock-item-menu/:id"
+                  element={<StockItemMenu />}
+                />
+              )}
+              {checkAccess("Ledger Directory", "canUpdate") && (
+                <Route
+                  path="/new-ledger-account-form/:id"
+                  element={<NewLedgerAccountForm />}
+                />
+              )}
+              {checkAccess("Vehicle Entry Records", "canUpdate") && (
+                <Route
+                  path="/vehicle-entry-form/:id"
+                  element={<VehicleEntryForm2 />}
+                />
+              )}
+              {checkAccess("JCB or HYDRA", "canUpdate") && (
+                <Route
+                  path="/vehicle-entry-data-jcb-hydra/:id"
+                  element={<VehiceEntryForm1 />}
+                />
+              )}
+              {checkAccess("View Stock Item Menu", "canRead") && (
+                <Route
+                  path="/view-stock-item-menu"
+                  element={<ViewStockItemMenu />}
+                />
+              )}
+              {checkAccess("Ledger Directory", "canRead") && (
+                <Route
+                  path="/view-ledger-details"
+                  element={<ViewLedgerAccount />}
+                />
+              )}
+              {checkAccess("Employee Directory", "canWrite") && (
+                <Route
+                  path="/employee-form"
+                  element={<EmployeeEnrollmentForm />}
+                />
+              )}
 
-                <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/add-user-form" element={<AddUserForm />} />
-                <Route path="/add-user-form/:id" element={<AddUserForm />} />
-                {checkAccess("Employee Directory", "canRead") && (
-                  <Route
-                    path="/employee-directory"
-                    element={<EmployeeDirectory />}
-                  />
-                )}
-                {checkAccess("Attendance Tracker", "canRead") && (
-                  <Route
-                    path="/attendance-tracker"
-                    element={<AttendanceTracker />}
-                  />
-                )}
-                {checkAccess("Attendance Records", "canRead") && (
-                  <Route
-                    path="/attendance-records"
-                    element={<AttendanceRecords />}
-                  />
-                )}
-                {checkAccess("Employee Gate Pass", "canRead") && (
-                  <Route
-                    path="/gate-pass-form"
-                    element={<GatePassForm />}
-                  />
-                )}
-                {checkAccess("Visitor Form", "canRead") && (
-                  <Route path="/visitor-entry" element={<VisitorForm />} />
-                )}
-                {checkAccess("JCB or HYDRA", "canWrite") && (
-                  <Route path="/vehicle-entry" element={<VehiceEntryForm1 />} />
-                )}
-                {checkAccess("Vehicle Entry Records", "canWrite") && (
-                  <Route
-                    path="/vehicle-entry-form"
-                    element={<VehicleEntryForm2 />}
-                  />
-                )}
-                {checkAccess("Vehicle Entry Records", "canRead") && (
-                  <Route
-                    path="/vehicle-entry-records"
-                    element={<VehicleEntryRecords />}
-                  />
-                )}
-                {checkAccess("JCB or HYDRA", "canRead") && (
-                  <Route
-                    path="/vehicle-entry-data-jcb-hydra"
-                    element={<JCBorHYDRARecords />}
-                  />
-                )}
-                <Route path="/not-found" element={<NotFound />} />
-                <Route path="*" element={<Navigate to="/not-found" />} />
-              </Routes>
-            </section>
-          </div>
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              <Route path="/add-user-form" element={<AddUserForm />} />
+              <Route path="/add-user-form/:id" element={<AddUserForm />} />
+              {checkAccess("Employee Directory", "canRead") && (
+                <Route
+                  path="/employee-directory"
+                  element={<EmployeeDirectory />}
+                />
+              )}
+              {checkAccess("Attendance Tracker", "canRead") && (
+                <Route
+                  path="/attendance-tracker"
+                  element={<AttendanceTracker />}
+                />
+              )}
+              {checkAccess("Attendance Records", "canRead") && (
+                <Route
+                  path="/attendance-records"
+                  element={<AttendanceRecords />}
+                />
+              )}
+              {checkAccess("Employee Gate Pass", "canRead") && (
+                <Route path="/gate-pass-form" element={<GatePassForm />} />
+              )}
+              {checkAccess("Visitor Form", "canRead") && (
+                <Route path="/visitor-entry" element={<VisitorForm />} />
+              )}
+              {checkAccess("JCB or HYDRA", "canWrite") && (
+                <Route path="/vehicle-entry" element={<VehiceEntryForm1 />} />
+              )}
+              {checkAccess("Vehicle Entry Records", "canWrite") && (
+                <Route
+                  path="/vehicle-entry-form"
+                  element={<VehicleEntryForm2 />}
+                />
+              )}
+              {checkAccess("Vehicle Entry Records", "canRead") && (
+                <Route
+                  path="/vehicle-entry-records"
+                  element={<VehicleEntryRecords />}
+                />
+              )}
+              {checkAccess("JCB or HYDRA", "canRead") && (
+                <Route
+                  path="/vehicle-entry-data-jcb-hydra"
+                  element={<JCBorHYDRARecords />}
+                />
+              )}
+              <Route path="/not-found" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/not-found" />} />
+            </Routes>
+          </section>
+        </div>
 
-          {/* </PersistentDrawerLeft> */}
-          {/* <Footer /> */}
-        </BrowserRouter>
+        {/* </PersistentDrawerLeft> */}
+        {/* <Footer /> */}
+      </BrowserRouter>
     </>
   );
 }
 function NotFound() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
-    <div style={{ textAlign: "center", marginTop: "50px",cursor:"pointer" }} onClick={()=>navigate("/login")}>
+    <div
+      style={{ textAlign: "center", marginTop: "50px", cursor: "pointer" }}
+      onClick={() => navigate("/login")}
+    >
       <img
         src={"/404.svg"}
         alt="404 Illustration"

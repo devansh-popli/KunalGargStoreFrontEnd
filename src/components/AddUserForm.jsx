@@ -3,7 +3,7 @@ import { Form, Button, Container, Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { privateAxios } from "../services/AxiosService";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { getUserById, updateUser } from "../services/UserService";
+import { getAllRoles, getUserById, updateUser } from "../services/UserService";
 import Select from "react-select";
 import { UserContext } from "../context/UserContext";
 const AddUserForm = () => {
@@ -93,12 +93,14 @@ const AddUserForm = () => {
       // Handle network or other errors
     }
   };
-  const roleOptions = [
-    { roleName: "ROLE_NORMAL", roleId: "abcd6789" },
-    { roleName: "ROLE_ADMIN", roleId: "abcd1245" },
-    // Add more role options as needed
-  ];
+  
 
+  const [roleOptions,setRoleOptions] =useState([])
+  useEffect(()=>{
+    getAllRoles().then(data=>{
+      setRoleOptions(data)
+    })
+  },[])
   const handleRoleChange = (selectedRoles) => {
     const formattedRoles = selectedRoles.map((role) => ({
       roleId: role.value,

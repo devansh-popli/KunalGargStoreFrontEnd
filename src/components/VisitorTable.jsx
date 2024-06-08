@@ -326,7 +326,7 @@ const VisitorTable = ({ visitors, handleTimeout, title }) => {
           {slicedVisitors.length <= 0 && (
             <Container>
               <img
-                src="../../noData2.jpg"
+                src="../../noData.svg"
                 width={"250"}
                 height={250}
                 alt=""

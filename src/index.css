@@ -3,13 +3,18 @@ body {
   /* background-color:  #faf9f8;Light gray or any other light color you prefer
    */
    background-color: RGB(250, 249, 248) !important;
-   font-family: 'Poppins', sans-serif;
+   /* font-family: 'Poppins', sans-serif; */
+   font-family: "Lato", sans-serif;
+   font-weight: 400;
+   font-style: normal;
 /* font-family: 'Lexend', sans-serif !important; */
   /* font-family: 'Raleway', sans-serif !important; */
   /* font-family: 'Lexend', sans-serif !important; */
 /* font-family: 'Raleway', sans-serif !important; */
 }
-
+.fw-bold{
+  font-weight: 580 !important;
+}
 /* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -68,6 +73,9 @@ body {
 }
 .w-41{
   width: 40%;
+}
+.w-49{
+  width: 50%;
 }
 .font-primary{
   color: #78C2AD !important;
@@ -301,6 +309,9 @@ h6 {
     width: 40% !important;
   }
   .w-41{
+    width: 100% !important;
+  }
+  .w-49{
     width: 100% !important;
   }
   .w-30{
