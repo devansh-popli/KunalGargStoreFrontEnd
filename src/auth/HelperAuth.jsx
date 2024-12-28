@@ -24,8 +24,8 @@ export const checkAccess=(screenName,access)=>{
   const hasReadAccessToScreen = getLoginData()?.user?.screenPermissions?.some(
     (data) => data.screenName === screenName && data[access]
   );
-  // return hasReadAccessToScreen??false
-  return true
+  return hasReadAccessToScreen??false
+  // return true
 }
 export const isUserLoggedIn = () => {
   const jwtToken = getJwtToken();
